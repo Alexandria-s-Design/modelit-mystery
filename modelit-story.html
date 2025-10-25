@@ -463,6 +463,15 @@
         // Sound Effects & Voice Over
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+        const resumeAudioContext = () => {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().catch(() => {});
+            }
+        };
+
+        document.addEventListener('click', resumeAudioContext, { once: true });
+        document.addEventListener('keydown', resumeAudioContext, { once: true });
+
         // Background Music
         let bgMusic = null;
         let musicEnabled = true;
@@ -472,7 +481,7 @@
         function initBackgroundMusic() {
             bgMusic = new Audio('audio/background_music.mp3');
             bgMusic.loop = true;
-            bgMusic.volume = 0.3;
+            bgMusic.volume = 0.054;
 
             // Auto-play with user interaction
             const playPromise = bgMusic.play();
@@ -556,6 +565,7 @@
         async function speak(text) {
             if (!voiceEnabled || !text) return;
 
+            resumeAudioContext();
             stopSpeaking();
 
             const sceneImage = document.querySelector('.scene-image');
