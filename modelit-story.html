@@ -53,6 +53,38 @@
         #progress-tracker {
             display: flex;
             gap: 10px;
+            align-items: center;
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+
+        .audio-toggle {
+            background: rgba(0, 212, 255, 0.2);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            padding: 8px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+        }
+
+        .audio-toggle.active {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+        }
+
+        .audio-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
         }
 
         .chapter-badge {
@@ -406,8 +438,18 @@
         <!-- Header -->
         <div id="game-header">
             <div id="game-title">ModelIt! The Mystery</div>
-            <div id="progress-tracker">
-                <!-- Dynamically filled with chapter badges -->
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="audio-controls">
+                    <button id="music-toggle" class="audio-toggle active" onclick="toggleMusic()">
+                        <span id="music-icon">🎵</span> Music
+                    </button>
+                    <button id="voice-toggle" class="audio-toggle active" onclick="toggleVoice()">
+                        <span id="voice-icon">🔊</span> Voice
+                    </button>
+                </div>
+                <div id="progress-tracker">
+                    <!-- Dynamically filled with chapter badges -->
+                </div>
             </div>
         </div>
 
@@ -423,81 +465,183 @@
         // Sound Effects & Voice Over
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+        // Background Music
+        let bgMusic = null;
+        let musicEnabled = true;
+        let voiceEnabled = true;
+
+        // Initialize background music
+        function initBackgroundMusic() {
+            bgMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_2d3c3b1c3e.mp3');
+            bgMusic.loop = true;
+            bgMusic.volume = 0.3;
+
+            // Auto-play with user interaction
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Music auto-play prevented. Will start on first click.');
+                    document.addEventListener('click', function startMusic() {
+                        if (musicEnabled && bgMusic) {
+                            bgMusic.play();
+                        }
+                        document.removeEventListener('click', startMusic);
+                    }, { once: true });
+                });
+            }
+        }
+
+        function toggleMusic() {
+            musicEnabled = !musicEnabled;
+            const button = document.getElementById('music-toggle');
+            const icon = document.getElementById('music-icon');
+
+            if (musicEnabled) {
+                button.classList.add('active');
+                icon.textContent = '🎵';
+                if (bgMusic) bgMusic.play();
+            } else {
+                button.classList.remove('active');
+                icon.textContent = '🔇';
+                if (bgMusic) bgMusic.pause();
+            }
+        }
+
+        function toggleVoice() {
+            voiceEnabled = !voiceEnabled;
+            const button = document.getElementById('voice-toggle');
+            const icon = document.getElementById('voice-icon');
+
+            if (voiceEnabled) {
+                button.classList.add('active');
+                icon.textContent = '🔊';
+            } else {
+                button.classList.remove('active');
+                icon.textContent = '🔇';
+                stopSpeaking();
+            }
+        }
+
         // Text-to-Speech Setup with Puter.js (Free, Unlimited, Human-like)
         let currentAudio = null;
         let isPuterReady = false;
 
-        // Wait for Puter.js to load
+        // Browser Speech API fallback
+        const synth = window.speechSynthesis;
+        let browserVoice = null;
+
+        // Initialize Puter.js
         window.addEventListener('load', () => {
+            // Init music
+            initBackgroundMusic();
+
+            // Init Puter.js voice
             if (typeof puter !== 'undefined') {
                 isPuterReady = true;
-                console.log('🎙️ Puter.js TTS loaded successfully - using Generative engine for human-like voice!');
+                console.log('🎙️ Puter.js AI voice loaded (Generative engine)');
             } else {
-                console.warn('⚠️ Puter.js not loaded, voice will be disabled');
+                console.warn('⚠️ Puter.js not loaded, using browser fallback');
             }
+
+            // Init browser fallback voices
+            initBrowserVoice();
         });
 
+        function initBrowserVoice() {
+            const voices = synth.getVoices();
+            browserVoice = voices.find(v => v.name.includes('Aria') || v.name.includes('Jenny')) ||
+                          voices.find(v => v.lang.startsWith('en-US')) ||
+                          voices[0];
+            console.log('🔊 Browser fallback voice:', browserVoice?.name || 'default');
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = initBrowserVoice;
+        }
+
         async function speak(text) {
+            // Check if voice enabled
+            if (!voiceEnabled) return;
+
             // Stop any current speech
             stopSpeaking();
 
-            if (!text || !isPuterReady) return;
+            if (!text) return;
 
-            // Clean HTML tags and special characters for better speech
+            // Clean HTML tags
             const cleanText = text
-                .replace(/<[^>]+>/g, '')  // Remove HTML tags
-                .replace(/&nbsp;/g, ' ')   // Replace nbsp
-                .replace(/\s+/g, ' ')      // Normalize spaces
+                .replace(/<[^>]+>/g, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/\s+/g, ' ')
                 .trim();
 
             if (!cleanText) return;
 
-            // Enforce 3000 character limit for Puter.js
-            const textToSpeak = cleanText.length > 3000 ? cleanText.substring(0, 2997) + '...' : cleanText;
-
-            // Add speaking animation to image
+            // Add speaking animation
             const sceneImage = document.querySelector('.scene-image');
-            if (sceneImage) {
-                sceneImage.classList.add('speaking');
+            if (sceneImage) sceneImage.classList.add('speaking');
+
+            // Try Puter.js first (free, human-like AI voice)
+            if (isPuterReady) {
+                try {
+                    const textToSpeak = cleanText.length > 3000 ? cleanText.substring(0, 2997) + '...' : cleanText;
+
+                    currentAudio = await puter.ai.txt2speech(textToSpeak, {
+                        engine: 'generative',  // Most human-like
+                        language: 'en-US',
+                        voice: 'female'
+                    });
+
+                    await currentAudio.play();
+
+                    currentAudio.addEventListener('ended', () => {
+                        if (sceneImage) sceneImage.classList.remove('speaking');
+                    });
+
+                    return; // Success!
+                } catch (error) {
+                    console.warn('Puter.js failed, using browser fallback:', error);
+                }
             }
 
+            // Fallback to browser speech API
             try {
-                // Use Puter.js Generative engine for most human-like speech
-                currentAudio = await puter.ai.txt2speech(textToSpeak, {
-                    engine: 'generative',  // BEST quality - most human-like
-                    language: 'en-US',
-                    voice: 'female'
-                });
+                const utterance = new SpeechSynthesisUtterance(cleanText);
+                utterance.voice = browserVoice;
+                utterance.rate = 0.92;
+                utterance.pitch = 1.05;
+                utterance.volume = 1.0;
 
-                // Play the audio
-                await currentAudio.play();
+                utterance.onend = () => {
+                    if (sceneImage) sceneImage.classList.remove('speaking');
+                };
 
-                // Remove speaking class when done
-                currentAudio.addEventListener('ended', () => {
-                    if (sceneImage) {
-                        sceneImage.classList.remove('speaking');
-                    }
-                });
+                utterance.onerror = () => {
+                    if (sceneImage) sceneImage.classList.remove('speaking');
+                };
 
+                synth.speak(utterance);
             } catch (error) {
-                console.error('🎙️ Puter TTS error:', error);
-                if (sceneImage) {
-                    sceneImage.classList.remove('speaking');
-                }
+                console.error('Speech failed:', error);
+                if (sceneImage) sceneImage.classList.remove('speaking');
             }
         }
 
         function stopSpeaking() {
+            // Stop Puter.js audio
             if (currentAudio) {
                 try {
                     currentAudio.pause();
                     currentAudio.currentTime = 0;
-                } catch (e) {
-                    console.warn('Could not stop audio:', e);
-                }
+                } catch (e) {}
             }
 
-            // Remove speaking animation
+            // Stop browser speech
+            try {
+                synth.cancel();
+            } catch (e) {}
+
+            // Remove animation
             const sceneImage = document.querySelector('.scene-image');
             if (sceneImage) {
                 sceneImage.classList.remove('speaking');
