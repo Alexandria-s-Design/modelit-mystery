@@ -7,8 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Puter.js - Free, unlimited, human-like TTS -->
-    <script src="https://js.puter.com/v2/"></script>
     <style>
         * {
             margin: 0;
@@ -472,7 +470,7 @@
 
         // Initialize background music
         function initBackgroundMusic() {
-            bgMusic = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_2d3c3b1c3e.mp3');
+            bgMusic = new Audio('audio/background_music.mp3');
             bgMusic.loop = true;
             bgMusic.volume = 0.3;
 
@@ -522,126 +520,80 @@
             }
         }
 
-        // Text-to-Speech Setup with Puter.js (Free, Unlimited, Human-like)
-        let currentAudio = null;
-        let isPuterReady = false;
+        // Pre-recorded Voice System (Microsoft Edge TTS - Neural Voices)
+        let currentVoiceAudio = null;
+        let currentChapter = 0;
+        let currentSceneInChapter = 0;
+        let isLearningMoment = false;
+        let isChoiceMoment = false;
+        let lastFeedbackIndex = 0;
 
-        // Browser Speech API fallback
-        const synth = window.speechSynthesis;
-        let browserVoice = null;
-
-        // Initialize Puter.js
+        // Initialize on page load
         window.addEventListener('load', () => {
-            // Init music
             initBackgroundMusic();
-
-            // Init Puter.js voice
-            if (typeof puter !== 'undefined') {
-                isPuterReady = true;
-                console.log('🎙️ Puter.js AI voice loaded (Generative engine)');
-            } else {
-                console.warn('⚠️ Puter.js not loaded, using browser fallback');
-            }
-
-            // Init browser fallback voices
-            initBrowserVoice();
+            console.log('🎙️ Voice system ready (Pre-recorded MP3 files)');
         });
 
-        function initBrowserVoice() {
-            const voices = synth.getVoices();
-            browserVoice = voices.find(v => v.name.includes('Aria') || v.name.includes('Jenny')) ||
-                          voices.find(v => v.lang.startsWith('en-US')) ||
-                          voices[0];
-            console.log('🔊 Browser fallback voice:', browserVoice?.name || 'default');
-        }
+        // Voice file mapping function
+        function getVoiceFile() {
+            const ch = currentChapter;
+            const sc = currentSceneInChapter;
 
-        if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = initBrowserVoice;
+            if (isChoiceMoment) {
+                return `audio/voice/ch${ch}_choice.mp3`;
+            } else if (isLearningMoment) {
+                return ch === 10 && sc === 3 ? `audio/voice/ch10_learning_final.mp3` : `audio/voice/ch${ch}_learning.mp3`;
+            } else if (lastFeedbackIndex >= 0) {
+                // Feedback from choice
+                const feedbackFile = `audio/voice/ch${ch}_feedback${lastFeedbackIndex + 1}.mp3`;
+                lastFeedbackIndex = -1; // Reset
+                return feedbackFile;
+            } else {
+                // Regular scene dialogue
+                return `audio/voice/ch${ch}_scene${sc}.mp3`;
+            }
         }
 
         async function speak(text) {
-            // Check if voice enabled
-            if (!voiceEnabled) return;
+            if (!voiceEnabled || !text) return;
 
-            // Stop any current speech
             stopSpeaking();
 
-            if (!text) return;
-
-            // Clean HTML tags
-            const cleanText = text
-                .replace(/<[^>]+>/g, '')
-                .replace(/&nbsp;/g, ' ')
-                .replace(/\s+/g, ' ')
-                .trim();
-
-            if (!cleanText) return;
-
-            // Add speaking animation
             const sceneImage = document.querySelector('.scene-image');
             if (sceneImage) sceneImage.classList.add('speaking');
 
-            // Try Puter.js first (free, human-like AI voice)
-            if (isPuterReady) {
-                try {
-                    const textToSpeak = cleanText.length > 3000 ? cleanText.substring(0, 2997) + '...' : cleanText;
+            // Get the appropriate voice file
+            const voiceFile = getVoiceFile();
 
-                    currentAudio = await puter.ai.txt2speech(textToSpeak, {
-                        engine: 'generative',  // Most human-like
-                        language: 'en-US',
-                        voice: 'female'
-                    });
-
-                    await currentAudio.play();
-
-                    currentAudio.addEventListener('ended', () => {
-                        if (sceneImage) sceneImage.classList.remove('speaking');
-                    });
-
-                    return; // Success!
-                } catch (error) {
-                    console.warn('Puter.js failed, using browser fallback:', error);
-                }
-            }
-
-            // Fallback to browser speech API
             try {
-                const utterance = new SpeechSynthesisUtterance(cleanText);
-                utterance.voice = browserVoice;
-                utterance.rate = 0.92;
-                utterance.pitch = 1.05;
-                utterance.volume = 1.0;
+                currentVoiceAudio = new Audio(voiceFile);
+                currentVoiceAudio.volume = 1.0;
 
-                utterance.onend = () => {
+                currentVoiceAudio.onended = () => {
                     if (sceneImage) sceneImage.classList.remove('speaking');
                 };
 
-                utterance.onerror = () => {
+                currentVoiceAudio.onerror = (error) => {
+                    console.warn(`Voice file not found: ${voiceFile}`, error);
                     if (sceneImage) sceneImage.classList.remove('speaking');
                 };
 
-                synth.speak(utterance);
+                await currentVoiceAudio.play();
+                console.log(`Playing: ${voiceFile}`);
             } catch (error) {
-                console.error('Speech failed:', error);
+                console.error('Voice playback failed:', error);
                 if (sceneImage) sceneImage.classList.remove('speaking');
             }
         }
 
         function stopSpeaking() {
-            // Stop Puter.js audio
-            if (currentAudio) {
+            if (currentVoiceAudio) {
                 try {
-                    currentAudio.pause();
-                    currentAudio.currentTime = 0;
+                    currentVoiceAudio.pause();
+                    currentVoiceAudio.currentTime = 0;
                 } catch (e) {}
             }
 
-            // Stop browser speech
-            try {
-                synth.cancel();
-            } catch (e) {}
-
-            // Remove animation
             const sceneImage = document.querySelector('.scene-image');
             if (sceneImage) {
                 sceneImage.classList.remove('speaking');
@@ -777,6 +729,11 @@
             const scene = chapter.scenes[sceneIndex];
             const panel = document.getElementById('story-panel');
 
+            // Update voice tracking
+            currentSceneInChapter = sceneIndex;
+            isLearningMoment = !!scene.learning;
+            isChoiceMoment = false;
+
             // Clean text for speech (remove HTML tags)
             const cleanText = scene.text.replace(/<[^>]*>/g, '');
 
@@ -843,6 +800,13 @@
 
             if (!revealArea || !chapter || !chapter.choice) return;
 
+            // Update voice tracking for choice moment
+            isChoiceMoment = true;
+            isLearningMoment = false;
+
+            // Speak the choice question
+            speak(chapter.choice.question);
+
             // Build choices HTML with question header
             let html = `
                 <div class="question-header">
@@ -883,6 +847,11 @@
                 text: choice.text
             });
 
+            // Set feedback tracking for voice
+            lastFeedbackIndex = choiceIndex;
+            isChoiceMoment = false;
+            isLearningMoment = false;
+
             // Check if this is a wrong answer that causes game over
             if (choice.gameOver) {
                 showGameOver(choice.feedback);
@@ -897,6 +866,10 @@
 
         function showChoiceFeedback(feedback, nextChapter) {
             const panel = document.getElementById('story-panel');
+
+            // Speak the feedback
+            speak(feedback);
+
             panel.innerHTML = `
                 <div class="scene-container">
                     <div class="dialogue-container">
@@ -914,6 +887,10 @@
 
         function showGameOver(feedback) {
             playFailureSound();
+
+            // Speak the game over feedback
+            speak(feedback);
+
             const panel = document.getElementById('story-panel');
             panel.innerHTML = `
                 <div class="scene-container">
