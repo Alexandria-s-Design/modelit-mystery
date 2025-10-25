@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Puter.js - Free, unlimited, human-like TTS -->
+    <script src="https://js.puter.com/v2/"></script>
     <style>
         * {
             margin: 0;
@@ -421,55 +423,25 @@
         // Sound Effects & Voice Over
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-        // Text-to-Speech Setup
-        const synth = window.speechSynthesis;
-        let drMayaVoice = null;
-        let currentUtterance = null;
+        // Text-to-Speech Setup with Puter.js (Free, Unlimited, Human-like)
+        let currentAudio = null;
+        let isPuterReady = false;
 
-        // Initialize voice - find best female voice
-        function initVoice() {
-            const voices = synth.getVoices();
-
-            // Priority list for most natural-sounding voices
-            const preferredVoices = [
-                'Samantha',                    // macOS - Very natural
-                'Microsoft Zira',              // Windows - Natural
-                'Google US English Female',    // Chrome - Good quality
-                'Google UK English Female',    // Chrome - Good quality
-                'Microsoft Jenny Online',      // Windows 11 - Neural voice
-                'Zira',                       // Windows - Good fallback
-            ];
-
-            // Try to find preferred voice
-            for (const preferred of preferredVoices) {
-                const voice = voices.find(v => v.name.includes(preferred));
-                if (voice) {
-                    drMayaVoice = voice;
-                    console.log('🎙️ Using voice:', voice.name);
-                    return;
-                }
+        // Wait for Puter.js to load
+        window.addEventListener('load', () => {
+            if (typeof puter !== 'undefined') {
+                isPuterReady = true;
+                console.log('🎙️ Puter.js TTS loaded successfully - using Generative engine for human-like voice!');
+            } else {
+                console.warn('⚠️ Puter.js not loaded, voice will be disabled');
             }
+        });
 
-            // Fallback: any female voice
-            drMayaVoice = voices.find(v => v.name.toLowerCase().includes('female')) ||
-                         voices.find(v => v.gender === 'female') ||
-                         voices.find(v => v.lang.startsWith('en')) ||
-                         voices[0];
-
-            console.log('🎙️ Using fallback voice:', drMayaVoice?.name || 'default');
-        }
-
-        // Load voices when available
-        if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = initVoice;
-        }
-        initVoice();
-
-        function speak(text) {
+        async function speak(text) {
             // Stop any current speech
-            synth.cancel();
+            stopSpeaking();
 
-            if (!text) return;
+            if (!text || !isPuterReady) return;
 
             // Clean HTML tags and special characters for better speech
             const cleanText = text
@@ -480,43 +452,56 @@
 
             if (!cleanText) return;
 
+            // Enforce 3000 character limit for Puter.js
+            const textToSpeak = cleanText.length > 3000 ? cleanText.substring(0, 2997) + '...' : cleanText;
+
             // Add speaking animation to image
             const sceneImage = document.querySelector('.scene-image');
             if (sceneImage) {
                 sceneImage.classList.add('speaking');
             }
 
-            currentUtterance = new SpeechSynthesisUtterance(cleanText);
-            currentUtterance.voice = drMayaVoice;
+            try {
+                // Use Puter.js Generative engine for most human-like speech
+                currentAudio = await puter.ai.txt2speech(textToSpeak, {
+                    engine: 'generative',  // BEST quality - most human-like
+                    language: 'en-US',
+                    voice: 'female'
+                });
 
-            // Optimized settings for natural, human-like speech
-            currentUtterance.rate = 0.95;      // Slightly slower for clarity and warmth
-            currentUtterance.pitch = 1.08;     // Warm, friendly female pitch
-            currentUtterance.volume = 1.0;     // Full volume
+                // Play the audio
+                await currentAudio.play();
 
-            // Add natural pauses at sentence boundaries
-            currentUtterance.text = cleanText.replace(/([.!?])\s+/g, '$1 ');
+                // Remove speaking class when done
+                currentAudio.addEventListener('ended', () => {
+                    if (sceneImage) {
+                        sceneImage.classList.remove('speaking');
+                    }
+                });
 
-            // Remove speaking class when done
-            currentUtterance.onend = () => {
+            } catch (error) {
+                console.error('🎙️ Puter TTS error:', error);
                 if (sceneImage) {
                     sceneImage.classList.remove('speaking');
                 }
-            };
-
-            // Error handling
-            currentUtterance.onerror = (event) => {
-                console.error('Speech error:', event);
-                if (sceneImage) {
-                    sceneImage.classList.remove('speaking');
-                }
-            };
-
-            synth.speak(currentUtterance);
+            }
         }
 
         function stopSpeaking() {
-            synth.cancel();
+            if (currentAudio) {
+                try {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                } catch (e) {
+                    console.warn('Could not stop audio:', e);
+                }
+            }
+
+            // Remove speaking animation
+            const sceneImage = document.querySelector('.scene-image');
+            if (sceneImage) {
+                sceneImage.classList.remove('speaking');
+            }
         }
 
         function playClickSound() {
@@ -656,7 +641,7 @@
 
             let html = `
                 <div class="scene-container">
-                    <div class="scene-image" style="background-image: url('${chapter.image}')">
+                    <div class="scene-image" style="background-image: url('${scene.image || chapter.image}')">
                         <div class="scene-overlay">
                             <div class="scene-title">${chapter.title}</div>
                         </div>

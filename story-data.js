@@ -1,6 +1,7 @@
 // ModelIt! - The Mystery of the Mutating Cells
 // Complete 10-Chapter Branching Story Adventure
 // Teaching the 10 Fundamentals of Boolean Modeling
+// UPDATED: Scene-level images for unique visuals on every screen
 
 const STORY_DATA = {
     // 10 Modeling Fundamentals we'll teach:
@@ -21,17 +22,18 @@ const STORY_DATA = {
             id: 0,
             title: "The Discovery",
             concept: "What is a Model?",
-            image: "images/drElena.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Hey there! I'm Dr. Maya, and I need YOUR help! Something weird is happening in my lab...",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch0_scene1_maya_intro.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "Last night, I was working late when I noticed something INCREDIBLE - cells in my Petri dish started glowing blue! But not just any glow... they were pulsing in a pattern.",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch0_scene2_glowing_cells.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -39,11 +41,13 @@ const STORY_DATA = {
                     learning: {
                         title: "🧬 What is a Model?",
                         content: "A model is like a blueprint for understanding how something works! Just like architects use blueprints to build buildings, scientists use models to understand biological systems. A model helps us predict what will happen BEFORE we try it in real life!"
-                    }
+                    },
+                    image: "images/scenes/ch0_scene3_modeling_explanation.png"
                 }
             ],
             choice: {
                 question: "How should we begin our investigation?",
+                image: "images/scenes/ch0_scene2_maya_excited.png",
                 options: [
                     {
                         text: "Let's identify what molecules are involved in this glowing",
@@ -64,12 +68,12 @@ const STORY_DATA = {
             id: 1,
             title: "Hunting for Clues",
             concept: "Components (Species)",
-            image: "images/cellSignaling.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Okay, let's look closer! Under my super-powered microscope, I can see what's making the cells glow...",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch1_scene1_microscope_view.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -77,16 +81,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🔬 Components (Species)",
                         content: "In modeling, we call the important parts 'components' or 'species'. These are the biological molecules that interact - like proteins, DNA, and enzymes. Think of them as the CHARACTERS in our story! Identifying them is always step #1."
-                    }
+                    },
+                    image: "images/scenes/ch1_scene2_three_components.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "But wait... something's OFF. The signal protein - it's not from these cells. It's coming from somewhere ELSE. Someone... or something... is sending signals to my cells!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch1_scene3_mysterious_signal.png"
                 }
             ],
             choice: {
                 question: "This is getting mysterious! What should we investigate next?",
+                image: "images/scenes/ch1_scene3_receptors.png",
                 options: [
                     {
                         text: "How do these three components interact with each other?",
@@ -107,12 +114,12 @@ const STORY_DATA = {
             id: 2,
             title: "Connect the Dots",
             concept: "Relationships (Regulators)",
-            image: "images/modelBuilding.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Time to map out HOW these components talk to each other! This is where it gets exciting...",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch2_scene1_network_mapping.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -120,16 +127,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🔗 Relationships (Regulators)",
                         content: "Components don't work alone - they INTERACT! We call these interactions 'regulators' or 'relationships'. One component can ACTIVATE another (turn it ON) or INHIBIT it (turn it OFF). It's like a conversation where molecules talk to each other!"
-                    }
+                    },
+                    image: "images/scenes/ch2_scene2_logic_gates.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "So we have: Signal → Receptor → Enzyme → Glow! But hold on... *checks computer* ...the glow pattern is changing FASTER than it should. There must be something else going on!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch2_scene3_changing_pattern.png"
                 }
             ],
             choice: {
                 question: "The plot thickens! What do you think is happening?",
+                image: "images/scenes/ch2_scene2_chain_reaction.png",
                 options: [
                     {
                         text: "Maybe the enzyme is feeding back and affecting the receptor?",
@@ -150,12 +160,12 @@ const STORY_DATA = {
             id: 3,
             title: "⚔️ BOSS CHALLENGE: The Starting Point",
             concept: "Initial Conditions",
-            image: "images/lab.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Wait! Before we continue, the cells are showing signs of dangerous mutation! I need to know you REALLY understand initial conditions, or this could go very wrong!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch3_scene1_mutation_warning.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -163,16 +173,19 @@ const STORY_DATA = {
                     learning: {
                         title: "▶️ Initial Conditions",
                         content: "Every system has a starting point! Initial conditions tell us the state of each component at the beginning - is it ON or OFF? ACTIVE or INACTIVE? This starting point determines EVERYTHING that happens next. Change the start, change the whole story!"
-                    }
+                    },
+                    image: "images/scenes/ch3_scene2_initial_state_diagram.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "⚠️ CRITICAL QUESTION: If I change ONLY the Receptor to start in the ON state (while Signal stays OFF and Enzyme stays OFF), what happens to the Enzyme? Think carefully - your answer determines if we can safely continue!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch3_scene1_lab_notes.png"
                 }
             ],
             choice: {
                 question: "⚠️ BOSS QUESTION: What happens to the Enzyme?",
+                image: "images/scenes/ch3_scene3_different_results.png",
                 options: [
                     {
                         text: "The Enzyme turns ON immediately because the Receptor is ON",
@@ -200,12 +213,12 @@ const STORY_DATA = {
             id: 4,
             title: "Cracking the Code",
             concept: "Logic Functions",
-            image: "images/modelBuilding.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Time to dive into the RULES! Every biological system follows logic - we just need to decode it...",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch4_scene1_logic_gates.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -213,16 +226,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🧮 Logic Functions",
                         content: "Biology uses logic! Components follow rules like AND, OR, and NOT. For example: 'Enzyme turns ON if Receptor is ON AND Signal is present' (AND gate). Or 'Gene activates if Factor A OR Factor B is present' (OR gate). These logical rules determine how the system behaves!"
-                    }
+                    },
+                    image: "images/scenes/ch4_scene2_decoding_rules.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "But wait... *alarm starts beeping* ...OH NO! The cells just multiplied! They're spreading to other Petri dishes! And the pattern... it's repeating itself over and over. We need to understand ALL possible states this system can be in!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch4_scene3_cells_spreading.png"
                 }
             ],
             choice: {
                 question: "This is escalating! What should we focus on?",
+                image: "images/scenes/ch4_scene2_network_diagram.png",
                 options: [
                     {
                         text: "Let's map out every possible state the system could be in",
@@ -243,12 +259,12 @@ const STORY_DATA = {
             id: 5,
             title: "The Big Picture",
             concept: "State Space",
-            image: "images/modelBuilding.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Okay, let's think this through systematically. With 3 components that can each be ON or OFF, how many possible states can the system be in?",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch5_scene1_state_space_map.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -256,16 +272,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🗺️ State Space",
                         content: "State space is like a map of EVERY possible configuration of your system! With N components that can be ON or OFF, you get 2^N possible states. For 3 components: 2³ = 8 states. For 10 components: 2¹⁰ = 1,024 states! Understanding state space helps us see ALL the paths our system could take."
-                    }
+                    },
+                    image: "images/scenes/ch5_scene2_cycling_states.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "And here's what's TERRIFYING - the system is cycling through multiple states, but it always ends up in the SAME final state no matter where it starts! It's like the cells are being PROGRAMMED to reach a specific outcome...",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch5_scene3_final_state.png"
                 }
             ],
             choice: {
                 question: "Why would the system always end up in the same state?",
+                image: "images/scenes/ch5_scene2_feedback_cycles.png",
                 options: [
                     {
                         text: "There must be a feedback loop controlling the system!",
@@ -286,12 +305,12 @@ const STORY_DATA = {
             id: 6,
             title: "⚔️ BOSS CHALLENGE: The Hidden Loop",
             concept: "Feedback Loops",
-            image: "images/cellSignaling.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "⚠️ ALERT! The cells are pulsing faster! I found a FEEDBACK LOOP we missed! The Enzyme doesn't just create the glow - it ALSO affects the Receptor!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch6_scene1_feedback_discovery.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -299,16 +318,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🔄 Feedback Loops",
                         content: "Feedback loops are when outputs affect inputs! POSITIVE feedback amplifies signals (like a microphone screech). NEGATIVE feedback stabilizes systems (like a thermostat). Feedback loops are EVERYWHERE in biology - they control everything from your body temperature to how cells divide!"
-                    }
+                    },
+                    image: "images/scenes/ch6_scene2_negative_feedback.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "⚠️ CRITICAL SITUATION: *alarm blaring* The cells are spreading! I need you to tell me: What type of feedback loop is this, and what will it do to the system's behavior? Your answer determines if we can contain this!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch6_scene2_control_systems.png"
                 }
             ],
             choice: {
                 question: "⚠️ BOSS QUESTION: What will this feedback loop do?",
+                image: "images/scenes/ch6_scene3_encrypted_message.png",
                 options: [
                     {
                         text: "It's POSITIVE feedback - the signal will amplify and grow exponentially!",
@@ -336,12 +358,12 @@ const STORY_DATA = {
             id: 7,
             title: "What Happens Next?",
             concept: "Predicting Behavior",
-            image: "images/modelBuilding.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "This is where our model becomes powerful! We can PREDICT what happens before we try it in real life!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch7_scene1_simulation_screen.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -349,16 +371,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🔮 Predicting System Behavior",
                         content: "This is the POWER of models! We can simulate what happens over time WITHOUT doing dangerous experiments. We can fast-forward, rewind, and test scenarios. It's like having a time machine for biology! Models let us predict the future before it happens."
-                    }
+                    },
+                    image: "images/scenes/ch7_scene2_prediction_models.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "But *checks ventilation* ...someone's been using this signal to control the cells! If we shut it off suddenly, we don't know if there will be side effects. What if we TEST what happens when we perturb the system different ways?",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch7_scene3_ventilation_check.png"
                 }
             ],
             choice: {
                 question: "How should we test the system?",
+                image: "images/scenes/ch7_scene2_prediction_diagram.png",
                 options: [
                     {
                         text: "Let's simulate removing the signal gradually instead of all at once",
@@ -379,12 +404,12 @@ const STORY_DATA = {
             id: 8,
             title: "Shake Things Up",
             concept: "Testing Perturbations",
-            image: "images/lab.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "Time to test! In science, we call these experiments <span class='concept-highlight'>perturbations</span> - we change something and observe what happens!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch8_scene1_experiment_setup.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -392,16 +417,19 @@ const STORY_DATA = {
                     learning: {
                         title: "🧪 Testing Perturbations",
                         content: "Perturbations are changes we make to test the system! We might remove a component (gene knockout), increase a signal (drug treatment), or change initial conditions. By testing HOW the system responds to changes, we discover which parts are critical and which are robust. It's like stress-testing a bridge!"
-                    }
+                    },
+                    image: "images/scenes/ch8_scene2_treatment_options.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "*suddenly, lights flicker* Someone just cut the power to my lab! But the cells... they're still glowing! That means... they've become INDEPENDENT of the external signal! The cells have adapted. We need to validate our model against this NEW data!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch8_scene3_power_outage.png"
                 }
             ],
             choice: {
                 question: "The system evolved! How do we handle this?",
+                image: "images/scenes/ch8_scene2_test_results.png",
                 options: [
                     {
                         text: "Check if our model's predictions match the new real-world data",
@@ -422,12 +450,12 @@ const STORY_DATA = {
             id: 9,
             title: "🔥 FINAL BOSS: The Ultimate Challenge",
             concept: "Model Validation",
-            image: "images/lab.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "🚨 RED ALERT! The cells are mutating RAPIDLY! We've compared our model predictions to reality, and something TERRIBLE is happening!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch9_scene1_validation_comparison.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -435,16 +463,19 @@ const STORY_DATA = {
                     learning: {
                         title: "✅ Model Validation",
                         content: "A model is only useful if it matches REALITY! Validation means testing our model against real experimental data. If predictions match observations - great! If not, we learn something new and improve the model. It's a cycle: Model → Predict → Test → Validate → Improve. This is how all of science works!"
-                    }
+                    },
+                    image: "images/scenes/ch9_scene2_evolved_feedback.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "💀 FINAL BOSS QUESTION: *emergency sirens blaring* I just detected a SECOND feedback loop forming! We have THREE components (Signal, Receptor, Enzyme) with TWO feedback loops - one negative (Enzyme inhibits Receptor) and one unknown. What system behavior indicates POSITIVE feedback is also present?",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch9_scene3_intruder_alert.png"
                 }
             ],
             choice: {
                 question: "💀 FINAL BOSS: What indicates positive feedback?",
+                image: "images/scenes/ch9_scene2_bistable_system.png",
                 options: [
                     {
                         text: "The system oscillates between ON and OFF in a stable rhythm",
@@ -472,12 +503,12 @@ const STORY_DATA = {
             id: 10,
             title: "The Final Model",
             concept: "Iteration & Refinement",
-            image: "images/celebration.png",
             scenes: [
                 {
                     speaker: "Dr. Maya",
                     text: "We've come full circle! Now we use EVERYTHING we learned to refine our model and find the perfect solution!",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch10_scene1_final_iteration.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -485,12 +516,14 @@ const STORY_DATA = {
                     learning: {
                         title: "🔄 Iteration & Refinement",
                         content: "Models are NEVER perfect on the first try! Iteration means we continuously improve our model based on new data. We go through the cycle: Build → Test → Learn → Refine → Repeat. Each iteration makes the model more accurate. This is the TRUE power of modeling - it gets better with every cycle!"
-                    }
+                    },
+                    image: "images/scenes/ch10_scene2_solution_found.png"
                 },
                 {
                     speaker: "Dr. Maya",
                     text: "*applies the treatment* YES! The cells are returning to normal! And look - *picks up a note left by the intruder* - 'Well done, Dr. Maya. You passed the test. Your modeling skills may have just saved the world. We'll be in touch. -A.F., Director, Bio-Defense Agency'",
-                    learning: null
+                    learning: null,
+                    image: "images/scenes/ch10_scene3_cells_healing.png"
                 },
                 {
                     speaker: "Dr. Maya",
@@ -498,7 +531,8 @@ const STORY_DATA = {
                     learning: {
                         title: "🏆 You Did It!",
                         content: "You just learned the 10 Fundamentals of Biological Modeling! 1. What Models Are 2. Components 3. Relationships 4. Initial Conditions 5. Logic Functions 6. State Space 7. Feedback Loops 8. Predicting Behavior 9. Perturbations 10. Validation & Iteration. These skills are used by scientists worldwide to understand diseases, develop drugs, and save lives!"
-                    }
+                    },
+                    image: "images/scenes/ch10_scene5_celebration.png"
                 }
             ],
             choice: null // End of story!

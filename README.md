@@ -6,11 +6,12 @@ An interactive educational game that teaches the 10 fundamentals of Boolean mode
 
 - **10 Complete Chapters** covering all fundamentals of biological modeling
 - **3 Boss Levels** with challenging questions and game-over mechanics
-- **36 Unique AI-Generated Images** featuring consistent character design
-- **Natural Voice-Over** with Dr. Maya speaking all dialogue
+- **49 Unique AI-Generated Images** featuring consistent Dr. Maya character design
+- **Human-Like Voice-Over** powered by Puter.js AI (free, unlimited, generative engine)
 - **Smooth Animations** - images zoom, buttons glow, choices slide in
 - **Side-by-Side Layout** - 48% image, 48% text, no scrolling needed
 - **Interactive Choices** that affect the story progression
+- **44 Unique Screens** - every screen has its own image (no repetition)
 
 ## 📚 Educational Content
 
@@ -39,10 +40,11 @@ No installation or server required - it's a standalone HTML file!
 ## 🛠️ Technical Details
 
 - **Framework:** Pure HTML5, CSS3, JavaScript (no dependencies)
-- **Voice:** Web Speech API for natural text-to-speech
+- **Voice:** Puter.js AI TTS with Generative engine (free, unlimited, human-like)
 - **Sound:** Web Audio API for click sounds and effects
-- **Images:** AI-generated using Google Gemini 2.5 Flash (Nano Banana)
+- **Images:** AI-generated using OpenRouter API (consistent Dr. Maya design)
 - **Style:** Sci-fi themed with cyan/blue color palette
+- **Deployment:** Single HTML file - works offline, no server required
 
 ## 📁 Project Structure
 
@@ -68,16 +70,17 @@ modeling-game/
 
 ## 💰 Development Cost
 
-- 36 original images: $1.40
-- 13 regenerated images: $0.51
-- **Total:** $1.91
+- 49 AI-generated images via OpenRouter: ~$2.00
+- Voice synthesis: $0 (Puter.js is free and unlimited)
+- **Total:** ~$2.00
 
 ## 🙏 Credits
 
 - Story & Game Design: Educational Biology Modeling Team
-- AI Image Generation: Google Gemini 2.5 Flash via OpenRouter
+- AI Image Generation: OpenRouter API (Gemini 2.5 Flash)
+- Voice Synthesis: Puter.js AI TTS (Generative engine)
 - Development: Built with Claude Code
-- Voice-Over: Web Speech API
+- Sound Effects: Web Audio API
 
 ## 📝 License
 

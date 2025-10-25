@@ -15,3 +15,12 @@ Thumbs.db
 
 # Backup images
 images/scenes/old_*.png
+
+# Archive folder (backups and old files)
+archive/
+
+# Environment variables
+.env
+
+# Temp files
+nul
