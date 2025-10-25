@@ -7,7 +7,8 @@ An interactive educational game that teaches the 10 fundamentals of Boolean mode
 - **10 Complete Chapters** covering all fundamentals of biological modeling
 - **3 Boss Levels** with challenging questions and game-over mechanics
 - **49 Unique AI-Generated Images** featuring consistent Dr. Maya character design
-- **Human-Like Voice-Over** powered by Puter.js AI (free, unlimited, generative engine)
+- **Professional Voice Narration** - 79 pre-recorded MP3 files using Microsoft Edge TTS (AriaNeural neural voice)
+- **Instrumental Background Music** - sci-fi ambient music (Kevin MacLeod - Eternal Hope)
 - **Smooth Animations** - images zoom, buttons glow, choices slide in
 - **Side-by-Side Layout** - 48% image, 48% text, no scrolling needed
 - **Interactive Choices** that affect the story progression
@@ -40,22 +41,28 @@ No installation or server required - it's a standalone HTML file!
 ## 🛠️ Technical Details
 
 - **Framework:** Pure HTML5, CSS3, JavaScript (no dependencies)
-- **Voice:** Puter.js AI TTS with Generative engine (free, unlimited, human-like)
+- **Voice:** 79 pre-recorded MP3 files generated with Microsoft Edge TTS (AriaNeural neural voice)
+- **Music:** Local MP3 file (Kevin MacLeod - Eternal Hope, CC-BY licensed)
+- **Audio System:** HTML5 Audio API with automatic voice file mapping
 - **Sound:** Web Audio API for click sounds and effects
 - **Images:** AI-generated using OpenRouter API (consistent Dr. Maya design)
 - **Style:** Sci-fi themed with cyan/blue color palette
-- **Deployment:** Single HTML file - works offline, no server required
+- **Deployment:** Fully offline-capable - no internet required after first load
+- **Cost:** $0.00 - all free tools and assets
 
 ## 📁 Project Structure
 
 ```
-modeling-game/
+modelit-mystery/
 ├── modelit-story.html      # Main game file (play this!)
 ├── story-data.js           # Complete 10-chapter branching story
+├── audio/
+│   ├── voice/              # 79 pre-recorded dialogue MP3 files (~15 MB)
+│   └── background_music.mp3 # Background music (11 MB)
 ├── images/
-│   └── scenes/             # 36 AI-generated scene images
-├── generate-all-scenes.js  # Image generation script
-└── test scripts/           # Various testing utilities
+│   └── scenes/             # 49 AI-generated scene images
+├── INTEGRATION_COMPLETE.md # Full documentation of v2.0 integration
+└── validate_assets.py      # Asset verification script
 ```
 
 ## 🎨 Character
@@ -71,15 +78,17 @@ modeling-game/
 ## 💰 Development Cost
 
 - 49 AI-generated images via OpenRouter: ~$2.00
-- Voice synthesis: $0 (Puter.js is free and unlimited)
-- **Total:** ~$2.00
+- 79 voice files (Microsoft Edge TTS): $0 (completely free)
+- Background music (Kevin MacLeod): $0 (CC-BY licensed)
+- **Total:** ~$2.00 (images only)
 
 ## 🙏 Credits
 
-- Story & Game Design: Educational Biology Modeling Team
+- Story & Game Design: Dr. Charles Martin
 - AI Image Generation: OpenRouter API (Gemini 2.5 Flash)
-- Voice Synthesis: Puter.js AI TTS (Generative engine)
-- Development: Built with Claude Code
+- Voice Synthesis: Microsoft Edge TTS (AriaNeural neural voice)
+- Background Music: Kevin MacLeod - "Eternal Hope" (CC-BY)
+- Development: Built with Claude Code AI Assistant
 - Sound Effects: Web Audio API
 
 ## 📝 License
