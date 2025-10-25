@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelIt! - The Mystery of the Mutating Cells</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a4f6e 0%, #1a1a2e 100%);
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        #game-header {
+            background: rgba(10, 79, 110, 0.9);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #00d4ff;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        #game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
+            letter-spacing: 1.5px;
+        }
+
+        #progress-tracker {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chapter-badge {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-badge.completed {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+        }
+
+        .chapter-badge.current {
+            background: linear-gradient(135deg, #ff00ff 0%, #cc00cc 100%);
+            border-color: #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        /* Main Area */
+        #game-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        /* Story Panel */
+        #story-panel {
+            max-width: 1000px;
+            width: 100%;
+            max-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scene-container {
+            animation: fadeIn 0.6s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-height: calc(100vh - 120px);
+        }
+
+        .scene-image {
+            width: 100%;
+            height: 360px;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center 30%;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+            border: 3px solid #00d4ff;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .scene-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+            padding: 20px;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .scene-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: #00d4ff;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+        }
+
+        .dialogue-container {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 153, 204, 0.15) 100%);
+            padding: 12px 15px;
+            border-radius: 15px;
+            border-left: 5px solid #00d4ff;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .speaker-name {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+            letter-spacing: 0.5px;
+        }
+
+        .dialogue-text {
+            font-family: 'Exo 2', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .concept-highlight {
+            background: rgba(0, 212, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #00ffff;
+            font-weight: 600;
+        }
+
+        /* Choices */
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .choice-button {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.2) 100%);
+            border: 2px solid #00d4ff;
+            color: white;
+            padding: 12px 20px;
+            font-size: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-button:before {
+            content: '▶';
+            position: absolute;
+            left: 15px;
+            color: #00d4ff;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .choice-button:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.4) 0%, rgba(0, 153, 204, 0.4) 100%);
+            transform: translateX(10px);
+            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.6);
+        }
+
+        .choice-button:hover:before {
+            left: 20px;
+        }
+
+        .continue-button {
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            margin: 15px auto 0;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+            border: 2px solid #00d4ff;
+            display: inline-block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .continue-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.8);
+            background: linear-gradient(135deg, #00ffff 0%, #00d4ff 100%);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Learning Moment */
+        .learning-moment {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.2) 0%, rgba(204, 0, 204, 0.2) 100%);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 10px 12px;
+            margin: 10px 0;
+            flex-shrink: 0;
+        }
+
+        .learning-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #ff00ff;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
+        }
+
+        .learning-content {
+            color: #e0e0e0;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+    </style>
+    <script src="story-data.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Header -->
+        <div id="game-header">
+            <div id="game-title">ModelIt! The Mystery</div>
+            <div id="progress-tracker">
+                <!-- Dynamically filled with chapter badges -->
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div id="game-main">
+            <div id="story-panel">
+                <!-- Story content dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sound Effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playClickSound() {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            oscillator.type = 'sine';
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        }
+
+        function playSuccessSound() {
+            [800, 1000, 1200].forEach((freq, index) => {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.frequency.value = freq;
+                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    oscillator.type = 'triangle';
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                }, index * 100);
+            });
+        }
+
+        function playFailureSound() {
+            // Dramatic failure sound
+            [600, 500, 400, 300].forEach((freq, index) => {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.frequency.value = freq;
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+                    oscillator.type = 'sawtooth';
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.4);
+                }, index * 150);
+            });
+        }
+
+        function playBossSound() {
+            // Dramatic boss encounter sound
+            [200, 250, 300, 400].forEach((freq, index) => {
+                setTimeout(() => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    oscillator.frequency.value = freq;
+                    gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    oscillator.type = 'square';
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                }, index * 100);
+            });
+        }
+
+        // Game State
+        let currentChapter = 0;
+        let completedChapters = [];
+        let playerChoices = [];
+
+        // Load story data from external file
+        const story = window.STORY_DATA || { chapters: [] };
+
+        // Initialize game
+        function initGame() {
+            renderChapterBadges();
+            showChapter(0);
+        }
+
+        function renderChapterBadges() {
+            const badgesContainer = document.getElementById('progress-tracker');
+            if (!badgesContainer) return;
+            badgesContainer.innerHTML = '';
+
+            // Show first 10 chapters
+            for (let i = 0; i < 10; i++) {
+                const badge = document.createElement('div');
+                badge.className = 'chapter-badge';
+                badge.textContent = i + 1;
+                badge.title = story.chapters[i]?.title || `Chapter ${i + 1}`;
+
+                if (completedChapters.includes(i)) {
+                    badge.classList.add('completed');
+                } else if (i === currentChapter) {
+                    badge.classList.add('current');
+                }
+
+                badgesContainer.appendChild(badge);
+            }
+        }
+
+        function showChapter(chapterIndex) {
+            currentChapter = chapterIndex;
+            const chapter = story.chapters[chapterIndex];
+
+            if (!chapter) {
+                showEnding();
+                return;
+            }
+
+            // Play boss sound for boss chapters
+            if (chapter.title.includes('BOSS')) {
+                playBossSound();
+            } else {
+                playClickSound();
+            }
+
+            renderChapterBadges();
+
+            let currentScene = 0;
+            showScene(chapter, currentScene);
+        }
+
+        function showScene(chapter, sceneIndex) {
+            const scene = chapter.scenes[sceneIndex];
+            const panel = document.getElementById('story-panel');
+
+            let html = `
+                <div class="scene-container">
+                    <div class="scene-image" style="background-image: url('${chapter.image}')">
+                        <div class="scene-overlay">
+                            <div class="scene-title">${chapter.title}</div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-container">
+                        <div class="speaker-name">${scene.speaker}</div>
+                        <div class="dialogue-text">${scene.text}</div>
+                    </div>
+            `;
+
+            if (scene.learning) {
+                html += `
+                    <div class="learning-moment">
+                        <div class="learning-title">${scene.learning.title}</div>
+                        <div class="learning-content">${scene.learning.content}</div>
+                    </div>
+                `;
+            }
+
+            // Check if there are more scenes or if we should show choices
+            if (sceneIndex < chapter.scenes.length - 1) {
+                html += `
+                    <div style="text-align: center;">
+                        <div class="continue-button" onclick="showNextScene(${sceneIndex})">
+                            Continue →
+                        </div>
+                    </div>
+                `;
+            } else if (chapter.choice) {
+                html += `
+                    <div class="choices-container">
+                `;
+                chapter.choice.options.forEach((option, index) => {
+                    html += `
+                        <div class="choice-button" onclick="makeChoice(${index})">
+                            ${option.text}
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+            panel.innerHTML = html;
+        }
+
+        let currentChapterData = null;
+
+        function showNextScene(currentSceneIndex) {
+            playClickSound();
+            const chapter = story.chapters[currentChapter];
+            showScene(chapter, currentSceneIndex + 1);
+        }
+
+        function makeChoice(choiceIndex) {
+            playSuccessSound();
+            const chapter = story.chapters[currentChapter];
+            const choice = chapter.choice.options[choiceIndex];
+
+            playerChoices.push({
+                chapter: currentChapter,
+                choice: choiceIndex,
+                text: choice.text
+            });
+
+            // Check if this is a wrong answer that causes game over
+            if (choice.gameOver) {
+                showGameOver(choice.feedback);
+                return;
+            }
+
+            completedChapters.push(currentChapter);
+
+            // Show feedback then move to next chapter
+            showChoiceFeedback(choice.feedback, choice.next);
+        }
+
+        function showChoiceFeedback(feedback, nextChapter) {
+            const panel = document.getElementById('story-panel');
+            panel.innerHTML = `
+                <div class="scene-container">
+                    <div class="dialogue-container">
+                        <div class="speaker-name">Dr. Maya</div>
+                        <div class="dialogue-text">${feedback}</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div class="continue-button" onclick="showChapter(${nextChapter})">
+                            Continue Investigation →
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showGameOver(feedback) {
+            playFailureSound();
+            const panel = document.getElementById('story-panel');
+            panel.innerHTML = `
+                <div class="scene-container">
+                    <div class="scene-image" style="background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%); display: flex; align-items: center; justify-content: center;">
+                        <div style="font-family: 'Orbitron', sans-serif; font-size: 48px; color: white; text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);">
+                            ⚠️ EXPERIMENT FAILED ⚠️
+                        </div>
+                    </div>
+
+                    <div class="dialogue-container" style="border-left-color: #ff0000;">
+                        <div class="speaker-name" style="color: #ff0000;">Dr. Maya</div>
+                        <div class="dialogue-text">${feedback}</div>
+                    </div>
+
+                    <div class="learning-moment" style="border-color: #ff0000; background: linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);">
+                        <div class="learning-title" style="color: #ff0000;">💀 Critical Failure</div>
+                        <div class="learning-content">
+                            The cells have mutated out of control! Without the right knowledge of modeling fundamentals, we couldn't predict what would happen.
+                            <br><br>
+                            <strong>In science, mistakes can be catastrophic. Let's start over and learn from this failure!</strong>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <div class="continue-button" style="background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%); border-color: #ff0000;" onclick="restartGame()">
+                            Start Over from Beginning
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function restartGame() {
+            currentChapter = 0;
+            completedChapters = [];
+            playerChoices = [];
+            renderChapterBadges();
+            showChapter(0);
+        }
+
+        function showEnding() {
+            playSuccessSound();
+            const panel = document.getElementById('story-panel');
+            panel.innerHTML = `
+                <div class="scene-container">
+                    <div class="scene-image" style="background-image: url('images/celebration.png')">
+                        <div class="scene-overlay">
+                            <div class="scene-title">🎉 Victory!</div>
+                        </div>
+                    </div>
+
+                    <div class="dialogue-container">
+                        <div class="speaker-name">Dr. Maya</div>
+                        <div class="dialogue-text">
+                            We did it! Together, we mastered all 10 fundamentals of biological modeling and solved the mystery!
+                            You're not just a helper anymore - you're a REAL computational biologist! 🧬
+                        </div>
+                    </div>
+
+                    <div class="learning-moment">
+                        <div class="learning-title">🏆 Congratulations, Modeler!</div>
+                        <div class="learning-content">
+                            You just completed an epic adventure and learned:<br><br>
+                            ✓ What models are and why they're powerful<br>
+                            ✓ How to identify components (species)<br>
+                            ✓ How to define relationships (regulators)<br>
+                            ✓ Why initial conditions matter<br>
+                            ✓ How logic functions control behavior<br>
+                            ✓ Understanding state space<br>
+                            ✓ Analyzing feedback loops<br>
+                            ✓ Predicting system behavior<br>
+                            ✓ Testing perturbations<br>
+                            ✓ Validating and iterating models<br><br>
+                            <strong>These skills are used by real scientists to understand diseases, develop drugs, and save lives!</strong>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <div class="continue-button" onclick="location.reload()">
+                            Play Again 🔄
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Start the game
+        initGame();
+        console.log('🎮 ModelIt! Story Game loaded!');
+    </script>
+</body>
+</html>

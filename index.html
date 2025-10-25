@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cell Collective: The Modeling Mystery - Act 1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0a4f6e 0%, #1a1a2e 100%);
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header with Cell Collective Branding */
+        #game-header {
+            background: rgba(10, 79, 110, 0.9);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #00d4ff;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        #game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
+            letter-spacing: 1.5px;
+        }
+
+        #progress-tracker {
+            display: flex;
+            gap: 10px;
+        }
+
+        .fundamental-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .fundamental-badge.completed {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+        }
+
+        /* Main Game Area */
+        #game-main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Story Panel */
+        #story-panel {
+            width: 40%;
+            background: rgba(26, 26, 46, 0.95);
+            padding: 30px;
+            overflow-y: auto;
+            border-right: 2px solid #00d4ff;
+        }
+
+        .character-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border: 3px solid #00d4ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .dialogue-box {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00d4ff;
+            flex: 1;
+        }
+
+        .character-name {
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .dialogue-text {
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        /* Interactive Panel */
+        #interactive-panel {
+            width: 60%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-title {
+            font-size: 22px;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Model Building Area */
+        #model-canvas {
+            flex: 1;
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 15px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        /* Component Palette */
+        #component-palette {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .component-list {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .component-item {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.2) 100%);
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px 25px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            user-select: none;
+        }
+
+        .component-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.4) 0%, rgba(0, 153, 204, 0.4) 100%);
+        }
+
+        .component-item:active {
+            cursor: grabbing;
+        }
+
+        .component-item.used {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Placed Components */
+        .placed-component {
+            position: absolute;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border: 3px solid #ffffff;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: move;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.6);
+            text-align: center;
+            padding: 5px;
+            animation: placeComponent 0.3s ease;
+            z-index: 10;
+        }
+
+        @keyframes placeComponent {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Action Buttons */
+        #action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .action-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 212, 255, 0.6);
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* AI Feedback Box */
+        #ai-feedback {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.2) 100%);
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 80px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            font-size: 15px;
+        }
+
+        #ai-feedback.visible {
+            display: block;
+        }
+
+        #ai-feedback strong {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+
+        #ai-feedback em {
+            color: #66e0ff;
+            font-style: italic;
+        }
+
+        .ai-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 20px;
+            vertical-align: top;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Connections between components */
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: #00d4ff;
+            transform-origin: left center;
+            pointer-events: none;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+        }
+
+        /* Instructions */
+        .instruction-text {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid #00d4ff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 26, 46, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #0099cc 0%, #00d4ff 100%);
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Header -->
+        <div id="game-header">
+            <div id="game-title">Cell Collective: The Modeling Mystery</div>
+            <div id="progress-tracker">
+                <div class="fundamental-badge" title="Identify Components">1</div>
+                <div class="fundamental-badge" title="Define Relationships">2</div>
+                <div class="fundamental-badge" title="Set Initial Conditions">3</div>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div id="game-main">
+            <!-- Story Panel -->
+            <div id="story-panel">
+                <div class="character-container">
+                    <div class="character-avatar">👩‍🔬</div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Dr. Elena Rodriguez</div>
+                        <div class="dialogue-text">
+                            Thank goodness you're here! I'm Dr. Elena Rodriguez, and we have a serious problem.
+                            I've been studying a mysterious biological system in the lab, but something unexpected
+                            is happening. The cells are behaving in ways I can't explain with traditional methods.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="character-container">
+                    <div class="character-avatar">👩‍🔬</div>
+                    <div class="dialogue-box">
+                        <div class="character-name">Dr. Elena Rodriguez</div>
+                        <div class="dialogue-text">
+                            We need to build a computational model to understand what's going on. Are you ready
+                            to help me solve this mystery? Let's start with the basics: identifying the key
+                            components in this system.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="instruction-text">
+                    <strong>🎯 Your Mission:</strong><br>
+                    Identify the key components in Dr. Elena's biological system by dragging them onto the model canvas.
+                    Look for: proteins, signals, and cellular machinery that might be interacting!
+                </div>
+            </div>
+
+            <!-- Interactive Panel -->
+            <div id="interactive-panel">
+                <div class="panel-title">⚗️ Model Building Lab</div>
+
+                <div id="model-canvas">
+                    <div class="grid-background"></div>
+                </div>
+
+                <div id="component-palette">
+                    <h3 style="color: #00d4ff; margin-bottom: 15px; text-align: center;">Available Components</h3>
+                    <div class="component-list">
+                        <div class="component-item" draggable="true" data-component="Receptor">🎯 Receptor</div>
+                        <div class="component-item" draggable="true" data-component="Signal">📡 Signal</div>
+                        <div class="component-item" draggable="true" data-component="Enzyme">⚗️ Enzyme</div>
+                        <div class="component-item" draggable="true" data-component="Gene">🧬 Gene</div>
+                        <div class="component-item" draggable="true" data-component="Protein">🔵 Protein</div>
+                    </div>
+                </div>
+
+                <div id="action-buttons">
+                    <button class="action-btn" id="hint-btn">💡 Get Hint</button>
+                    <button class="action-btn" id="check-btn" disabled>✓ Check My Model</button>
+                </div>
+
+                <div id="ai-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/game.js"></script>
+</body>
+</html>

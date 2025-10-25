@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Game Images - One Time</title>
+    <style>
+        body {
+            background: #1a1a2e;
+            color: white;
+            font-family: Arial;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00d4ff;
+        }
+        .image-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            border-radius: 10px;
+        }
+        button {
+            background: #00d4ff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #00ffff;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 2px solid #00d4ff;
+        }
+        .code-output {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Generate Game Images Once</h1>
+    <p>Click the buttons below to generate each image using Nano Banana. Once generated, copy the URLs and we'll hardcode them into the game.</p>
+
+    <div class="image-section">
+        <h2>1. Dr. Elena Portrait</h2>
+        <p>Friendly scientist in lab coat with blue lighting</p>
+        <button onclick="generateDrElena()">Generate Dr. Elena</button>
+        <div id="elena-status" class="status">Ready to generate...</div>
+        <div id="elena-image"></div>
+        <div id="elena-code" class="code-output"></div>
+    </div>
+
+    <div class="image-section">
+        <h2>2. Mystery Lab Scene</h2>
+        <p>Modern biology lab with mysterious data</p>
+        <button onclick="generateLab()">Generate Lab Scene</button>
+        <div id="lab-status" class="status">Ready to generate...</div>
+        <div id="lab-image"></div>
+        <div id="lab-code" class="code-output"></div>
+    </div>
+
+    <div class="image-section">
+        <h2>3. Cell Signaling Diagram</h2>
+        <p>Scientific illustration of cellular pathway</p>
+        <button onclick="generateCellSignaling()">Generate Cell Signaling</button>
+        <div id="cell-status" class="status">Ready to generate...</div>
+        <div id="cell-image"></div>
+        <div id="cell-code" class="code-output"></div>
+    </div>
+
+    <div class="image-section">
+        <h2>4. Model Building Interface</h2>
+        <p>Interactive modeling workspace</p>
+        <button onclick="generateModelBuilding()">Generate Model Building</button>
+        <div id="model-status" class="status">Ready to generate...</div>
+        <div id="model-image"></div>
+        <div id="model-code" class="code-output"></div>
+    </div>
+
+    <div class="image-section">
+        <h2>5. Celebration Scene</h2>
+        <p>Victory celebration with confetti</p>
+        <button onclick="generateCelebration()">Generate Celebration</button>
+        <div id="celebration-status" class="status">Ready to generate...</div>
+        <div id="celebration-image"></div>
+        <div id="celebration-code" class="code-output"></div>
+    </div>
+
+    <button onclick="generateAll()" style="background: #ff00ff; font-size: 20px; padding: 20px 40px;">
+        🚀 Generate ALL Images At Once
+    </button>
+
+    <script>
+        const API_KEY = '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';
+        const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+        const IMAGE_MODEL = 'google/gemini-2.5-flash-image';
+
+        const imagePrompts = {
+            drElena: "Professional portrait of Dr. Elena Rodriguez, a friendly Hispanic female scientist in her 30s, wearing a white lab coat with blue accents, warm brown eyes, dark hair in ponytail, welcoming smile, standing in a modern molecular biology laboratory with blue and cyan lighting, Cell Collective branding, photorealistic, professional photography style, bright and inviting atmosphere",
+
+            lab: "Wide cinematic shot of a modern molecular biology research laboratory, multiple computer screens displaying blue and cyan data patterns and cell diagrams, scientific equipment including microscopes and petri dishes on lab benches, dramatic blue accent lighting, mysterious atmosphere but professional, photorealistic, Cell Collective aesthetic with blue color scheme",
+
+            cellSignaling: "Scientific educational illustration of cellular signaling pathway, showing three connected elements: signal molecule, receptor protein on cell membrane, and enzyme inside cell, clean modern medical illustration style, blue and cyan color scheme matching Cell Collective branding, arrows showing signal flow, professional scientific diagram quality, clear and educational",
+
+            modelBuilding: "Over-the-shoulder view of scientist working at large interactive touchscreen display showing a network diagram with glowing blue nodes and connections, modern laboratory environment, futuristic but grounded aesthetic, blue and cyan interface elements, Cell Collective branding colors, photorealistic, professional scientific setting",
+
+            celebration: "Joyful scene of Dr. Elena Rodriguez celebrating with raised fists and big smile, lab coat, background shows successful simulation results on computer screens with blue graphics, blue and cyan confetti-like particle effects, photorealistic, uplifting and exciting atmosphere, Cell Collective blue color scheme"
+        };
+
+        async function generateImage(promptKey, statusId, imageId, codeId) {
+            const status = document.getElementById(statusId);
+            const imageDiv = document.getElementById(imageId);
+            const codeDiv = document.getElementById(codeId);
+
+            status.innerHTML = '🎨 Generating image... Please wait...';
+            imageDiv.innerHTML = '';
+            codeDiv.innerHTML = '';
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': 'https://cellcollective.org',
+                        'X-Title': 'Cell Collective Modeling Game'
+                    },
+                    body: JSON.stringify({
+                        model: IMAGE_MODEL,
+                        messages: [{
+                            role: 'user',
+                            content: imagePrompts[promptKey]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    status.innerHTML = `❌ Failed: ${response.status} - ${errorText}`;
+                    return;
+                }
+
+                const data = await response.json();
+                status.innerHTML = '✅ Image generated! See below:';
+
+                // Show full response
+                codeDiv.innerHTML = `<strong>Full API Response:</strong>\n${JSON.stringify(data, null, 2)}`;
+
+                // Try to extract and display image
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const content = data.choices[0].message.content;
+
+                    // Try to find image URL
+                    const urlMatch = content.match(/https?:\/\/[^\s"']+\.(jpg|jpeg|png|gif|webp|svg)/i);
+                    if (urlMatch) {
+                        const imageUrl = urlMatch[0];
+                        imageDiv.innerHTML = `
+                            <img src="${imageUrl}" alt="${promptKey}">
+                            <div style="margin-top: 10px; background: #00d4ff; color: black; padding: 10px; border-radius: 5px;">
+                                <strong>✅ COPY THIS URL:</strong><br>
+                                <input type="text" value="${imageUrl}" style="width: 100%; padding: 5px; margin-top: 5px;" onclick="this.select()">
+                            </div>
+                        `;
+                    } else {
+                        imageDiv.innerHTML = `<p style="color: #ff8800;">⚠️ No image URL found in response. Check the API response below.</p>`;
+                    }
+                }
+
+            } catch (error) {
+                status.innerHTML = `❌ Error: ${error.message}`;
+                codeDiv.innerHTML = error.stack;
+            }
+        }
+
+        function generateDrElena() {
+            generateImage('drElena', 'elena-status', 'elena-image', 'elena-code');
+        }
+
+        function generateLab() {
+            generateImage('lab', 'lab-status', 'lab-image', 'lab-code');
+        }
+
+        function generateCellSignaling() {
+            generateImage('cellSignaling', 'cell-status', 'cell-image', 'cell-code');
+        }
+
+        function generateModelBuilding() {
+            generateImage('modelBuilding', 'model-status', 'model-image', 'model-code');
+        }
+
+        function generateCelebration() {
+            generateImage('celebration', 'celebration-status', 'celebration-image', 'celebration-code');
+        }
+
+        async function generateAll() {
+            if (!confirm('This will generate all 5 images. This may take a minute. Continue?')) {
+                return;
+            }
+
+            await generateDrElena();
+            await new Promise(r => setTimeout(r, 2000)); // Wait 2 seconds between requests
+
+            await generateLab();
+            await new Promise(r => setTimeout(r, 2000));
+
+            await generateCellSignaling();
+            await new Promise(r => setTimeout(r, 2000));
+
+            await generateModelBuilding();
+            await new Promise(r => setTimeout(r, 2000));
+
+            await generateCelebration();
+
+            alert('✅ All images generated! Scroll up to copy the URLs.');
+        }
+    </script>
+</body>
+</html>
