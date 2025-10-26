@@ -463,6 +463,15 @@
         // Sound Effects & Voice Over
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
+        const resumeAudioContext = () => {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().catch(() => {});
+            }
+        };
+
+        document.addEventListener('click', resumeAudioContext, { once: true });
+        document.addEventListener('keydown', resumeAudioContext, { once: true });
+
         // Background Music
         let bgMusic = null;
         let musicEnabled = true;
@@ -472,7 +481,7 @@
         function initBackgroundMusic() {
             bgMusic = new Audio('audio/background_music.mp3');
             bgMusic.loop = true;
-            bgMusic.volume = 0.3;
+            bgMusic.volume = 0.054;
 
             // Auto-play with user interaction
             const playPromise = bgMusic.play();
@@ -526,7 +535,7 @@
         let currentSceneInChapter = 0;
         let isLearningMoment = false;
         let isChoiceMoment = false;
-        let lastFeedbackIndex = 0;
+        let lastFeedbackKey = null;
 
         // Initialize on page load
         window.addEventListener('load', () => {
@@ -543,10 +552,9 @@
                 return `audio/voice/ch${ch}_choice.mp3`;
             } else if (isLearningMoment) {
                 return ch === 10 && sc === 3 ? `audio/voice/ch10_learning_final.mp3` : `audio/voice/ch${ch}_learning.mp3`;
-            } else if (lastFeedbackIndex >= 0) {
-                // Feedback from choice
-                const feedbackFile = `audio/voice/ch${ch}_feedback${lastFeedbackIndex + 1}.mp3`;
-                lastFeedbackIndex = -1; // Reset
+            } else if (lastFeedbackKey) {
+                const feedbackFile = `audio/voice/ch${ch}_${lastFeedbackKey}.mp3`;
+                lastFeedbackKey = null;
                 return feedbackFile;
             } else {
                 // Regular scene dialogue
@@ -557,6 +565,7 @@
         async function speak(text) {
             if (!voiceEnabled || !text) return;
 
+            resumeAudioContext();
             stopSpeaking();
 
             const sceneImage = document.querySelector('.scene-image');
@@ -668,7 +677,6 @@
         }
 
         // Game State
-        let currentChapter = 0;
         let completedChapters = [];
         let playerChoices = [];
 
@@ -686,8 +694,8 @@
             if (!badgesContainer) return;
             badgesContainer.innerHTML = '';
 
-            // Show first 10 chapters
-            for (let i = 0; i < 10; i++) {
+            const totalChapters = story.chapters.length;
+            for (let i = 0; i < totalChapters; i++) {
                 const badge = document.createElement('div');
                 badge.className = 'chapter-badge';
                 badge.textContent = i + 1;
@@ -705,6 +713,7 @@
 
         function showChapter(chapterIndex) {
             currentChapter = chapterIndex;
+            lastFeedbackKey = null;
             const chapter = story.chapters[chapterIndex];
 
             if (!chapter) {
@@ -837,7 +846,6 @@
         }
 
         function makeChoice(choiceIndex) {
-            playSuccessSound();
             const chapter = story.chapters[currentChapter];
             const choice = chapter.choice.options[choiceIndex];
 
@@ -847,8 +855,17 @@
                 text: choice.text
             });
 
-            // Set feedback tracking for voice
-            lastFeedbackIndex = choiceIndex;
+            // Determine voice file for feedback
+            if (choice.voiceKey) {
+                lastFeedbackKey = choice.voiceKey;
+            } else if (choice.gameOver) {
+                lastFeedbackKey = `gameover${choiceIndex + 1}`;
+            } else if (chapter.title.includes('BOSS')) {
+                lastFeedbackKey = 'correct';
+            } else {
+                lastFeedbackKey = `feedback${choiceIndex + 1}`;
+            }
+
             isChoiceMoment = false;
             isLearningMoment = false;
 
@@ -858,7 +875,11 @@
                 return;
             }
 
-            completedChapters.push(currentChapter);
+            playSuccessSound();
+
+            if (!completedChapters.includes(currentChapter)) {
+                completedChapters.push(currentChapter);
+            }
 
             // Show feedback then move to next chapter
             showChoiceFeedback(choice.feedback, choice.next);
@@ -927,6 +948,7 @@
             currentChapter = 0;
             completedChapters = [];
             playerChoices = [];
+            lastFeedbackKey = null;
             renderChapterBadges();
             showChapter(0);
         }
