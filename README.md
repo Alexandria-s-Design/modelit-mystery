@@ -38,6 +38,15 @@ Simply open `modelit-story.html` in a modern web browser (Chrome, Firefox, Edge,
 
 No installation or server required - it's a standalone HTML file!
 
+## ⚙️ Configuration & Debug Mode
+
+The game includes a configuration system for customizing behavior and enabling debug mode:
+
+- **Configuration File:** `src/config.js` - Customize audio, accessibility, and debug settings
+- **Debug Mode:** Enable `DEBUG_MODE: true` in config.js to see detailed console logs and error information
+- **Documentation:** See `docs/DEBUG_MODE.md` for detailed configuration options
+- **Testing:** Open `test-config.html` or `test-error-handler.html` to verify configuration
+
 ## 🛠️ Technical Details
 
 - **Framework:** Pure HTML5, CSS3, JavaScript (no dependencies)

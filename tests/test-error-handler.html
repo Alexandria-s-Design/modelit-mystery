@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Handler Test</title>
+    <script src="src/config.js"></script>
+    <script src="src/error-handler.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a2e;
+            color: white;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+        .success { color: #00ff00; }
+        .error { color: #ff3333; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background: #00d4ff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #0099cc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Error Handler & Configuration Test</h1>
+    
+    <div class="test-section">
+        <h2>Configuration Status</h2>
+        <div id="config-status"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Error Handler Tests</h2>
+        <button onclick="testAudioError()">Test Audio Error</button>
+        <button onclick="testImageError()">Test Image Error</button>
+        <button onclick="testAPIError()">Test API Error</button>
+        <button onclick="testGeneralError()">Test General Error</button>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Debug Mode Toggle</h2>
+        <p>Current DEBUG_MODE: <strong id="debug-status"></strong></p>
+        <button onclick="toggleDebugMode()">Toggle DEBUG_MODE</button>
+        <p style="font-size: 12px; opacity: 0.7;">
+            When DEBUG_MODE is enabled, errors will be logged to console.
+            Open browser console (F12) to see the difference.
+        </p>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Output</h2>
+        <div id="console-output" style="background: #000; padding: 10px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        // Check configuration
+        function updateConfigStatus() {
+            const status = document.getElementById('config-status');
+            const debugStatus = document.getElementById('debug-status');
+            
+            if (typeof window.GAME_CONFIG !== 'undefined') {
+                status.innerHTML = `
+                    <p class="success">✅ Configuration loaded successfully!</p>
+                    <p>window.GAME_CONFIG.DEBUG_MODE = ${window.GAME_CONFIG.DEBUG_MODE}</p>
+                    <p>window.GAME_CONFIG?.DEBUG_MODE = ${window.GAME_CONFIG?.DEBUG_MODE}</p>
+                `;
+                debugStatus.textContent = window.GAME_CONFIG.DEBUG_MODE ? 'ENABLED' : 'DISABLED';
+                debugStatus.style.color = window.GAME_CONFIG.DEBUG_MODE ? '#00ff00' : '#ff3333';
+            } else {
+                status.innerHTML = '<p class="error">❌ Configuration NOT loaded</p>';
+            }
+        }
+
+        // Override console.error to capture output
+        const originalConsoleError = console.error;
+        const consoleOutput = document.getElementById('console-output');
+        
+        console.error = function(...args) {
+            originalConsoleError.apply(console, args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleOutput.innerHTML += `<div style="color: #ff3333;">[ERROR] ${message}</div>`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        };
+
+        // Test functions
+        function testAudioError() {
+            if (window.ErrorHandler) {
+                const handler = new ErrorHandler();
+                handler.handleError('Audio', new Error('Audio file not found - voice_01.mp3'));
+                addTestResult('Audio error triggered - check notifications and console');
+            }
+        }
+
+        function testImageError() {
+            if (window.ErrorHandler) {
+                const handler = new ErrorHandler();
+                handler.handleError('Image', new Error('Failed to load image: scene_01.png'));
+                addTestResult('Image error triggered - check notifications and console');
+            }
+        }
+
+        function testAPIError() {
+            if (window.ErrorHandler) {
+                const handler = new ErrorHandler();
+                handler.handleError('API', new Error('Network fetch failed: rate limit exceeded'));
+                addTestResult('API error triggered - check notifications and console');
+            }
+        }
+
+        function testGeneralError() {
+            if (window.ErrorHandler) {
+                const handler = new ErrorHandler();
+                handler.handleError('General', new Error('Cannot read property of undefined'));
+                addTestResult('General error triggered - check notifications and console');
+            }
+        }
+
+        function addTestResult(message) {
+            const results = document.getElementById('test-results');
+            const timestamp = new Date().toLocaleTimeString();
+            results.innerHTML += `<p>[${timestamp}] ${message}</p>`;
+        }
+
+        function toggleDebugMode() {
+            window.GAME_CONFIG.DEBUG_MODE = !window.GAME_CONFIG.DEBUG_MODE;
+            updateConfigStatus();
+            consoleOutput.innerHTML += `<div style="color: #00d4ff;">[INFO] DEBUG_MODE toggled to: ${window.GAME_CONFIG.DEBUG_MODE}</div>`;
+            addTestResult(`DEBUG_MODE is now ${window.GAME_CONFIG.DEBUG_MODE ? 'ENABLED' : 'DISABLED'}`);
+        }
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            updateConfigStatus();
+            consoleOutput.innerHTML = '<div style="color: #00d4ff;">[INFO] Console output will appear here...</div>';
+        });
+    </script>
+</body>
+</html>
