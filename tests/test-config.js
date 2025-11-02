@@ -3,7 +3,7 @@
  * Test script to verify configuration is properly loaded
  */
 
-const CONFIG = require('./src/config.js');
+const CONFIG = require('../src/config.js');
 
 console.log('🧪 Testing ModelIt Configuration...\n');
 
