@@ -80,6 +80,8 @@ After enabling, open the browser console and you'll see detailed debug informati
 
 ## See Also
 
-- `src/config.js` - Main configuration file
-- `src/config.example.js` - Template with all available options
+- `src/config.js` - Main configuration file (edit this to change settings)
+- `src/config.example.js` - Reference template
 - `src/error-handler.js` - Error handling implementation
+
+**Note:** The `src/config.js` file contains the complete set of configuration options. The `config.example.js` is a reference template that may not include all options.
