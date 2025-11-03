@@ -39,6 +39,16 @@ Simply open `modelit-story.html` in a modern web browser (Chrome, Firefox, Edge,
 
 No installation or server required - it's a standalone HTML file!
 
+## 🔒 Security Notice
+
+**⚠️ IMPORTANT:** This repository no longer contains exposed API keys. If you need AI-powered features:
+
+1. Copy `src/config.example.js` to `src/config.js`
+2. Add your own API keys
+3. **Never commit `config.js` to Git!**
+
+The game works perfectly without API keys - it uses built-in fallback responses.
+
 ## 🛠️ Technical Details
 
 - **Framework:** Pure HTML5, CSS3, JavaScript (no dependencies)

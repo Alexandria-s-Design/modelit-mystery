@@ -4,8 +4,12 @@
 /* global DialogueSystem */
 
 // Configuration
+// Load from external config if available, otherwise use defaults
 const CONFIG = {
-    OPENROUTER_API_KEY: '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',
+    OPENROUTER_API_KEY:
+        typeof window !== 'undefined' && window.GAME_CONFIG
+            ? window.GAME_CONFIG.OPENROUTER_API_KEY
+            : '', // Load from config.js
     OPENROUTER_API_URL: 'https://openrouter.ai/api/v1/chat/completions',
     AI_MODEL: 'google/gemini-2.0-flash-exp:free',
     IMAGE_MODEL: 'google/gemini-2.5-flash-image',
@@ -466,6 +470,11 @@ Be SUPER excited and fun!`;
 }
 
 async function callOpenRouter(prompt) {
+    // Check if API key is configured
+    if (!CONFIG.OPENROUTER_API_KEY) {
+        throw new Error('API key not configured. Game will use fallback responses.');
+    }
+
     const response = await fetch(CONFIG.OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
