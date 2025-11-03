@@ -11,6 +11,8 @@
  * - Error tracking (privacy-friendly, no external services)
  */
 
+/* global DialogueSystem */
+
 class ErrorHandler {
     constructor() {
         this.errors = [];
@@ -27,7 +29,7 @@ class ErrorHandler {
         window.addEventListener('unhandledrejection', (event) => {
             this.handleError('Promise Rejection', event.reason, {
                 type: 'promise',
-                promise: event.promise
+                promise: event.promise,
             });
             event.preventDefault();
         });
@@ -38,7 +40,7 @@ class ErrorHandler {
                 type: 'error',
                 filename: event.filename,
                 lineno: event.lineno,
-                colno: event.colno
+                colno: event.colno,
             });
         });
     }
@@ -52,7 +54,7 @@ class ErrorHandler {
             message: error?.message || String(error),
             stack: error?.stack,
             context,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
         };
 
         // Log to console in development
@@ -85,20 +87,20 @@ class ErrorHandler {
                 return {
                     message: '🔇 Voice file not found. The game will continue without voice narration.',
                     type: 'warning',
-                    action: 'You can still read Dr. Maya\'s dialogue on screen.'
+                    action: 'You can still read Dr. Maya\'s dialogue on screen.',
                 };
             }
             if (errorStr.includes('autoplay') || errorStr.includes('user interaction')) {
                 return {
                     message: '🔊 Audio blocked by browser. Click anywhere to enable sound.',
                     type: 'info',
-                    action: null
+                    action: null,
                 };
             }
             return {
                 message: '🔇 Audio playback issue. The game will continue silently.',
                 type: 'warning',
-                action: 'Check your browser audio settings.'
+                action: 'Check your browser audio settings.',
             };
         }
 
@@ -107,7 +109,7 @@ class ErrorHandler {
             return {
                 message: '🖼️ Some images couldn\'t load. Using placeholder images.',
                 type: 'warning',
-                action: 'Check your internet connection for full experience.'
+                action: 'Check your internet connection for full experience.',
             };
         }
 
@@ -117,13 +119,13 @@ class ErrorHandler {
                 return {
                     message: '⏱️ API rate limit reached. Using fallback content.',
                     type: 'info',
-                    action: 'Game functionality is not affected.'
+                    action: 'Game functionality is not affected.',
                 };
             }
             return {
                 message: '🌐 Network error. Using offline content.',
                 type: 'warning',
-                action: 'Some features may be limited without internet.'
+                action: 'Some features may be limited without internet.',
             };
         }
 
@@ -132,7 +134,7 @@ class ErrorHandler {
             return {
                 message: '💾 Unable to save progress. Your game will not be saved.',
                 type: 'warning',
-                action: 'Clear browser data or use a different browser.'
+                action: 'Clear browser data or use a different browser.',
             };
         }
 
@@ -141,7 +143,7 @@ class ErrorHandler {
             return {
                 message: '⚠️ Unexpected error occurred. Try refreshing the page.',
                 type: 'error',
-                action: 'If problem persists, clear browser cache.'
+                action: 'If problem persists, clear browser cache.',
             };
         }
 
@@ -206,7 +208,7 @@ class ErrorHandler {
         return {
             totalErrors: this.errors.length,
             categories,
-            recentErrors: this.errors.slice(-5)
+            recentErrors: this.errors.slice(-5),
         };
     }
 
@@ -225,7 +227,7 @@ class ErrorHandler {
             errors: this.errors,
             stats: this.getStats(),
             userAgent: navigator.userAgent,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
         }, null, 2);
 
         const blob = new Blob([data], { type: 'application/json' });
@@ -242,7 +244,7 @@ class ErrorHandler {
  * Add notification styles to page
  */
 function injectNotificationStyles() {
-    if (document.getElementById('notification-styles')) return;
+    if (document.getElementById('notification-styles')) {return;}
 
     const style = document.createElement('style');
     style.id = 'notification-styles';

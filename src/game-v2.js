@@ -1,6 +1,8 @@
 // Cell Collective: The Modeling Mystery - Act 1 (Version 2)
 // With Click-to-Continue Dialogue and Image Support
 
+/* global DialogueSystem */
+
 // Configuration
 const CONFIG = {
     OPENROUTER_API_KEY: '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',
@@ -16,7 +18,7 @@ const gameState = {
     completedFundamentals: [],
     currentStage: 0,
     attempts: 0,
-    hintsUsed: 0
+    hintsUsed: 0,
 };
 
 // DOM Elements
@@ -44,7 +46,7 @@ function initGame() {
         showStage2Interface: () => showGameInterface(2),
         startStage3: () => showStage3(),
         showStage3Interface: () => showGameInterface(3),
-        showCompletionScreen: () => showCompletion()
+        showCompletionScreen: () => showCompletion(),
     };
 
     // Start with intro dialogue
@@ -112,7 +114,7 @@ function setupDragAndDrop() {
 let draggedComponent = null;
 
 function handleDragStart(e) {
-    if (this.classList.contains('used')) return;
+    if (this.classList.contains('used')) {return;}
     draggedComponent = this.dataset.component;
     this.style.opacity = '0.5';
 }
@@ -129,7 +131,7 @@ function handleDragOver(e) {
 function handleDrop(e) {
     e.preventDefault();
 
-    if (!draggedComponent) return;
+    if (!draggedComponent) {return;}
 
     const rect = modelCanvas.getBoundingClientRect();
     const x = e.clientX - rect.left - 40;
@@ -168,7 +170,7 @@ function placeComponent(componentName, x, y) {
         name: componentName,
         x: x,
         y: y,
-        element: component
+        element: component,
     });
 }
 
@@ -177,7 +179,7 @@ function removeComponent(componentElement) {
     componentElement.remove();
 
     gameState.placedComponents = gameState.placedComponents.filter(
-        c => c.element !== componentElement
+        c => c.element !== componentElement,
     );
 
     const paletteItem = document.querySelector(`.component-item[data-component="${componentName}"]`);
@@ -239,7 +241,7 @@ function enableConnectionDrawing() {
                 drawConnection(selectedComponent, this);
                 connections.push({
                     from: selectedComponent.dataset.component,
-                    to: this.dataset.component
+                    to: this.dataset.component,
                 });
 
                 selectedComponent.style.border = '3px solid #ffffff';
@@ -282,11 +284,11 @@ function drawConnection(fromElement, toElement) {
 async function checkStage2(connections) {
     const correctConnections = [
         { from: 'Signal', to: 'Receptor' },
-        { from: 'Receptor', to: 'Enzyme' }
+        { from: 'Receptor', to: 'Enzyme' },
     ];
 
     const isCorrect = correctConnections.every(correct =>
-        connections.some(conn => conn.from === correct.from && conn.to === correct.to)
+        connections.some(conn => conn.from === correct.from && conn.to === correct.to),
     );
 
     showFeedback('🤖 Analyzing connections...', 'loading');
@@ -383,8 +385,8 @@ The correct answer is: Receptor, Signal, Enzyme
 Was it correct? ${isCorrect ? 'YES' : 'NO'}
 
 ${isCorrect ?
-    'Give them SUPER EXCITED praise! Use 2 SHORT sentences. Add a cool real-world example like "This is how your body knows when to feel hungry!" or "This is how your brain sends messages!" Keep it simple and FUN!' :
-    'Give them a hint in a FUN way! Use 2 SHORT sentences. Be encouraging! Maybe use an analogy like "Think of it like a phone call - you need someone to call, a phone, and someone to answer!"'}
+        'Give them SUPER EXCITED praise! Use 2 SHORT sentences. Add a cool real-world example like "This is how your body knows when to feel hungry!" or "This is how your brain sends messages!" Keep it simple and FUN!' :
+        'Give them a hint in a FUN way! Use 2 SHORT sentences. Be encouraging! Maybe use an analogy like "Think of it like a phone call - you need someone to call, a phone, and someone to answer!"'}
 
 Talk like you're talking to a kid. Short sentences. Lots of energy!`;
 
@@ -399,15 +401,17 @@ Talk like you're talking to a kid. Short sentences. Lots of energy!`;
 }
 
 async function getConnectionFeedback(connections, isCorrect) {
-    const prompt = `You're Dr. Elena talking to a kid. They connected: ${connections.map(c => `${c.from} → ${c.to}`).join(', ')}
+    const connectionStr = connections.map((c) => `${c.from} → ${c.to}`).join(', ');
+    const correctMsg = 'Give MEGA EXCITED praise in 2 SHORT sentences! Add a fun example like "Just like dominoes knocking each other down!" or "Like passing a note in class!"';
+    const hintMsg = 'Give a fun hint in 2 SHORT sentences! Use an analogy like "Think of a relay race - who starts, who\'s in the middle, who finishes?"';
+
+    const prompt = `You're Dr. Elena talking to a kid. They connected: ${connectionStr}
 
 Correct path: Signal → Receptor → Enzyme
 
 Correct? ${isCorrect ? 'YES' : 'NO'}
 
-${isCorrect ?
-    'Give MEGA EXCITED praise in 2 SHORT sentences! Add a fun example like "Just like dominoes knocking each other down!" or "Like passing a note in class!"' :
-    'Give a fun hint in 2 SHORT sentences! Use an analogy like "Think of a relay race - who starts, who's in the middle, who finishes?"'}
+${isCorrect ? correctMsg : hintMsg}
 
 Talk to a kid. Be SUPER enthusiastic!`;
 
@@ -432,8 +436,8 @@ Correct answer: Signal ON, Receptor OFF, Enzyme OFF (signal starts it!)
 Correct? ${isCorrect ? 'YES' : 'NO'}
 
 ${isCorrect ?
-    'CELEBRATE BIG TIME in 2 SHORT sentences! Say they completed Act 1! Add something like "You just solved the mystery!"' :
-    'Give a fun hint in 2 SHORT sentences! Like "What arrives first to wake everything up?" or "Think of turning on a TV - what button do you press first?"'}
+        'CELEBRATE BIG TIME in 2 SHORT sentences! Say they completed Act 1! Add something like "You just solved the mystery!"' :
+        'Give a fun hint in 2 SHORT sentences! Like "What arrives first to wake everything up?" or "Think of turning on a TV - what button do you press first?"'}
 
 Be SUPER excited and fun!`;
 
@@ -453,17 +457,17 @@ async function callOpenRouter(prompt) {
             'Authorization': `Bearer ${CONFIG.OPENROUTER_API_KEY}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://cellcollective.org',
-            'X-Title': 'Cell Collective Modeling Game'
+            'X-Title': 'Cell Collective Modeling Game',
         },
         body: JSON.stringify({
             model: CONFIG.AI_MODEL,
             messages: [{ role: 'user', content: prompt }],
             temperature: 0.7,
-            max_tokens: 150
-        })
+            max_tokens: 150,
+        }),
     });
 
-    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    if (!response.ok) {throw new Error(`API error: ${response.status}`);}
 
     const data = await response.json();
     return data.choices[0].message.content.trim();
@@ -486,7 +490,7 @@ function showFeedback(message, type = 'info') {
         error: '❌',
         warning: '⚠️',
         hint: '💡',
-        info: '🤖'
+        info: '🤖',
     };
 
     const formattedMessage = formatAIResponse(message);

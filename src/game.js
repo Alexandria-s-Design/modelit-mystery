@@ -91,7 +91,7 @@ const gameState = {
     completedFundamentals: [],
     currentStage: 1, // Stage 1: Identify Components
     attempts: 0,
-    hintsUsed: 0
+    hintsUsed: 0,
 };
 
 // DOM Elements
@@ -126,7 +126,7 @@ function setupDragAndDrop() {
 let draggedComponent = null;
 
 function handleDragStart(e) {
-    if (this.classList.contains('used')) return;
+    if (this.classList.contains('used')) {return;}
 
     draggedComponent = this.dataset.component;
     this.style.opacity = '0.5';
@@ -144,7 +144,7 @@ function handleDragOver(e) {
 function handleDrop(e) {
     e.preventDefault();
 
-    if (!draggedComponent) return;
+    if (!draggedComponent) {return;}
 
     // Get drop position relative to canvas
     const rect = modelCanvas.getBoundingClientRect();
@@ -200,7 +200,7 @@ function placeComponent(componentName, x, y) {
         name: componentName,
         x: x,
         y: y,
-        element: component
+        element: component,
     });
 
     console.log(`✅ Placed component: ${componentName}`);
@@ -224,7 +224,7 @@ function removeComponent(componentElement) {
 
     // Remove from game state
     gameState.placedComponents = gameState.placedComponents.filter(
-        c => c.element !== componentElement
+        c => c.element !== componentElement,
     );
 
     // Re-enable in palette
@@ -306,8 +306,8 @@ The correct components are: Receptor, Signal, Enzyme
 Was their answer correct? ${isCorrect ? 'YES' : 'NO'}
 
 ${isCorrect ?
-    'Give them enthusiastic praise, explain why these components are important in cellular signaling, AND provide a REAL-WORLD EXAMPLE of this system in action (like insulin signaling, immune response, neurotransmitter signaling, etc.). Keep it to 3-4 sentences.' :
-    'Give them encouraging feedback about what they got right (if anything), a gentle hint about what they might be missing, AND a simple real-world example to help them understand. Keep it to 3-4 sentences. Be supportive!'}
+        'Give them enthusiastic praise, explain why these components are important in cellular signaling, AND provide a REAL-WORLD EXAMPLE of this system in action (like insulin signaling, immune response, neurotransmitter signaling, etc.). Keep it to 3-4 sentences.' :
+        'Give them encouraging feedback about what they got right (if anything), a gentle hint about what they might be missing, AND a simple real-world example to help them understand. Keep it to 3-4 sentences. Be supportive!'}
 
 Stay in character as Dr. Elena. Use scientific language but keep it accessible.`;
 
@@ -338,9 +338,9 @@ Keep it to 2-3 sentences. Be encouraging and stay in character as Dr. Elena.`;
     } catch (error) {
         console.error('AI Hint Error:', error);
         const hints = [
-            "Think about the journey of a signal: what receives it, what is it, and what processes it?",
-            "In cellular signaling, we need something to receive messages, the message itself, and something to act on it!",
-            "Look for: a Receptor (receives), a Signal (the message), and an Enzyme (processes)!"
+            'Think about the journey of a signal: what receives it, what is it, and what processes it?',
+            'In cellular signaling, we need something to receive messages, the message itself, and something to act on it!',
+            'Look for: a Receptor (receives), a Signal (the message), and an Enzyme (processes)!',
         ];
         return hints[Math.min(hintNumber - 1, hints.length - 1)];
     }
@@ -353,19 +353,19 @@ async function callOpenRouter(prompt) {
             'Authorization': `Bearer ${CONFIG.OPENROUTER_API_KEY}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://cellcollective.org',
-            'X-Title': 'Cell Collective Modeling Game'
+            'X-Title': 'Cell Collective Modeling Game',
         },
         body: JSON.stringify({
             model: CONFIG.AI_MODEL,
             messages: [
                 {
                     role: 'user',
-                    content: prompt
-                }
+                    content: prompt,
+                },
             ],
             temperature: 0.7,
-            max_tokens: 150
-        })
+            max_tokens: 150,
+        }),
     });
 
     if (!response.ok) {
@@ -403,7 +403,7 @@ function showFeedback(message, type = 'info') {
         error: '❌',
         warning: '⚠️',
         hint: '💡',
-        info: '🤖'
+        info: '🤖',
     };
 
     // Format the message for better display
@@ -511,7 +511,7 @@ function enableConnectionDrawing() {
                 drawConnection(selectedComponent, this);
                 connections.push({
                     from: selectedComponent.dataset.component,
-                    to: this.dataset.component
+                    to: this.dataset.component,
                 });
 
                 // Reset selection
@@ -557,11 +557,11 @@ function drawConnection(fromElement, toElement) {
 async function checkConnections(connections) {
     const correctConnections = [
         { from: 'Signal', to: 'Receptor' },
-        { from: 'Receptor', to: 'Enzyme' }
+        { from: 'Receptor', to: 'Enzyme' },
     ];
 
     const isCorrect = correctConnections.every(correct =>
-        connections.some(conn => conn.from === correct.from && conn.to === correct.to)
+        connections.some(conn => conn.from === correct.from && conn.to === correct.to),
     );
 
     showFeedback('🤖 Analyzing your connections...', 'loading');
@@ -589,8 +589,8 @@ The correct relationships are: Signal → Receptor, Receptor → Enzyme
 Is it correct? ${isCorrect ? 'YES' : 'NO'}
 
 ${isCorrect ?
-    'Give enthusiastic praise and explain why this pathway is important. Provide a REAL-WORLD EXAMPLE from biology (like how adrenaline signals work, or neurotransmitters in the brain). 3-4 sentences.' :
-    'Give encouraging feedback with a hint about the correct pathway. Include a simple EXAMPLE or analogy to help them understand (like a relay race or chain reaction). 3-4 sentences.'}
+        'Give enthusiastic praise and explain why this pathway is important. Provide a REAL-WORLD EXAMPLE from biology (like how adrenaline signals work, or neurotransmitters in the brain). 3-4 sentences.' :
+        'Give encouraging feedback with a hint about the correct pathway. Include a simple EXAMPLE or analogy to help them understand (like a relay race or chain reaction). 3-4 sentences.'}
 
 Stay in character as Dr. Elena.`;
 
@@ -713,8 +713,8 @@ The correct initial state is: Signal ON, Receptor OFF, Enzyme OFF (because the s
 Is it correct? ${isCorrect ? 'YES' : 'NO'}
 
 ${isCorrect ?
-    'Give enthusiastic praise about completing Act 1! Explain why initial conditions matter in modeling and provide a brief REAL-WORLD EXAMPLE (like how a light switch starts OFF until you flip it, or how cells respond to hormones). 3-4 sentences.' :
-    'Give a helpful hint about which component should start ON. Include a simple EXAMPLE or analogy to help them understand (like how you need to ring a doorbell for someone to answer). 2-3 sentences.'}
+        'Give enthusiastic praise about completing Act 1! Explain why initial conditions matter in modeling and provide a brief REAL-WORLD EXAMPLE (like how a light switch starts OFF until you flip it, or how cells respond to hormones). 3-4 sentences.' :
+        'Give a helpful hint about which component should start ON. Include a simple EXAMPLE or analogy to help them understand (like how you need to ring a doorbell for someone to answer). 2-3 sentences.'}
 
 Stay in character as Dr. Elena.`;
 

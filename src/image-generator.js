@@ -4,7 +4,7 @@
 const IMAGE_CONFIG = {
     API_KEY: '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',
     API_URL: 'https://openrouter.ai/api/v1/chat/completions',
-    MODEL: 'google/gemini-2.5-flash-image-preview:free'
+    MODEL: 'google/gemini-2.5-flash-image-preview:free',
 };
 
 // Image prompts for different scenes
@@ -37,7 +37,7 @@ const IMAGE_PROMPTS = {
                   big smile, lab coat,
                   background shows successful simulation results on screens,
                   confetti-like particle effects in blue and cyan,
-                  photorealistic, joyful atmosphere`
+                  photorealistic, joyful atmosphere`,
 };
 
 async function generateImage(promptKey) {
@@ -52,17 +52,17 @@ async function generateImage(promptKey) {
                 'Authorization': `Bearer ${IMAGE_CONFIG.API_KEY}`,
                 'Content-Type': 'application/json',
                 'HTTP-Referer': 'https://cellcollective.org',
-                'X-Title': 'Cell Collective Modeling Game'
+                'X-Title': 'Cell Collective Modeling Game',
             },
             body: JSON.stringify({
                 model: IMAGE_CONFIG.MODEL,
                 messages: [
                     {
                         role: 'user',
-                        content: prompt
-                    }
-                ]
-            })
+                        content: prompt,
+                    },
+                ],
+            }),
         });
 
         if (!response.ok) {
@@ -101,7 +101,7 @@ async function generateAllImages() {
     return images;
 }
 
-// Export for use in main game
-if (typeof module !== 'undefined' && module.exports) {
+// Export for use in main game (CommonJS for Node.js compatibility)
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = { generateImage, generateAllImages, IMAGE_PROMPTS };
 }

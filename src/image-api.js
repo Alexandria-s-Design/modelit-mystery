@@ -56,7 +56,7 @@ class ImageAPIManager {
      * Fetch image from Unsplash API
      */
     async tryUnsplash(keywords) {
-        if (!this.config.UNSPLASH_ACCESS_KEY) return null;
+        if (!this.config.UNSPLASH_ACCESS_KEY) {return null;}
         if (this.apiCallCount.unsplash >= this.maxApiCalls.unsplash) {
             console.warn('[ImageAPI] Unsplash rate limit reached, using fallback');
             return null;
@@ -68,8 +68,8 @@ class ImageAPIManager {
 
             const response = await fetch(url, {
                 headers: {
-                    'Authorization': `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`
-                }
+                    'Authorization': `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`,
+                },
             });
 
             if (!response.ok) {
@@ -86,8 +86,8 @@ class ImageAPIManager {
                 if (photo.links?.download_location) {
                     fetch(photo.links.download_location, {
                         headers: {
-                            'Authorization': `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`
-                        }
+                            'Authorization': `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`,
+                        },
                     }).catch(() => {}); // Silent fail for tracking
                 }
 
@@ -105,7 +105,7 @@ class ImageAPIManager {
      * Fetch image from Pexels API
      */
     async tryPexels(keywords) {
-        if (!this.config.PEXELS_API_KEY) return null;
+        if (!this.config.PEXELS_API_KEY) {return null;}
         if (this.apiCallCount.pexels >= this.maxApiCalls.pexels) {
             console.warn('[ImageAPI] Pexels rate limit reached, using fallback');
             return null;
@@ -117,8 +117,8 @@ class ImageAPIManager {
 
             const response = await fetch(url, {
                 headers: {
-                    'Authorization': this.config.PEXELS_API_KEY
-                }
+                    'Authorization': this.config.PEXELS_API_KEY,
+                },
             });
 
             if (!response.ok) {
@@ -149,7 +149,7 @@ class ImageAPIManager {
                 return this.getSceneImage(
                     scene.id,
                     scene.imageKeywords || 'science laboratory',
-                    scene.image
+                    scene.image,
                 );
             }
         });
@@ -166,7 +166,7 @@ class ImageAPIManager {
             unsplashCalls: this.apiCallCount.unsplash,
             pexelsCalls: this.apiCallCount.pexels,
             unsplashRemaining: this.maxApiCalls.unsplash - this.apiCallCount.unsplash,
-            pexelsRemaining: this.maxApiCalls.pexels - this.apiCallCount.pexels
+            pexelsRemaining: this.maxApiCalls.pexels - this.apiCallCount.pexels,
         };
     }
 
@@ -237,7 +237,7 @@ const SCENE_KEYWORDS = {
     'ch10_scene2': 'solution found success',
     'ch10_scene3': 'cells healing recovery',
     'ch10_scene4': 'mysterious note letter',
-    'ch10_scene5': 'celebration success victory'
+    'ch10_scene5': 'celebration success victory',
 };
 
 /**
