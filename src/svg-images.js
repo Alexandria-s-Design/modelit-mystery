@@ -138,7 +138,7 @@ const SVGImages = {
   </circle>
   <text x="400" y="360" font-family="Arial" font-size="48" fill="%2300d4ff" text-anchor="middle" font-weight="bold">YOU DID IT!</text>
   <text x="400" y="560" font-family="Arial" font-size="24" fill="%2300d4ff" text-anchor="middle">⭐ Science Champion ⭐</text>
-</svg>`
+</svg>`,
 };
 
 // Export for use

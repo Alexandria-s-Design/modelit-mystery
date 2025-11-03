@@ -78,8 +78,12 @@ function playErrorSound() {
 }
 
 // Configuration
+// Load from external config if available, otherwise use defaults
 const CONFIG = {
-    OPENROUTER_API_KEY: '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',
+    OPENROUTER_API_KEY:
+        typeof window !== 'undefined' && window.GAME_CONFIG
+            ? window.GAME_CONFIG.OPENROUTER_API_KEY
+            : '', // Load from config.js
     OPENROUTER_API_URL: 'https://openrouter.ai/api/v1/chat/completions',
     AI_MODEL: 'google/gemini-2.0-flash-exp:free', // Free Gemini model
     REQUIRED_COMPONENTS: ['Receptor', 'Signal', 'Enzyme'], // Correct answer for Act 1
@@ -91,7 +95,7 @@ const gameState = {
     completedFundamentals: [],
     currentStage: 1, // Stage 1: Identify Components
     attempts: 0,
-    hintsUsed: 0
+    hintsUsed: 0,
 };
 
 // DOM Elements
@@ -113,7 +117,7 @@ function initGame() {
 function setupDragAndDrop() {
     const componentItems = document.querySelectorAll('.component-item');
 
-    componentItems.forEach(item => {
+    componentItems.forEach((item) => {
         item.addEventListener('dragstart', handleDragStart);
         item.addEventListener('dragend', handleDragEnd);
     });
@@ -126,7 +130,9 @@ function setupDragAndDrop() {
 let draggedComponent = null;
 
 function handleDragStart(e) {
-    if (this.classList.contains('used')) return;
+    if (this.classList.contains('used')) {
+        return;
+    }
 
     draggedComponent = this.dataset.component;
     this.style.opacity = '0.5';
@@ -144,7 +150,9 @@ function handleDragOver(e) {
 function handleDrop(e) {
     e.preventDefault();
 
-    if (!draggedComponent) return;
+    if (!draggedComponent) {
+        return;
+    }
 
     // Get drop position relative to canvas
     const rect = modelCanvas.getBoundingClientRect();
@@ -200,7 +208,7 @@ function placeComponent(componentName, x, y) {
         name: componentName,
         x: x,
         y: y,
-        element: component
+        element: component,
     });
 
     console.log(`✅ Placed component: ${componentName}`);
@@ -224,11 +232,13 @@ function removeComponent(componentElement) {
 
     // Remove from game state
     gameState.placedComponents = gameState.placedComponents.filter(
-        c => c.element !== componentElement
+        (c) => c.element !== componentElement
     );
 
     // Re-enable in palette
-    const paletteItem = document.querySelector(`.component-item[data-component="${componentName}"]`);
+    const paletteItem = document.querySelector(
+        `.component-item[data-component="${componentName}"]`
+    );
     if (paletteItem) {
         paletteItem.classList.remove('used');
     }
@@ -251,8 +261,8 @@ function setupEventListeners() {
 async function checkModel() {
     gameState.attempts++;
 
-    const placedNames = gameState.placedComponents.map(c => c.name);
-    const isCorrect = CONFIG.REQUIRED_COMPONENTS.every(comp => placedNames.includes(comp));
+    const placedNames = gameState.placedComponents.map((c) => c.name);
+    const isCorrect = CONFIG.REQUIRED_COMPONENTS.every((comp) => placedNames.includes(comp));
 
     showFeedback('🤖 Analyzing your model...', 'loading');
 
@@ -270,7 +280,10 @@ async function checkModel() {
         }, 3000);
     } else if (isCorrect && placedNames.length > CONFIG.REQUIRED_COMPONENTS.length) {
         playClickSound();
-        showFeedback('🤔 You have the right components, but you added some extras! ' + feedback, 'warning');
+        showFeedback(
+            '🤔 You have the right components, but you added some extras! ' + feedback,
+            'warning'
+        );
     } else {
         playErrorSound();
         showFeedback(feedback, 'error');
@@ -285,7 +298,7 @@ async function getAIHint() {
 
     showFeedback('🤖 Thinking...', 'loading');
 
-    const placedNames = gameState.placedComponents.map(c => c.name);
+    const placedNames = gameState.placedComponents.map((c) => c.name);
     const hint = await getAIHintFromModel(placedNames, gameState.hintsUsed);
 
     showFeedback('💡 ' + hint, 'hint');
@@ -305,9 +318,11 @@ The correct components are: Receptor, Signal, Enzyme
 
 Was their answer correct? ${isCorrect ? 'YES' : 'NO'}
 
-${isCorrect ?
-    'Give them enthusiastic praise, explain why these components are important in cellular signaling, AND provide a REAL-WORLD EXAMPLE of this system in action (like insulin signaling, immune response, neurotransmitter signaling, etc.). Keep it to 3-4 sentences.' :
-    'Give them encouraging feedback about what they got right (if anything), a gentle hint about what they might be missing, AND a simple real-world example to help them understand. Keep it to 3-4 sentences. Be supportive!'}
+${
+    isCorrect
+        ? 'Give them enthusiastic praise, explain why these components are important in cellular signaling, AND provide a REAL-WORLD EXAMPLE of this system in action (like insulin signaling, immune response, neurotransmitter signaling, etc.). Keep it to 3-4 sentences.'
+        : 'Give them encouraging feedback about what they got right (if anything), a gentle hint about what they might be missing, AND a simple real-world example to help them understand. Keep it to 3-4 sentences. Be supportive!'
+}
 
 Stay in character as Dr. Elena. Use scientific language but keep it accessible.`;
 
@@ -316,9 +331,9 @@ Stay in character as Dr. Elena. Use scientific language but keep it accessible.`
         return response;
     } catch (error) {
         console.error('AI Feedback Error:', error);
-        return isCorrect ?
-            '🎉 Excellent work! You identified the key components correctly!' :
-            '🤔 Not quite right. Think about what receives signals, what the signal is, and what processes it.';
+        return isCorrect
+            ? '🎉 Excellent work! You identified the key components correctly!'
+            : '🤔 Not quite right. Think about what receives signals, what the signal is, and what processes it.';
     }
 }
 
@@ -338,34 +353,39 @@ Keep it to 2-3 sentences. Be encouraging and stay in character as Dr. Elena.`;
     } catch (error) {
         console.error('AI Hint Error:', error);
         const hints = [
-            "Think about the journey of a signal: what receives it, what is it, and what processes it?",
-            "In cellular signaling, we need something to receive messages, the message itself, and something to act on it!",
-            "Look for: a Receptor (receives), a Signal (the message), and an Enzyme (processes)!"
+            'Think about the journey of a signal: what receives it, what is it, and what processes it?',
+            'In cellular signaling, we need something to receive messages, the message itself, and something to act on it!',
+            'Look for: a Receptor (receives), a Signal (the message), and an Enzyme (processes)!',
         ];
         return hints[Math.min(hintNumber - 1, hints.length - 1)];
     }
 }
 
 async function callOpenRouter(prompt) {
+    // Check if API key is configured
+    if (!CONFIG.OPENROUTER_API_KEY) {
+        throw new Error('API key not configured. Game will use fallback responses.');
+    }
+
     const response = await fetch(CONFIG.OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${CONFIG.OPENROUTER_API_KEY}`,
+            Authorization: `Bearer ${CONFIG.OPENROUTER_API_KEY}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://cellcollective.org',
-            'X-Title': 'Cell Collective Modeling Game'
+            'X-Title': 'Cell Collective Modeling Game',
         },
         body: JSON.stringify({
             model: CONFIG.AI_MODEL,
             messages: [
                 {
                     role: 'user',
-                    content: prompt
-                }
+                    content: prompt,
+                },
             ],
             temperature: 0.7,
-            max_tokens: 150
-        })
+            max_tokens: 150,
+        }),
     });
 
     if (!response.ok) {
@@ -403,7 +423,7 @@ function showFeedback(message, type = 'info') {
         error: '❌',
         warning: '⚠️',
         hint: '💡',
-        info: '🤖'
+        info: '🤖',
     };
 
     // Format the message for better display
@@ -483,7 +503,10 @@ function progressToStage2() {
     checkBtn.textContent = '✓ Check Relationships';
     checkBtn.disabled = true;
 
-    showFeedback('🎉 Great job identifying components! Now let\'s see how they interact...', 'success');
+    showFeedback(
+        "🎉 Great job identifying components! Now let's see how they interact...",
+        'success'
+    );
 }
 
 function enableConnectionDrawing() {
@@ -492,10 +515,10 @@ function enableConnectionDrawing() {
 
     const components = document.querySelectorAll('.placed-component');
 
-    components.forEach(comp => {
+    components.forEach((comp) => {
         comp.style.cursor = 'pointer';
 
-        comp.addEventListener('click', function() {
+        comp.addEventListener('click', function () {
             if (!selectedComponent) {
                 // First click - select source
                 selectedComponent = this;
@@ -511,7 +534,7 @@ function enableConnectionDrawing() {
                 drawConnection(selectedComponent, this);
                 connections.push({
                     from: selectedComponent.dataset.component,
-                    to: this.dataset.component
+                    to: this.dataset.component,
                 });
 
                 // Reset selection
@@ -542,7 +565,7 @@ function drawConnection(fromElement, toElement) {
     const y2 = toRect.top + toRect.height / 2 - canvasRect.top;
 
     const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    const angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
 
     const line = document.createElement('div');
     line.className = 'connection-line';
@@ -557,11 +580,11 @@ function drawConnection(fromElement, toElement) {
 async function checkConnections(connections) {
     const correctConnections = [
         { from: 'Signal', to: 'Receptor' },
-        { from: 'Receptor', to: 'Enzyme' }
+        { from: 'Receptor', to: 'Enzyme' },
     ];
 
-    const isCorrect = correctConnections.every(correct =>
-        connections.some(conn => conn.from === correct.from && conn.to === correct.to)
+    const isCorrect = correctConnections.every((correct) =>
+        connections.some((conn) => conn.from === correct.from && conn.to === correct.to)
     );
 
     showFeedback('🤖 Analyzing your connections...', 'loading');
@@ -582,24 +605,26 @@ async function checkConnections(connections) {
 
 async function getConnectionFeedback(connections, isCorrect) {
     const prompt = `You are Dr. Elena Rodriguez. The student drew these connections in their model:
-${connections.map(c => `${c.from} → ${c.to}`).join(', ')}
+${connections.map((c) => `${c.from} → ${c.to}`).join(', ')}
 
 The correct relationships are: Signal → Receptor, Receptor → Enzyme
 
 Is it correct? ${isCorrect ? 'YES' : 'NO'}
 
-${isCorrect ?
-    'Give enthusiastic praise and explain why this pathway is important. Provide a REAL-WORLD EXAMPLE from biology (like how adrenaline signals work, or neurotransmitters in the brain). 3-4 sentences.' :
-    'Give encouraging feedback with a hint about the correct pathway. Include a simple EXAMPLE or analogy to help them understand (like a relay race or chain reaction). 3-4 sentences.'}
+${
+    isCorrect
+        ? 'Give enthusiastic praise and explain why this pathway is important. Provide a REAL-WORLD EXAMPLE from biology (like how adrenaline signals work, or neurotransmitters in the brain). 3-4 sentences.'
+        : 'Give encouraging feedback with a hint about the correct pathway. Include a simple EXAMPLE or analogy to help them understand (like a relay race or chain reaction). 3-4 sentences.'
+}
 
 Stay in character as Dr. Elena.`;
 
     try {
         return await callOpenRouter(prompt);
     } catch (error) {
-        return isCorrect ?
-            '🎉 Perfect! You understand how signals flow through the system!' :
-            '🤔 Think about the signal\'s journey: it reaches the receptor first, then the receptor activates the enzyme.';
+        return isCorrect
+            ? '🎉 Perfect! You understand how signals flow through the system!'
+            : "🤔 Think about the signal's journey: it reaches the receptor first, then the receptor activates the enzyme.";
     }
 }
 
@@ -631,14 +656,17 @@ function progressToStage3() {
     // Update interaction for setting states
     enableStateSelection();
 
-    showFeedback('🎉 You mapped the relationships! Now let\'s set the starting conditions...', 'success');
+    showFeedback(
+        "🎉 You mapped the relationships! Now let's set the starting conditions...",
+        'success'
+    );
 }
 
 function enableStateSelection() {
     const components = document.querySelectorAll('.placed-component');
     const states = {};
 
-    components.forEach(comp => {
+    components.forEach((comp) => {
         const componentName = comp.dataset.component;
         states[componentName] = 0; // Default to OFF
 
@@ -660,7 +688,7 @@ function enableStateSelection() {
         comp.appendChild(stateIndicator);
 
         // Toggle state on click
-        comp.onclick = function() {
+        comp.onclick = function () {
             states[componentName] = states[componentName] === 0 ? 1 : 0;
 
             if (states[componentName] === 1) {
@@ -712,18 +740,20 @@ The correct initial state is: Signal ON, Receptor OFF, Enzyme OFF (because the s
 
 Is it correct? ${isCorrect ? 'YES' : 'NO'}
 
-${isCorrect ?
-    'Give enthusiastic praise about completing Act 1! Explain why initial conditions matter in modeling and provide a brief REAL-WORLD EXAMPLE (like how a light switch starts OFF until you flip it, or how cells respond to hormones). 3-4 sentences.' :
-    'Give a helpful hint about which component should start ON. Include a simple EXAMPLE or analogy to help them understand (like how you need to ring a doorbell for someone to answer). 2-3 sentences.'}
+${
+    isCorrect
+        ? 'Give enthusiastic praise about completing Act 1! Explain why initial conditions matter in modeling and provide a brief REAL-WORLD EXAMPLE (like how a light switch starts OFF until you flip it, or how cells respond to hormones). 3-4 sentences.'
+        : 'Give a helpful hint about which component should start ON. Include a simple EXAMPLE or analogy to help them understand (like how you need to ring a doorbell for someone to answer). 2-3 sentences.'
+}
 
 Stay in character as Dr. Elena.`;
 
     try {
         return await callOpenRouter(prompt);
     } catch (error) {
-        return isCorrect ?
-            '🎉 Perfect! You understand initial conditions! Act 1 complete!' :
-            '🤔 Remember, the signal arrives from outside to start the cascade.';
+        return isCorrect
+            ? '🎉 Perfect! You understand initial conditions! Act 1 complete!'
+            : '🤔 Remember, the signal arrives from outside to start the cascade.';
     }
 }
 

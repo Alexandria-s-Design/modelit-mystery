@@ -11,6 +11,8 @@
  * - Error tracking (privacy-friendly, no external services)
  */
 
+/* global DialogueSystem */
+
 class ErrorHandler {
     constructor() {
         this.errors = [];
@@ -27,7 +29,7 @@ class ErrorHandler {
         window.addEventListener('unhandledrejection', (event) => {
             this.handleError('Promise Rejection', event.reason, {
                 type: 'promise',
-                promise: event.promise
+                promise: event.promise,
             });
             event.preventDefault();
         });
@@ -38,7 +40,7 @@ class ErrorHandler {
                 type: 'error',
                 filename: event.filename,
                 lineno: event.lineno,
-                colno: event.colno
+                colno: event.colno,
             });
         });
     }
@@ -52,7 +54,7 @@ class ErrorHandler {
             message: error?.message || String(error),
             stack: error?.stack,
             context,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
         };
 
         // Log to console in development
@@ -83,65 +85,78 @@ class ErrorHandler {
         if (category.includes('Audio') || errorStr.includes('audio')) {
             if (errorStr.includes('not found') || errorStr.includes('404')) {
                 return {
-                    message: '🔇 Voice file not found. The game will continue without voice narration.',
+                    message:
+                        '🔇 Voice file not found. The game will continue without voice narration.',
                     type: 'warning',
-                    action: 'You can still read Dr. Maya\'s dialogue on screen.'
+                    action: "You can still read Dr. Maya's dialogue on screen.",
                 };
             }
             if (errorStr.includes('autoplay') || errorStr.includes('user interaction')) {
                 return {
                     message: '🔊 Audio blocked by browser. Click anywhere to enable sound.',
                     type: 'info',
-                    action: null
+                    action: null,
                 };
             }
             return {
                 message: '🔇 Audio playback issue. The game will continue silently.',
                 type: 'warning',
-                action: 'Check your browser audio settings.'
+                action: 'Check your browser audio settings.',
             };
         }
 
         // Image errors
         if (category.includes('Image') || errorStr.includes('image')) {
             return {
-                message: '🖼️ Some images couldn\'t load. Using placeholder images.',
+                message: "🖼️ Some images couldn't load. Using placeholder images.",
                 type: 'warning',
-                action: 'Check your internet connection for full experience.'
+                action: 'Check your internet connection for full experience.',
             };
         }
 
         // API errors
-        if (category.includes('API') || errorStr.includes('fetch') || errorStr.includes('network')) {
+        if (
+            category.includes('API') ||
+            errorStr.includes('fetch') ||
+            errorStr.includes('network')
+        ) {
             if (errorStr.includes('rate limit') || errorStr.includes('429')) {
                 return {
                     message: '⏱️ API rate limit reached. Using fallback content.',
                     type: 'info',
-                    action: 'Game functionality is not affected.'
+                    action: 'Game functionality is not affected.',
                 };
             }
             return {
                 message: '🌐 Network error. Using offline content.',
                 type: 'warning',
-                action: 'Some features may be limited without internet.'
+                action: 'Some features may be limited without internet.',
             };
         }
 
         // Storage errors
-        if (category.includes('Storage') || errorStr.includes('localstorage') || errorStr.includes('quota')) {
+        if (
+            category.includes('Storage') ||
+            errorStr.includes('localstorage') ||
+            errorStr.includes('quota')
+        ) {
             return {
                 message: '💾 Unable to save progress. Your game will not be saved.',
                 type: 'warning',
-                action: 'Clear browser data or use a different browser.'
+                action: 'Clear browser data or use a different browser.',
             };
         }
 
         // Critical errors that break functionality
-        if (errorStr.includes('cannot read') || errorStr.includes('undefined') || errorStr.includes('null')) {
+        if (
+            errorStr.includes('cannot read') ||
+            errorStr.includes('undefined') ||
+            errorStr.includes('null')
+        ) {
             return {
                 message: '⚠️ Unexpected error occurred. Try refreshing the page.',
                 type: 'error',
-                action: 'If problem persists, clear browser cache.'
+                action: 'If problem persists, clear browser cache.',
             };
         }
 
@@ -199,14 +214,14 @@ class ErrorHandler {
      */
     getStats() {
         const categories = {};
-        this.errors.forEach(error => {
+        this.errors.forEach((error) => {
             categories[error.category] = (categories[error.category] || 0) + 1;
         });
 
         return {
             totalErrors: this.errors.length,
             categories,
-            recentErrors: this.errors.slice(-5)
+            recentErrors: this.errors.slice(-5),
         };
     }
 
@@ -221,12 +236,16 @@ class ErrorHandler {
      * Export errors for debugging
      */
     exportErrors() {
-        const data = JSON.stringify({
-            errors: this.errors,
-            stats: this.getStats(),
-            userAgent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-        }, null, 2);
+        const data = JSON.stringify(
+            {
+                errors: this.errors,
+                stats: this.getStats(),
+                userAgent: navigator.userAgent,
+                timestamp: new Date().toISOString(),
+            },
+            null,
+            2
+        );
 
         const blob = new Blob([data], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -242,7 +261,9 @@ class ErrorHandler {
  * Add notification styles to page
  */
 function injectNotificationStyles() {
-    if (document.getElementById('notification-styles')) return;
+    if (document.getElementById('notification-styles')) {
+        return;
+    }
 
     const style = document.createElement('style');
     style.id = 'notification-styles';

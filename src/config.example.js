@@ -45,7 +45,7 @@ const CONFIG = {
 
     // Development
     DEBUG_MODE: false, // Show console logs
-    SKIP_INTRO: false // Skip to specific chapter (for testing)
+    SKIP_INTRO: false, // Skip to specific chapter (for testing)
 };
 
 // Export for use in game

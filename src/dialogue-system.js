@@ -12,96 +12,96 @@ const DialogueSystem = {
         this.scenes = {
             intro: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "Hey there! I'm Dr. Elena, and I need YOUR help! Something weird is happening in my lab...",
-                    image: "drElena",
-                    action: null
+                    image: 'drElena',
+                    action: null,
                 },
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "My cells are acting super strange! We need to build a model to figure out what's going on!",
-                    image: "labCrisis",
-                    action: null
+                    image: 'labCrisis',
+                    action: null,
                 },
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "Ready to be a scientist and solve this mystery with me? Let's do this!",
-                    image: "drElena",
-                    action: "startStage1"
-                }
+                    image: 'drElena',
+                    action: 'startStage1',
+                },
             ],
 
             stage1Start: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
-                    text: "First step: Find the important pieces! Drag the right parts onto the board!",
-                    image: "modelBuilding",
-                    action: "showStage1Interface"
-                }
+                    speaker: 'Dr. Elena Rodriguez',
+                    text: 'First step: Find the important pieces! Drag the right parts onto the board!',
+                    image: 'modelBuilding',
+                    action: 'showStage1Interface',
+                },
             ],
 
             stage1Complete: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "YES! You found them all - Signal, Receptor, and Enzyme! You're a natural scientist!",
-                    image: "drElena",
-                    action: null
+                    image: 'drElena',
+                    action: null,
                 },
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "Now the cool part - let's see how they talk to each other!",
-                    image: "cellSignaling",
-                    action: "startStage2"
-                }
+                    image: 'cellSignaling',
+                    action: 'startStage2',
+                },
             ],
 
             stage2Start: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
-                    text: "Click to connect! Show me how the signal travels from piece to piece!",
-                    image: "modelBuilding",
-                    action: "showStage2Interface"
-                }
+                    speaker: 'Dr. Elena Rodriguez',
+                    text: 'Click to connect! Show me how the signal travels from piece to piece!',
+                    image: 'modelBuilding',
+                    action: 'showStage2Interface',
+                },
             ],
 
             stage2Complete: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
-                    text: "AMAZING! You mapped the pathway perfectly!",
-                    image: "drElena",
-                    action: null
+                    speaker: 'Dr. Elena Rodriguez',
+                    text: 'AMAZING! You mapped the pathway perfectly!',
+                    image: 'drElena',
+                    action: null,
                 },
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "Last challenge: What's ON or OFF at the start? You decide!",
-                    image: "modelBuilding",
-                    action: "startStage3"
-                }
+                    image: 'modelBuilding',
+                    action: 'startStage3',
+                },
             ],
 
             stage3Start: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
-                    text: "Click each piece to turn it ON (green) or OFF (red). What makes sense?",
-                    image: "cellSignaling",
-                    action: "showStage3Interface"
-                }
+                    speaker: 'Dr. Elena Rodriguez',
+                    text: 'Click each piece to turn it ON (green) or OFF (red). What makes sense?',
+                    image: 'cellSignaling',
+                    action: 'showStage3Interface',
+                },
             ],
 
             finale: [
                 {
-                    speaker: "Dr. Elena Rodriguez",
+                    speaker: 'Dr. Elena Rodriguez',
                     text: "YOU DID IT! You're officially a computational biologist!",
-                    image: "celebration",
-                    action: null
+                    image: 'celebration',
+                    action: null,
                 },
                 {
-                    speaker: "Dr. Elena Rodriguez",
-                    text: "You just learned 3 super important modeling skills! High five! 🎉",
-                    image: "celebration",
-                    action: "showCompletionScreen"
-                }
-            ]
+                    speaker: 'Dr. Elena Rodriguez',
+                    text: 'You just learned 3 super important modeling skills! High five! 🎉',
+                    image: 'celebration',
+                    action: 'showCompletionScreen',
+                },
+            ],
         };
     },
 
@@ -150,7 +150,8 @@ const DialogueSystem = {
         const storyPanel = document.getElementById('story-panel');
 
         // Get image URL from cache or use placeholder
-        const imageUrl = this.imageCache[dialogue.image] || this.getPlaceholderImage(dialogue.image);
+        const imageUrl =
+            this.imageCache[dialogue.image] || this.getPlaceholderImage(dialogue.image);
 
         storyPanel.innerHTML = `
             <div class="scene-container">
@@ -210,11 +211,16 @@ const DialogueSystem = {
 
         // Fallback to simple placeholders
         const placeholders = {
-            drElena: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">👩‍🔬 Dr. Elena Rodriguez</text></svg>',
-            labCrisis: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">⚗️ Laboratory Scene</text></svg>',
-            cellSignaling: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🧬 Cell Signaling</text></svg>',
-            modelBuilding: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🔬 Model Building</text></svg>',
-            celebration: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="36" font-family="Arial">🎉</text></svg>'
+            drElena:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">👩‍🔬 Dr. Elena Rodriguez</text></svg>',
+            labCrisis:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">⚗️ Laboratory Scene</text></svg>',
+            cellSignaling:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🧬 Cell Signaling</text></svg>',
+            modelBuilding:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🔬 Model Building</text></svg>',
+            celebration:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="36" font-family="Arial">🎉</text></svg>',
         };
 
         return placeholders[imageType] || placeholders.drElena;
@@ -236,13 +242,13 @@ const DialogueSystem = {
             showStage2Interface: () => window.gameActions?.showStage2Interface(),
             startStage3: () => window.gameActions?.startStage3(),
             showStage3Interface: () => window.gameActions?.showStage3Interface(),
-            showCompletionScreen: () => window.gameActions?.showCompletionScreen()
+            showCompletionScreen: () => window.gameActions?.showCompletionScreen(),
         };
 
         if (actions[actionName]) {
             setTimeout(actions[actionName], 500);
         }
-    }
+    },
 };
 
 // Add pulse animation for continue hint

@@ -17,6 +17,7 @@ An interactive educational game that teaches the 10 fundamentals of Boolean mode
 ## 📚 Educational Content
 
 Students learn about:
+
 1. Components & Variables
 2. Relationships & Interactions
 3. Initial Conditions
@@ -37,6 +38,16 @@ Middle school students (ages 11-14) - approximately 10-15 minutes of gameplay.
 Simply open `modelit-story.html` in a modern web browser (Chrome, Firefox, Edge, Safari).
 
 No installation or server required - it's a standalone HTML file!
+
+## 🔒 Security Notice
+
+**⚠️ IMPORTANT:** This repository no longer contains exposed API keys. If you need AI-powered features:
+
+1. Copy `src/config.example.js` to `src/config.js`
+2. Add your own API keys
+3. **Never commit `config.js` to Git!**
+
+The game works perfectly without API keys - it uses built-in fallback responses.
 
 ## 🛠️ Technical Details
 
@@ -68,6 +79,7 @@ modelit-mystery/
 ## 🎨 Character
 
 **Dr. Maya** - A warm and friendly African American female scientist with:
+
 - Natural curly hair in a bun
 - Warm brown skin tone
 - Big, expressive brown eyes
