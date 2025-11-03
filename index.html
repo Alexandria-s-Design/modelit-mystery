@@ -812,8 +812,12 @@
                 isLearningMoment = !!scene.learning;
                 isChoiceMoment = false;
 
-                // Clean text for speech (remove HTML tags)
-                const cleanText = scene.text.replace(/<[^>]*>/g, '');
+                // Clean text for speech (remove HTML tags) - using DOM parser for security
+                const tempDiv = document.createElement('div');
+                tempDiv.textContent = scene.text; // textContent automatically escapes HTML
+                const escapeText = tempDiv.innerHTML;
+                tempDiv.innerHTML = escapeText;
+                const cleanText = tempDiv.textContent.trim();
 
                 // Speak Dr. Maya's dialogue
                 speak(cleanText);
