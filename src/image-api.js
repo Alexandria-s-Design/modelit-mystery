@@ -56,7 +56,9 @@ class ImageAPIManager {
      * Fetch image from Unsplash API
      */
     async tryUnsplash(keywords) {
-        if (!this.config.UNSPLASH_ACCESS_KEY) {return null;}
+        if (!this.config.UNSPLASH_ACCESS_KEY) {
+            return null;
+        }
         if (this.apiCallCount.unsplash >= this.maxApiCalls.unsplash) {
             console.warn('[ImageAPI] Unsplash rate limit reached, using fallback');
             return null;
@@ -68,7 +70,7 @@ class ImageAPIManager {
 
             const response = await fetch(url, {
                 headers: {
-                    'Authorization': `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`,
+                    Authorization: `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`,
                 },
             });
 
@@ -86,7 +88,7 @@ class ImageAPIManager {
                 if (photo.links?.download_location) {
                     fetch(photo.links.download_location, {
                         headers: {
-                            'Authorization': `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`,
+                            Authorization: `Client-ID ${this.config.UNSPLASH_ACCESS_KEY}`,
                         },
                     }).catch(() => {}); // Silent fail for tracking
                 }
@@ -105,7 +107,9 @@ class ImageAPIManager {
      * Fetch image from Pexels API
      */
     async tryPexels(keywords) {
-        if (!this.config.PEXELS_API_KEY) {return null;}
+        if (!this.config.PEXELS_API_KEY) {
+            return null;
+        }
         if (this.apiCallCount.pexels >= this.maxApiCalls.pexels) {
             console.warn('[ImageAPI] Pexels rate limit reached, using fallback');
             return null;
@@ -117,7 +121,7 @@ class ImageAPIManager {
 
             const response = await fetch(url, {
                 headers: {
-                    'Authorization': this.config.PEXELS_API_KEY,
+                    Authorization: this.config.PEXELS_API_KEY,
                 },
             });
 
@@ -144,12 +148,12 @@ class ImageAPIManager {
      * Preload images for upcoming scenes
      */
     async preloadImages(scenes) {
-        const promises = scenes.map(scene => {
+        const promises = scenes.map((scene) => {
             if (scene.image && !this.cache.has(scene.id)) {
                 return this.getSceneImage(
                     scene.id,
                     scene.imageKeywords || 'science laboratory',
-                    scene.image,
+                    scene.image
                 );
             }
         });
@@ -183,61 +187,61 @@ class ImageAPIManager {
 // Scene keyword mappings for better image results
 const SCENE_KEYWORDS = {
     // Chapter 0: The Discovery
-    'ch0_scene1': 'african american female scientist portrait',
-    'ch0_scene2': 'glowing blue cells microscope petri dish',
-    'ch0_scene3': 'biological model blueprint diagram',
+    ch0_scene1: 'african american female scientist portrait',
+    ch0_scene2: 'glowing blue cells microscope petri dish',
+    ch0_scene3: 'biological model blueprint diagram',
 
     // Chapter 1: Components
-    'ch1_scene1': 'microscope close up laboratory',
-    'ch1_scene2': 'protein receptor enzyme cell biology',
-    'ch1_scene3': 'mysterious signal communication',
+    ch1_scene1: 'microscope close up laboratory',
+    ch1_scene2: 'protein receptor enzyme cell biology',
+    ch1_scene3: 'mysterious signal communication',
 
     // Chapter 2: Relationships
-    'ch2_scene1': 'network connections nodes diagram',
-    'ch2_scene2': 'logic gates circuit diagram',
-    'ch2_scene3': 'pattern changing transformation',
+    ch2_scene1: 'network connections nodes diagram',
+    ch2_scene2: 'logic gates circuit diagram',
+    ch2_scene3: 'pattern changing transformation',
 
     // Chapter 3: Boss Level
-    'ch3_scene1': 'warning alert mutation danger',
-    'ch3_scene2': 'initial state diagram flowchart',
-    'ch3_scene3': 'different results comparison',
+    ch3_scene1: 'warning alert mutation danger',
+    ch3_scene2: 'initial state diagram flowchart',
+    ch3_scene3: 'different results comparison',
 
     // Chapter 4: Logic Functions
-    'ch4_scene1': 'logic gates AND OR NOT',
-    'ch4_scene2': 'network diagram connections',
-    'ch4_scene3': 'cells spreading multiplication',
+    ch4_scene1: 'logic gates AND OR NOT',
+    ch4_scene2: 'network diagram connections',
+    ch4_scene3: 'cells spreading multiplication',
 
     // Chapter 5: State Space
-    'ch5_scene1': 'state space map diagram',
-    'ch5_scene2': 'cycling states loop',
-    'ch5_scene3': 'final stable state attractor',
+    ch5_scene1: 'state space map diagram',
+    ch5_scene2: 'cycling states loop',
+    ch5_scene3: 'final stable state attractor',
 
     // Chapter 6: Feedback Loops
-    'ch6_scene1': 'feedback loop discovery',
-    'ch6_scene2': 'negative feedback control system',
-    'ch6_scene3': 'encrypted message code',
+    ch6_scene1: 'feedback loop discovery',
+    ch6_scene2: 'negative feedback control system',
+    ch6_scene3: 'encrypted message code',
 
     // Chapter 7: Prediction
-    'ch7_scene1': 'simulation screen computer',
-    'ch7_scene2': 'prediction models forecast',
-    'ch7_scene3': 'ventilation laboratory safety',
+    ch7_scene1: 'simulation screen computer',
+    ch7_scene2: 'prediction models forecast',
+    ch7_scene3: 'ventilation laboratory safety',
 
     // Chapter 8: Perturbations
-    'ch8_scene1': 'experiment setup laboratory',
-    'ch8_scene2': 'treatment options medicine',
-    'ch8_scene3': 'power outage emergency',
+    ch8_scene1: 'experiment setup laboratory',
+    ch8_scene2: 'treatment options medicine',
+    ch8_scene3: 'power outage emergency',
 
     // Chapter 9: Final Boss
-    'ch9_scene1': 'validation comparison data',
-    'ch9_scene2': 'bistable system two states',
-    'ch9_scene3': 'alert warning intruder',
+    ch9_scene1: 'validation comparison data',
+    ch9_scene2: 'bistable system two states',
+    ch9_scene3: 'alert warning intruder',
 
     // Chapter 10: Solution
-    'ch10_scene1': 'final iteration completion',
-    'ch10_scene2': 'solution found success',
-    'ch10_scene3': 'cells healing recovery',
-    'ch10_scene4': 'mysterious note letter',
-    'ch10_scene5': 'celebration success victory',
+    ch10_scene1: 'final iteration completion',
+    ch10_scene2: 'solution found success',
+    ch10_scene3: 'cells healing recovery',
+    ch10_scene4: 'mysterious note letter',
+    ch10_scene5: 'celebration success victory',
 };
 
 /**

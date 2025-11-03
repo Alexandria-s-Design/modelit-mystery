@@ -1,755 +1,824 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ModelIt! - The Mystery of the Mutating Cells</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Exo 2', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #0a4f6e 0%, #1a1a2e 100%);
-            color: #ffffff;
-            overflow: hidden;
-        }
-
-        #game-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        #game-header {
-            background: rgba(10, 79, 110, 0.9);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 3px solid #00d4ff;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
-        }
-
-        #game-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 28px;
-            font-weight: 900;
-            color: #00d4ff;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5), 0 0 20px rgba(0, 212, 255, 0.3);
-            letter-spacing: 1.5px;
-        }
-
-        #progress-tracker {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        /* Audio Controls */
-        .audio-controls {
-            display: flex;
-            gap: 10px;
-            margin-left: 20px;
-        }
-
-        .audio-toggle {
-            background: rgba(0, 212, 255, 0.2);
-            border: 2px solid #00d4ff;
-            color: #00d4ff;
-            padding: 8px 15px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-        }
-
-        .audio-toggle.active {
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-            color: white;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
-        }
-
-        .audio-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
-        }
-
-        .chapter-badge {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .chapter-badge.completed {
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-            border-color: #00d4ff;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
-        }
-
-        .chapter-badge.current {
-            background: linear-gradient(135deg, #ff00ff 0%, #cc00cc 100%);
-            border-color: #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
-            animation: pulse 2s infinite;
-        }
-
-        /* Main Area */
-        #game-main {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px 40px;
-            overflow: hidden;
-            min-height: 0;
-        }
-
-        /* Story Panel - Side by Side Layout */
-        #story-panel {
-            max-width: 100%;
-            width: 100%;
-            max-height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .scene-container {
-            animation: fadeIn 0.6s ease;
-            display: flex;
-            flex-direction: row;
-            gap: 25px;
-            height: 100%;
-            max-height: calc(100vh - 120px);
-        }
-
-        .scene-image {
-            width: 48%;
-            height: calc(100vh - 120px);
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
-            border: 3px solid #00d4ff;
-            position: relative;
-            flex-shrink: 0;
-            animation: imageZoomIn 0.8s ease-out;
-            transition: all 0.3s ease;
-        }
-
-        .scene-image.speaking {
-            animation: subtlePulse 2s ease-in-out infinite;
-            box-shadow: 0 8px 40px rgba(0, 212, 255, 0.8);
-        }
-
-        @keyframes imageZoomIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ModelIt! - The Mystery of the Mutating Cells</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
 
-        @keyframes subtlePulse {
-            0%, 100% {
+            body {
+                font-family: 'Exo 2', 'Segoe UI', sans-serif;
+                background: linear-gradient(135deg, #0a4f6e 0%, #1a1a2e 100%);
+                color: #ffffff;
+                overflow: hidden;
+            }
+
+            #game-container {
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Header */
+            #game-header {
+                background: rgba(10, 79, 110, 0.9);
+                padding: 15px 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 3px solid #00d4ff;
+                box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+            }
+
+            #game-title {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 28px;
+                font-weight: 900;
+                color: #00d4ff;
+                text-shadow:
+                    0 0 10px rgba(0, 212, 255, 0.5),
+                    0 0 20px rgba(0, 212, 255, 0.3);
+                letter-spacing: 1.5px;
+            }
+
+            #progress-tracker {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            /* Audio Controls */
+            .audio-controls {
+                display: flex;
+                gap: 10px;
+                margin-left: 20px;
+            }
+
+            .audio-toggle {
+                background: rgba(0, 212, 255, 0.2);
+                border: 2px solid #00d4ff;
+                color: #00d4ff;
+                padding: 8px 15px;
+                border-radius: 25px;
+                cursor: pointer;
+                font-size: 18px;
+                transition: all 0.3s ease;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 12px;
+            }
+
+            .audio-toggle.active {
+                background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+                color: white;
+                box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+            }
+
+            .audio-toggle:hover {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+            }
+
+            .chapter-badge {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.2);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 12px;
+                font-weight: 700;
+                transition: all 0.3s ease;
+            }
+
+            .chapter-badge.completed {
+                background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+                border-color: #00d4ff;
+                box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+            }
+
+            .chapter-badge.current {
+                background: linear-gradient(135deg, #ff00ff 0%, #cc00cc 100%);
+                border-color: #ff00ff;
+                box-shadow: 0 0 20px rgba(255, 0, 255, 0.8);
+                animation: pulse 2s infinite;
+            }
+
+            /* Main Area */
+            #game-main {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px 40px;
+                overflow: hidden;
+                min-height: 0;
+            }
+
+            /* Story Panel - Side by Side Layout */
+            #story-panel {
+                max-width: 100%;
+                width: 100%;
+                max-height: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .scene-container {
+                animation: fadeIn 0.6s ease;
+                display: flex;
+                flex-direction: row;
+                gap: 25px;
+                height: 100%;
+                max-height: calc(100vh - 120px);
+            }
+
+            .scene-image {
+                width: 48%;
+                height: calc(100vh - 120px);
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center center;
+                border-radius: 15px;
                 box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+                border: 3px solid #00d4ff;
+                position: relative;
+                flex-shrink: 0;
+                animation: imageZoomIn 0.8s ease-out;
+                transition: all 0.3s ease;
             }
-            50% {
-                box-shadow: 0 8px 45px rgba(0, 212, 255, 0.7);
+
+            .scene-image.speaking {
+                animation: subtlePulse 2s ease-in-out infinite;
+                box-shadow: 0 8px 40px rgba(0, 212, 255, 0.8);
             }
-        }
 
-        .scene-content-wrapper {
-            width: 48%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
+            @keyframes imageZoomIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
 
-        .scene-content-wrapper::-webkit-scrollbar {
-            width: 8px;
-        }
+            @keyframes subtlePulse {
+                0%,
+                100% {
+                    box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+                }
+                50% {
+                    box-shadow: 0 8px 45px rgba(0, 212, 255, 0.7);
+                }
+            }
 
-        .scene-content-wrapper::-webkit-scrollbar-track {
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 10px;
-        }
+            .scene-content-wrapper {
+                width: 48%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                overflow-y: auto;
+                padding-right: 10px;
+            }
 
-        .scene-content-wrapper::-webkit-scrollbar-thumb {
-            background: rgba(0, 212, 255, 0.5);
-            border-radius: 10px;
-        }
+            .scene-content-wrapper::-webkit-scrollbar {
+                width: 8px;
+            }
 
-        .scene-content-wrapper::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 212, 255, 0.8);
-        }
+            .scene-content-wrapper::-webkit-scrollbar-track {
+                background: rgba(0, 212, 255, 0.1);
+                border-radius: 10px;
+            }
 
-        .scene-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
-            padding: 20px;
-            border-radius: 0 0 12px 12px;
-        }
+            .scene-content-wrapper::-webkit-scrollbar-thumb {
+                background: rgba(0, 212, 255, 0.5);
+                border-radius: 10px;
+            }
 
-        .scene-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 24px;
-            color: #00d4ff;
-            text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
-        }
+            .scene-content-wrapper::-webkit-scrollbar-thumb:hover {
+                background: rgba(0, 212, 255, 0.8);
+            }
 
-        .dialogue-container {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 153, 204, 0.15) 100%);
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 5px solid #00d4ff;
-            margin-bottom: 15px;
-            flex-shrink: 0;
-        }
+            .scene-overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
+                padding: 20px;
+                border-radius: 0 0 12px 12px;
+            }
 
-        .speaker-name {
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            color: #00d4ff;
-            margin-bottom: 10px;
-            font-size: 18px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-            letter-spacing: 0.5px;
-        }
+            .scene-title {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 24px;
+                color: #00d4ff;
+                text-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+            }
 
-        .dialogue-text {
-            font-family: 'Exo 2', sans-serif;
-            line-height: 1.6;
-            color: #e0e0e0;
-            font-size: 16px;
-            font-weight: 400;
-        }
+            .dialogue-container {
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 212, 255, 0.15) 0%,
+                    rgba(0, 153, 204, 0.15) 100%
+                );
+                padding: 20px;
+                border-radius: 15px;
+                border-left: 5px solid #00d4ff;
+                margin-bottom: 15px;
+                flex-shrink: 0;
+            }
 
-        .concept-highlight {
-            background: rgba(0, 212, 255, 0.2);
-            padding: 2px 8px;
-            border-radius: 4px;
-            color: #00ffff;
-            font-weight: 600;
-        }
+            .speaker-name {
+                font-family: 'Orbitron', sans-serif;
+                font-weight: 700;
+                color: #00d4ff;
+                margin-bottom: 10px;
+                font-size: 18px;
+                text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+                letter-spacing: 0.5px;
+            }
 
-        /* Choices */
-        .choices-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+            .dialogue-text {
+                font-family: 'Exo 2', sans-serif;
+                line-height: 1.6;
+                color: #e0e0e0;
+                font-size: 16px;
+                font-weight: 400;
+            }
 
-        .choice-button {
-            font-family: 'Exo 2', sans-serif;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.2) 100%);
-            border: 2px solid #00d4ff;
-            color: white;
-            padding: 12px 20px;
-            font-size: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-            position: relative;
-            overflow: hidden;
-        }
+            .concept-highlight {
+                background: rgba(0, 212, 255, 0.2);
+                padding: 2px 8px;
+                border-radius: 4px;
+                color: #00ffff;
+                font-weight: 600;
+            }
 
-        .choice-button:before {
-            content: '▶';
-            position: absolute;
-            left: 15px;
-            color: #00d4ff;
-            font-size: 20px;
-            transition: all 0.3s ease;
-        }
+            /* Choices */
+            .choices-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
 
-        .choice-button:hover {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.4) 0%, rgba(0, 153, 204, 0.4) 100%);
-            transform: translateX(10px);
-            box-shadow: 0 5px 25px rgba(0, 212, 255, 0.6);
-        }
+            .choice-button {
+                font-family: 'Exo 2', sans-serif;
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 212, 255, 0.2) 0%,
+                    rgba(0, 153, 204, 0.2) 100%
+                );
+                border: 2px solid #00d4ff;
+                color: white;
+                padding: 12px 20px;
+                font-size: 15px;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-align: left;
+                position: relative;
+                overflow: hidden;
+            }
 
-        .choice-button:hover:before {
-            left: 20px;
-        }
+            .choice-button:before {
+                content: '▶';
+                position: absolute;
+                left: 15px;
+                color: #00d4ff;
+                font-size: 20px;
+                transition: all 0.3s ease;
+            }
 
-        .continue-button {
-            font-family: 'Orbitron', sans-serif;
-            text-align: center;
-            margin: 15px auto 0;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-            padding: 12px 35px;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
-            border: 2px solid #00d4ff;
-            display: inline-block;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
-        }
+            .choice-button:hover {
+                background: linear-gradient(
+                    135deg,
+                    rgba(0, 212, 255, 0.4) 0%,
+                    rgba(0, 153, 204, 0.4) 100%
+                );
+                transform: translateX(10px);
+                box-shadow: 0 5px 25px rgba(0, 212, 255, 0.6);
+            }
 
-        .continue-button:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+            .choice-button:hover:before {
+                left: 20px;
+            }
 
-        .continue-button:hover {
-            transform: scale(1.08) translateY(-3px);
-            box-shadow: 0 8px 35px rgba(0, 212, 255, 1), 0 0 20px rgba(0, 255, 255, 0.5);
-            background: linear-gradient(135deg, #00ffff 0%, #00d4ff 100%);
-        }
+            .continue-button {
+                font-family: 'Orbitron', sans-serif;
+                text-align: center;
+                margin: 15px auto 0;
+                background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+                color: white;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 35px;
+                border-radius: 50px;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+                border: 2px solid #00d4ff;
+                display: inline-block;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                position: relative;
+                overflow: hidden;
+            }
 
-        .continue-button:hover:before {
-            width: 300px;
-            height: 300px;
-        }
+            .continue-button:before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: translate(-50%, -50%);
+                transition:
+                    width 0.6s,
+                    height 0.6s;
+            }
 
-        .continue-button:active {
-            transform: scale(1.02) translateY(0);
-        }
+            .continue-button:hover {
+                transform: scale(1.08) translateY(-3px);
+                box-shadow:
+                    0 8px 35px rgba(0, 212, 255, 1),
+                    0 0 20px rgba(0, 255, 255, 0.5);
+                background: linear-gradient(135deg, #00ffff 0%, #00d4ff 100%);
+            }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+            .continue-button:hover:before {
+                width: 300px;
+                height: 300px;
+            }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+            .continue-button:active {
+                transform: scale(1.02) translateY(0);
+            }
 
-        @keyframes slideInLeft {
-            from {
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes pulse {
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            @keyframes slideInLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .choice-button {
+                animation: slideInLeft 0.4s ease forwards;
                 opacity: 0;
-                transform: translateX(-50px);
             }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+
+            .choice-button:nth-child(1) {
+                animation-delay: 0.1s;
             }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+            .choice-button:nth-child(2) {
+                animation-delay: 0.3s;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .choice-button:nth-child(3) {
+                animation-delay: 0.5s;
             }
-        }
 
-        .choice-button {
-            animation: slideInLeft 0.4s ease forwards;
-            opacity: 0;
-        }
+            .question-header {
+                animation: slideInUp 0.5s ease forwards;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 20px;
+                color: #00ffff;
+                text-align: center;
+                margin-bottom: 20px;
+                padding: 15px;
+                background: rgba(0, 212, 255, 0.1);
+                border-radius: 10px;
+                border: 2px solid #00d4ff;
+            }
 
-        .choice-button:nth-child(1) { animation-delay: 0.1s; }
-        .choice-button:nth-child(2) { animation-delay: 0.3s; }
-        .choice-button:nth-child(3) { animation-delay: 0.5s; }
+            /* Learning Moment */
+            .learning-moment {
+                background: linear-gradient(
+                    135deg,
+                    rgba(255, 0, 255, 0.2) 0%,
+                    rgba(204, 0, 204, 0.2) 100%
+                );
+                border: 2px solid #ff00ff;
+                border-radius: 15px;
+                padding: 15px;
+                margin: 15px 0;
+                flex-shrink: 0;
+            }
 
-        .question-header {
-            animation: slideInUp 0.5s ease forwards;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 20px;
-            color: #00ffff;
-            text-align: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(0, 212, 255, 0.1);
-            border-radius: 10px;
-            border: 2px solid #00d4ff;
-        }
+            .learning-title {
+                font-family: 'Orbitron', sans-serif;
+                color: #ff00ff;
+                font-size: 16px;
+                margin-bottom: 10px;
+                text-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
+            }
 
-        /* Learning Moment */
-        .learning-moment {
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.2) 0%, rgba(204, 0, 204, 0.2) 100%);
-            border: 2px solid #ff00ff;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 15px 0;
-            flex-shrink: 0;
-        }
-
-        .learning-title {
-            font-family: 'Orbitron', sans-serif;
-            color: #ff00ff;
-            font-size: 16px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.6);
-        }
-
-        .learning-content {
-            color: #e0e0e0;
-            line-height: 1.5;
-            font-size: 14px;
-        }
-    </style>
-    <script src="story-data.js"></script>
-</head>
-<body>
-    <div id="game-container">
-        <!-- Header -->
-        <div id="game-header">
-            <div id="game-title">ModelIt! The Mystery</div>
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div class="audio-controls">
-                    <button id="music-toggle" class="audio-toggle active" onclick="toggleMusic()">
-                        <span id="music-icon">🎵</span> Music
-                    </button>
-                    <button id="voice-toggle" class="audio-toggle active" onclick="toggleVoice()">
-                        <span id="voice-icon">🔊</span> Voice
-                    </button>
+            .learning-content {
+                color: #e0e0e0;
+                line-height: 1.5;
+                font-size: 14px;
+            }
+        </style>
+        <script src="story-data.js"></script>
+    </head>
+    <body>
+        <div id="game-container">
+            <!-- Header -->
+            <div id="game-header">
+                <div id="game-title">ModelIt! The Mystery</div>
+                <div style="display: flex; align-items: center; gap: 20px">
+                    <div class="audio-controls">
+                        <button
+                            id="music-toggle"
+                            class="audio-toggle active"
+                            onclick="toggleMusic()"
+                        >
+                            <span id="music-icon">🎵</span> Music
+                        </button>
+                        <button
+                            id="voice-toggle"
+                            class="audio-toggle active"
+                            onclick="toggleVoice()"
+                        >
+                            <span id="voice-icon">🔊</span> Voice
+                        </button>
+                    </div>
+                    <div id="progress-tracker">
+                        <!-- Dynamically filled with chapter badges -->
+                    </div>
                 </div>
-                <div id="progress-tracker">
-                    <!-- Dynamically filled with chapter badges -->
+            </div>
+
+            <!-- Main Game Area -->
+            <div id="game-main">
+                <div id="story-panel">
+                    <!-- Story content dynamically loaded here -->
                 </div>
             </div>
         </div>
 
-        <!-- Main Game Area -->
-        <div id="game-main">
-            <div id="story-panel">
-                <!-- Story content dynamically loaded here -->
-            </div>
-        </div>
-    </div>
+        <script>
+            // Sound Effects & Voice Over
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    <script>
-        // Sound Effects & Voice Over
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const resumeAudioContext = () => {
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume().catch(() => {});
+                }
+            };
 
-        const resumeAudioContext = () => {
-            if (audioContext.state === 'suspended') {
-                audioContext.resume().catch(() => {});
+            document.addEventListener('click', resumeAudioContext, { once: true });
+            document.addEventListener('keydown', resumeAudioContext, { once: true });
+
+            // Background Music
+            let bgMusic = null;
+            let musicEnabled = true;
+            let voiceEnabled = true;
+
+            // Initialize background music
+            function initBackgroundMusic() {
+                bgMusic = new Audio('audio/background_music.mp3');
+                bgMusic.loop = true;
+                bgMusic.volume = 0.054;
+
+                // Auto-play with user interaction
+                const playPromise = bgMusic.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch((error) => {
+                        console.log('Music auto-play prevented. Will start on first click.');
+                        document.addEventListener(
+                            'click',
+                            function startMusic() {
+                                if (musicEnabled && bgMusic) {
+                                    bgMusic.play();
+                                }
+                                document.removeEventListener('click', startMusic);
+                            },
+                            { once: true }
+                        );
+                    });
+                }
             }
-        };
 
-        document.addEventListener('click', resumeAudioContext, { once: true });
-        document.addEventListener('keydown', resumeAudioContext, { once: true });
+            function toggleMusic() {
+                musicEnabled = !musicEnabled;
+                const button = document.getElementById('music-toggle');
+                const icon = document.getElementById('music-icon');
 
-        // Background Music
-        let bgMusic = null;
-        let musicEnabled = true;
-        let voiceEnabled = true;
-
-        // Initialize background music
-        function initBackgroundMusic() {
-            bgMusic = new Audio('audio/background_music.mp3');
-            bgMusic.loop = true;
-            bgMusic.volume = 0.054;
-
-            // Auto-play with user interaction
-            const playPromise = bgMusic.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log('Music auto-play prevented. Will start on first click.');
-                    document.addEventListener('click', function startMusic() {
-                        if (musicEnabled && bgMusic) {
-                            bgMusic.play();
-                        }
-                        document.removeEventListener('click', startMusic);
-                    }, { once: true });
-                });
+                if (musicEnabled) {
+                    button.classList.add('active');
+                    icon.textContent = '🎵';
+                    if (bgMusic) bgMusic.play();
+                } else {
+                    button.classList.remove('active');
+                    icon.textContent = '🔇';
+                    if (bgMusic) bgMusic.pause();
+                }
             }
-        }
 
-        function toggleMusic() {
-            musicEnabled = !musicEnabled;
-            const button = document.getElementById('music-toggle');
-            const icon = document.getElementById('music-icon');
+            function toggleVoice() {
+                voiceEnabled = !voiceEnabled;
+                const button = document.getElementById('voice-toggle');
+                const icon = document.getElementById('voice-icon');
 
-            if (musicEnabled) {
-                button.classList.add('active');
-                icon.textContent = '🎵';
-                if (bgMusic) bgMusic.play();
-            } else {
-                button.classList.remove('active');
-                icon.textContent = '🔇';
-                if (bgMusic) bgMusic.pause();
+                if (voiceEnabled) {
+                    button.classList.add('active');
+                    icon.textContent = '🔊';
+                } else {
+                    button.classList.remove('active');
+                    icon.textContent = '🔇';
+                    stopSpeaking();
+                }
             }
-        }
 
-        function toggleVoice() {
-            voiceEnabled = !voiceEnabled;
-            const button = document.getElementById('voice-toggle');
-            const icon = document.getElementById('voice-icon');
+            // Pre-recorded Voice System (Microsoft Edge TTS - Neural Voices)
+            let currentVoiceAudio = null;
+            let currentChapter = 0;
+            let currentSceneInChapter = 0;
+            let isLearningMoment = false;
+            let isChoiceMoment = false;
+            let lastFeedbackKey = null;
 
-            if (voiceEnabled) {
-                button.classList.add('active');
-                icon.textContent = '🔊';
-            } else {
-                button.classList.remove('active');
-                icon.textContent = '🔇';
+            // Initialize on page load
+            window.addEventListener('load', () => {
+                initBackgroundMusic();
+                console.log('🎙️ Voice system ready (Pre-recorded MP3 files)');
+            });
+
+            // Voice file mapping function
+            function getVoiceFile() {
+                const ch = currentChapter;
+                const sc = currentSceneInChapter;
+
+                if (isChoiceMoment) {
+                    return `audio/voice/ch${ch}_choice.mp3`;
+                } else if (isLearningMoment) {
+                    return ch === 10 && sc === 3
+                        ? `audio/voice/ch10_learning_final.mp3`
+                        : `audio/voice/ch${ch}_learning.mp3`;
+                } else if (lastFeedbackKey) {
+                    const feedbackFile = `audio/voice/ch${ch}_${lastFeedbackKey}.mp3`;
+                    lastFeedbackKey = null;
+                    return feedbackFile;
+                } else {
+                    // Regular scene dialogue
+                    return `audio/voice/ch${ch}_scene${sc}.mp3`;
+                }
+            }
+
+            async function speak(text) {
+                if (!voiceEnabled || !text) return;
+
+                resumeAudioContext();
                 stopSpeaking();
-            }
-        }
 
-        // Pre-recorded Voice System (Microsoft Edge TTS - Neural Voices)
-        let currentVoiceAudio = null;
-        let currentChapter = 0;
-        let currentSceneInChapter = 0;
-        let isLearningMoment = false;
-        let isChoiceMoment = false;
-        let lastFeedbackKey = null;
+                const sceneImage = document.querySelector('.scene-image');
+                if (sceneImage) sceneImage.classList.add('speaking');
 
-        // Initialize on page load
-        window.addEventListener('load', () => {
-            initBackgroundMusic();
-            console.log('🎙️ Voice system ready (Pre-recorded MP3 files)');
-        });
+                // Get the appropriate voice file
+                const voiceFile = getVoiceFile();
 
-        // Voice file mapping function
-        function getVoiceFile() {
-            const ch = currentChapter;
-            const sc = currentSceneInChapter;
-
-            if (isChoiceMoment) {
-                return `audio/voice/ch${ch}_choice.mp3`;
-            } else if (isLearningMoment) {
-                return ch === 10 && sc === 3 ? `audio/voice/ch10_learning_final.mp3` : `audio/voice/ch${ch}_learning.mp3`;
-            } else if (lastFeedbackKey) {
-                const feedbackFile = `audio/voice/ch${ch}_${lastFeedbackKey}.mp3`;
-                lastFeedbackKey = null;
-                return feedbackFile;
-            } else {
-                // Regular scene dialogue
-                return `audio/voice/ch${ch}_scene${sc}.mp3`;
-            }
-        }
-
-        async function speak(text) {
-            if (!voiceEnabled || !text) return;
-
-            resumeAudioContext();
-            stopSpeaking();
-
-            const sceneImage = document.querySelector('.scene-image');
-            if (sceneImage) sceneImage.classList.add('speaking');
-
-            // Get the appropriate voice file
-            const voiceFile = getVoiceFile();
-
-            try {
-                currentVoiceAudio = new Audio(voiceFile);
-                currentVoiceAudio.volume = 1.0;
-
-                currentVoiceAudio.onended = () => {
-                    if (sceneImage) sceneImage.classList.remove('speaking');
-                };
-
-                currentVoiceAudio.onerror = (error) => {
-                    console.warn(`Voice file not found: ${voiceFile}`, error);
-                    if (sceneImage) sceneImage.classList.remove('speaking');
-                };
-
-                await currentVoiceAudio.play();
-                console.log(`Playing: ${voiceFile}`);
-            } catch (error) {
-                console.error('Voice playback failed:', error);
-                if (sceneImage) sceneImage.classList.remove('speaking');
-            }
-        }
-
-        function stopSpeaking() {
-            if (currentVoiceAudio) {
                 try {
-                    currentVoiceAudio.pause();
-                    currentVoiceAudio.currentTime = 0;
-                } catch (e) {}
+                    currentVoiceAudio = new Audio(voiceFile);
+                    currentVoiceAudio.volume = 1.0;
+
+                    currentVoiceAudio.onended = () => {
+                        if (sceneImage) sceneImage.classList.remove('speaking');
+                    };
+
+                    currentVoiceAudio.onerror = (error) => {
+                        console.warn(`Voice file not found: ${voiceFile}`, error);
+                        if (sceneImage) sceneImage.classList.remove('speaking');
+                    };
+
+                    await currentVoiceAudio.play();
+                    console.log(`Playing: ${voiceFile}`);
+                } catch (error) {
+                    console.error('Voice playback failed:', error);
+                    if (sceneImage) sceneImage.classList.remove('speaking');
+                }
             }
 
-            const sceneImage = document.querySelector('.scene-image');
-            if (sceneImage) {
-                sceneImage.classList.remove('speaking');
-            }
-        }
-
-        function playClickSound() {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
-            oscillator.frequency.exponentialRampToValueAtTime(600, audioContext.currentTime + 0.1);
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-            oscillator.type = 'sine';
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.15);
-        }
-
-        function playSuccessSound() {
-            [800, 1000, 1200].forEach((freq, index) => {
-                setTimeout(() => {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    oscillator.frequency.value = freq;
-                    gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-                    oscillator.type = 'triangle';
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.3);
-                }, index * 100);
-            });
-        }
-
-        function playFailureSound() {
-            // Dramatic failure sound
-            [600, 500, 400, 300].forEach((freq, index) => {
-                setTimeout(() => {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    oscillator.frequency.value = freq;
-                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
-                    oscillator.type = 'sawtooth';
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.4);
-                }, index * 150);
-            });
-        }
-
-        function playBossSound() {
-            // Dramatic boss encounter sound
-            [200, 250, 300, 400].forEach((freq, index) => {
-                setTimeout(() => {
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    oscillator.frequency.value = freq;
-                    gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-                    oscillator.type = 'square';
-                    oscillator.start(audioContext.currentTime);
-                    oscillator.stop(audioContext.currentTime + 0.5);
-                }, index * 100);
-            });
-        }
-
-        // Game State
-        let completedChapters = [];
-        let playerChoices = [];
-
-        // Load story data from external file
-        const story = window.STORY_DATA || { chapters: [] };
-
-        // Initialize game
-        function initGame() {
-            renderChapterBadges();
-            showChapter(0);
-        }
-
-        function renderChapterBadges() {
-            const badgesContainer = document.getElementById('progress-tracker');
-            if (!badgesContainer) return;
-            badgesContainer.innerHTML = '';
-
-            const totalChapters = story.chapters.length;
-            for (let i = 0; i < totalChapters; i++) {
-                const badge = document.createElement('div');
-                badge.className = 'chapter-badge';
-                badge.textContent = i + 1;
-                badge.title = story.chapters[i]?.title || `Chapter ${i + 1}`;
-
-                if (completedChapters.includes(i)) {
-                    badge.classList.add('completed');
-                } else if (i === currentChapter) {
-                    badge.classList.add('current');
+            function stopSpeaking() {
+                if (currentVoiceAudio) {
+                    try {
+                        currentVoiceAudio.pause();
+                        currentVoiceAudio.currentTime = 0;
+                    } catch (e) {}
                 }
 
-                badgesContainer.appendChild(badge);
-            }
-        }
-
-        function showChapter(chapterIndex) {
-            currentChapter = chapterIndex;
-            lastFeedbackKey = null;
-            const chapter = story.chapters[chapterIndex];
-
-            if (!chapter) {
-                showEnding();
-                return;
+                const sceneImage = document.querySelector('.scene-image');
+                if (sceneImage) {
+                    sceneImage.classList.remove('speaking');
+                }
             }
 
-            // Play boss sound for boss chapters
-            if (chapter.title.includes('BOSS')) {
-                playBossSound();
-            } else {
-                playClickSound();
+            function playClickSound() {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(
+                    600,
+                    audioContext.currentTime + 0.1
+                );
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+                oscillator.type = 'sine';
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.15);
             }
 
-            renderChapterBadges();
+            function playSuccessSound() {
+                [800, 1000, 1200].forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        oscillator.frequency.value = freq;
+                        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(
+                            0.01,
+                            audioContext.currentTime + 0.3
+                        );
+                        oscillator.type = 'triangle';
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.3);
+                    }, index * 100);
+                });
+            }
 
-            let currentScene = 0;
-            showScene(chapter, currentScene);
-        }
+            function playFailureSound() {
+                // Dramatic failure sound
+                [600, 500, 400, 300].forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        oscillator.frequency.value = freq;
+                        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(
+                            0.01,
+                            audioContext.currentTime + 0.4
+                        );
+                        oscillator.type = 'sawtooth';
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.4);
+                    }, index * 150);
+                });
+            }
 
-        function showScene(chapter, sceneIndex) {
-            const scene = chapter.scenes[sceneIndex];
-            const panel = document.getElementById('story-panel');
+            function playBossSound() {
+                // Dramatic boss encounter sound
+                [200, 250, 300, 400].forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        const gainNode = audioContext.createGain();
+                        oscillator.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
+                        oscillator.frequency.value = freq;
+                        gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(
+                            0.01,
+                            audioContext.currentTime + 0.5
+                        );
+                        oscillator.type = 'square';
+                        oscillator.start(audioContext.currentTime);
+                        oscillator.stop(audioContext.currentTime + 0.5);
+                    }, index * 100);
+                });
+            }
 
-            // Update voice tracking
-            currentSceneInChapter = sceneIndex;
-            isLearningMoment = !!scene.learning;
-            isChoiceMoment = false;
+            // Game State
+            let completedChapters = [];
+            let playerChoices = [];
 
-            // Clean text for speech (remove HTML tags)
-            const cleanText = scene.text.replace(/<[^>]*>/g, '');
+            // Load story data from external file
+            const story = window.STORY_DATA || { chapters: [] };
 
-            // Speak Dr. Maya's dialogue
-            speak(cleanText);
+            // Initialize game
+            function initGame() {
+                renderChapterBadges();
+                showChapter(0);
+            }
 
-            let html = `
+            function renderChapterBadges() {
+                const badgesContainer = document.getElementById('progress-tracker');
+                if (!badgesContainer) return;
+                badgesContainer.innerHTML = '';
+
+                const totalChapters = story.chapters.length;
+                for (let i = 0; i < totalChapters; i++) {
+                    const badge = document.createElement('div');
+                    badge.className = 'chapter-badge';
+                    badge.textContent = i + 1;
+                    badge.title = story.chapters[i]?.title || `Chapter ${i + 1}`;
+
+                    if (completedChapters.includes(i)) {
+                        badge.classList.add('completed');
+                    } else if (i === currentChapter) {
+                        badge.classList.add('current');
+                    }
+
+                    badgesContainer.appendChild(badge);
+                }
+            }
+
+            function showChapter(chapterIndex) {
+                currentChapter = chapterIndex;
+                lastFeedbackKey = null;
+                const chapter = story.chapters[chapterIndex];
+
+                if (!chapter) {
+                    showEnding();
+                    return;
+                }
+
+                // Play boss sound for boss chapters
+                if (chapter.title.includes('BOSS')) {
+                    playBossSound();
+                } else {
+                    playClickSound();
+                }
+
+                renderChapterBadges();
+
+                let currentScene = 0;
+                showScene(chapter, currentScene);
+            }
+
+            function showScene(chapter, sceneIndex) {
+                const scene = chapter.scenes[sceneIndex];
+                const panel = document.getElementById('story-panel');
+
+                // Update voice tracking
+                currentSceneInChapter = sceneIndex;
+                isLearningMoment = !!scene.learning;
+                isChoiceMoment = false;
+
+                // Clean text for speech (remove HTML tags)
+                const cleanText = scene.text.replace(/<[^>]*>/g, '');
+
+                // Speak Dr. Maya's dialogue
+                speak(cleanText);
+
+                let html = `
                 <div class="scene-container">
                     <div class="scene-image" style="background-image: url('${scene.image || chapter.image}')">
                         <div class="scene-overlay">
@@ -764,134 +833,134 @@
                         </div>
             `;
 
-            if (scene.learning) {
-                html += `
+                if (scene.learning) {
+                    html += `
                         <div class="learning-moment">
                             <div class="learning-title">${scene.learning.title}</div>
                             <div class="learning-content">${scene.learning.content}</div>
                         </div>
                 `;
-            }
+                }
 
-            // Check if there are more scenes or if we should show choices
-            if (sceneIndex < chapter.scenes.length - 1) {
-                html += `
+                // Check if there are more scenes or if we should show choices
+                if (sceneIndex < chapter.scenes.length - 1) {
+                    html += `
                         <div style="text-align: center;">
                             <div class="continue-button" onclick="showNextScene(${sceneIndex})">
                                 Continue →
                             </div>
                         </div>
                 `;
-            } else if (chapter.choice) {
-                // Show button to reveal choices with animation
-                html += `
+                } else if (chapter.choice) {
+                    // Show button to reveal choices with animation
+                    html += `
                         <div id="choice-reveal-area" style="text-align: center;">
                             <div class="continue-button" onclick="revealChoices()">
                                 Continue →
                             </div>
                         </div>
                 `;
-            }
+                }
 
-            html += `
+                html += `
                     </div>
                 </div>`;
-            panel.innerHTML = html;
+                panel.innerHTML = html;
 
-            // Store the current chapter for revealChoices function
-            window.currentChapterData = chapter;
-        }
+                // Store the current chapter for revealChoices function
+                window.currentChapterData = chapter;
+            }
 
-        function revealChoices() {
-            playClickSound();
-            const chapter = window.currentChapterData;
-            const revealArea = document.getElementById('choice-reveal-area');
+            function revealChoices() {
+                playClickSound();
+                const chapter = window.currentChapterData;
+                const revealArea = document.getElementById('choice-reveal-area');
 
-            if (!revealArea || !chapter || !chapter.choice) return;
+                if (!revealArea || !chapter || !chapter.choice) return;
 
-            // Update voice tracking for choice moment
-            isChoiceMoment = true;
-            isLearningMoment = false;
+                // Update voice tracking for choice moment
+                isChoiceMoment = true;
+                isLearningMoment = false;
 
-            // Speak the choice question
-            speak(chapter.choice.question);
+                // Speak the choice question
+                speak(chapter.choice.question);
 
-            // Build choices HTML with question header
-            let html = `
+                // Build choices HTML with question header
+                let html = `
                 <div class="question-header">
                     ${chapter.choice.question}
                 </div>
                 <div class="choices-container">
             `;
 
-            chapter.choice.options.forEach((option, index) => {
-                html += `
+                chapter.choice.options.forEach((option, index) => {
+                    html += `
                     <div class="choice-button" onclick="makeChoice(${index})">
                         ${option.text}
                     </div>
                 `;
-            });
-            html += `</div>`;
+                });
+                html += `</div>`;
 
-            // Replace the continue button with animated choices
-            revealArea.innerHTML = html;
-        }
-
-        let currentChapterData = null;
-
-        function showNextScene(currentSceneIndex) {
-            playClickSound();
-            const chapter = story.chapters[currentChapter];
-            showScene(chapter, currentSceneIndex + 1);
-        }
-
-        function makeChoice(choiceIndex) {
-            const chapter = story.chapters[currentChapter];
-            const choice = chapter.choice.options[choiceIndex];
-
-            playerChoices.push({
-                chapter: currentChapter,
-                choice: choiceIndex,
-                text: choice.text
-            });
-
-            // Determine voice file for feedback
-            if (choice.voiceKey) {
-                lastFeedbackKey = choice.voiceKey;
-            } else if (choice.gameOver) {
-                lastFeedbackKey = `gameover${choiceIndex + 1}`;
-            } else if (chapter.title.includes('BOSS')) {
-                lastFeedbackKey = 'correct';
-            } else {
-                lastFeedbackKey = `feedback${choiceIndex + 1}`;
+                // Replace the continue button with animated choices
+                revealArea.innerHTML = html;
             }
 
-            isChoiceMoment = false;
-            isLearningMoment = false;
+            let currentChapterData = null;
 
-            // Check if this is a wrong answer that causes game over
-            if (choice.gameOver) {
-                showGameOver(choice.feedback);
-                return;
+            function showNextScene(currentSceneIndex) {
+                playClickSound();
+                const chapter = story.chapters[currentChapter];
+                showScene(chapter, currentSceneIndex + 1);
             }
 
-            playSuccessSound();
+            function makeChoice(choiceIndex) {
+                const chapter = story.chapters[currentChapter];
+                const choice = chapter.choice.options[choiceIndex];
 
-            if (!completedChapters.includes(currentChapter)) {
-                completedChapters.push(currentChapter);
+                playerChoices.push({
+                    chapter: currentChapter,
+                    choice: choiceIndex,
+                    text: choice.text,
+                });
+
+                // Determine voice file for feedback
+                if (choice.voiceKey) {
+                    lastFeedbackKey = choice.voiceKey;
+                } else if (choice.gameOver) {
+                    lastFeedbackKey = `gameover${choiceIndex + 1}`;
+                } else if (chapter.title.includes('BOSS')) {
+                    lastFeedbackKey = 'correct';
+                } else {
+                    lastFeedbackKey = `feedback${choiceIndex + 1}`;
+                }
+
+                isChoiceMoment = false;
+                isLearningMoment = false;
+
+                // Check if this is a wrong answer that causes game over
+                if (choice.gameOver) {
+                    showGameOver(choice.feedback);
+                    return;
+                }
+
+                playSuccessSound();
+
+                if (!completedChapters.includes(currentChapter)) {
+                    completedChapters.push(currentChapter);
+                }
+
+                // Show feedback then move to next chapter
+                showChoiceFeedback(choice.feedback, choice.next);
             }
 
-            // Show feedback then move to next chapter
-            showChoiceFeedback(choice.feedback, choice.next);
-        }
+            function showChoiceFeedback(feedback, nextChapter) {
+                const panel = document.getElementById('story-panel');
 
-        function showChoiceFeedback(feedback, nextChapter) {
-            const panel = document.getElementById('story-panel');
+                // Speak the feedback
+                speak(feedback);
 
-            // Speak the feedback
-            speak(feedback);
-
-            panel.innerHTML = `
+                panel.innerHTML = `
                 <div class="scene-container">
                     <div class="dialogue-container">
                         <div class="speaker-name">Dr. Maya</div>
@@ -904,16 +973,16 @@
                     </div>
                 </div>
             `;
-        }
+            }
 
-        function showGameOver(feedback) {
-            playFailureSound();
+            function showGameOver(feedback) {
+                playFailureSound();
 
-            // Speak the game over feedback
-            speak(feedback);
+                // Speak the game over feedback
+                speak(feedback);
 
-            const panel = document.getElementById('story-panel');
-            panel.innerHTML = `
+                const panel = document.getElementById('story-panel');
+                panel.innerHTML = `
                 <div class="scene-container">
                     <div class="scene-image" style="background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%); display: flex; align-items: center; justify-content: center;">
                         <div style="font-family: 'Orbitron', sans-serif; font-size: 48px; color: white; text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);">
@@ -942,21 +1011,21 @@
                     </div>
                 </div>
             `;
-        }
+            }
 
-        function restartGame() {
-            currentChapter = 0;
-            completedChapters = [];
-            playerChoices = [];
-            lastFeedbackKey = null;
-            renderChapterBadges();
-            showChapter(0);
-        }
+            function restartGame() {
+                currentChapter = 0;
+                completedChapters = [];
+                playerChoices = [];
+                lastFeedbackKey = null;
+                renderChapterBadges();
+                showChapter(0);
+            }
 
-        function showEnding() {
-            playSuccessSound();
-            const panel = document.getElementById('story-panel');
-            panel.innerHTML = `
+            function showEnding() {
+                playSuccessSound();
+                const panel = document.getElementById('story-panel');
+                panel.innerHTML = `
                 <div class="scene-container">
                     <div class="scene-image" style="background-image: url('images/celebration.png')">
                         <div class="scene-overlay">
@@ -997,11 +1066,11 @@
                     </div>
                 </div>
             `;
-        }
+            }
 
-        // Start the game
-        initGame();
-        console.log('🎮 ModelIt! Story Game loaded!');
-    </script>
-</body>
+            // Start the game
+            initGame();
+            console.log('🎮 ModelIt! Story Game loaded!');
+        </script>
+    </body>
 </html>

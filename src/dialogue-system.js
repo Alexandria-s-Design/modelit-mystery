@@ -150,7 +150,8 @@ const DialogueSystem = {
         const storyPanel = document.getElementById('story-panel');
 
         // Get image URL from cache or use placeholder
-        const imageUrl = this.imageCache[dialogue.image] || this.getPlaceholderImage(dialogue.image);
+        const imageUrl =
+            this.imageCache[dialogue.image] || this.getPlaceholderImage(dialogue.image);
 
         storyPanel.innerHTML = `
             <div class="scene-container">
@@ -210,11 +211,16 @@ const DialogueSystem = {
 
         // Fallback to simple placeholders
         const placeholders = {
-            drElena: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">👩‍🔬 Dr. Elena Rodriguez</text></svg>',
-            labCrisis: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">⚗️ Laboratory Scene</text></svg>',
-            cellSignaling: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🧬 Cell Signaling</text></svg>',
-            modelBuilding: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🔬 Model Building</text></svg>',
-            celebration: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="36" font-family="Arial">🎉</text></svg>',
+            drElena:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">👩‍🔬 Dr. Elena Rodriguez</text></svg>',
+            labCrisis:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">⚗️ Laboratory Scene</text></svg>',
+            cellSignaling:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🧬 Cell Signaling</text></svg>',
+            modelBuilding:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="24" font-family="Arial">🔬 Model Building</text></svg>',
+            celebration:
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23193a52" width="400" height="300"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300d4ff" font-size="36" font-family="Arial">🎉</text></svg>',
         };
 
         return placeholders[imageType] || placeholders.drElena;

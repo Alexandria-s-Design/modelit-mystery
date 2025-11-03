@@ -73,7 +73,8 @@ function showStage1() {
 }
 
 function setupStage1() {
-    instructionText.textContent = 'Drag THREE pieces onto the board: Signal (📡), Receptor (🎯), and Enzyme (⚗️)';
+    instructionText.textContent =
+        'Drag THREE pieces onto the board: Signal (📡), Receptor (🎯), and Enzyme (⚗️)';
     setupDragAndDrop();
     checkBtn.onclick = checkStage1;
 }
@@ -84,7 +85,8 @@ function showStage2() {
 }
 
 function setupStage2() {
-    instructionText.textContent = 'Click one piece, then another to connect them! Signal → Receptor → Enzyme';
+    instructionText.textContent =
+        'Click one piece, then another to connect them! Signal → Receptor → Enzyme';
     enableConnectionDrawing();
 }
 
@@ -94,7 +96,8 @@ function showStage3() {
 }
 
 function setupStage3() {
-    instructionText.textContent = 'Click each piece to flip it ON (green) or OFF (red). Which one starts the reaction?';
+    instructionText.textContent =
+        'Click each piece to flip it ON (green) or OFF (red). Which one starts the reaction?';
     enableStateSelection();
 }
 
@@ -102,7 +105,7 @@ function setupStage3() {
 function setupDragAndDrop() {
     const componentItems = document.querySelectorAll('.component-item');
 
-    componentItems.forEach(item => {
+    componentItems.forEach((item) => {
         item.addEventListener('dragstart', handleDragStart);
         item.addEventListener('dragend', handleDragEnd);
     });
@@ -114,7 +117,9 @@ function setupDragAndDrop() {
 let draggedComponent = null;
 
 function handleDragStart(e) {
-    if (this.classList.contains('used')) {return;}
+    if (this.classList.contains('used')) {
+        return;
+    }
     draggedComponent = this.dataset.component;
     this.style.opacity = '0.5';
 }
@@ -131,7 +136,9 @@ function handleDragOver(e) {
 function handleDrop(e) {
     e.preventDefault();
 
-    if (!draggedComponent) {return;}
+    if (!draggedComponent) {
+        return;
+    }
 
     const rect = modelCanvas.getBoundingClientRect();
     const x = e.clientX - rect.left - 40;
@@ -179,10 +186,12 @@ function removeComponent(componentElement) {
     componentElement.remove();
 
     gameState.placedComponents = gameState.placedComponents.filter(
-        c => c.element !== componentElement,
+        (c) => c.element !== componentElement
     );
 
-    const paletteItem = document.querySelector(`.component-item[data-component="${componentName}"]`);
+    const paletteItem = document.querySelector(
+        `.component-item[data-component="${componentName}"]`
+    );
     if (paletteItem) {
         paletteItem.classList.remove('used');
     }
@@ -196,8 +205,8 @@ function removeComponent(componentElement) {
 async function checkStage1() {
     gameState.attempts++;
 
-    const placedNames = gameState.placedComponents.map(c => c.name);
-    const isCorrect = CONFIG.REQUIRED_COMPONENTS.every(comp => placedNames.includes(comp));
+    const placedNames = gameState.placedComponents.map((c) => c.name);
+    const isCorrect = CONFIG.REQUIRED_COMPONENTS.every((comp) => placedNames.includes(comp));
 
     showFeedback('🤖 Analyzing your model...', 'loading');
 
@@ -225,10 +234,10 @@ function enableConnectionDrawing() {
 
     const components = document.querySelectorAll('.placed-component');
 
-    components.forEach(comp => {
+    components.forEach((comp) => {
         comp.style.cursor = 'pointer';
 
-        comp.onclick = function() {
+        comp.onclick = function () {
             if (!selectedComponent) {
                 selectedComponent = this;
                 this.style.border = '4px solid #ffff00';
@@ -269,7 +278,7 @@ function drawConnection(fromElement, toElement) {
     const y2 = toRect.top + toRect.height / 2 - canvasRect.top;
 
     const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+    const angle = (Math.atan2(y2 - y1, x2 - x1) * 180) / Math.PI;
 
     const line = document.createElement('div');
     line.className = 'connection-line';
@@ -287,8 +296,8 @@ async function checkStage2(connections) {
         { from: 'Receptor', to: 'Enzyme' },
     ];
 
-    const isCorrect = correctConnections.every(correct =>
-        connections.some(conn => conn.from === correct.from && conn.to === correct.to),
+    const isCorrect = correctConnections.every((correct) =>
+        connections.some((conn) => conn.from === correct.from && conn.to === correct.to)
     );
 
     showFeedback('🤖 Analyzing connections...', 'loading');
@@ -314,7 +323,7 @@ function enableStateSelection() {
     const components = document.querySelectorAll('.placed-component');
     const states = {};
 
-    components.forEach(comp => {
+    components.forEach((comp) => {
         const componentName = comp.dataset.component;
         states[componentName] = 0;
 
@@ -334,7 +343,7 @@ function enableStateSelection() {
         stateIndicator.textContent = 'OFF';
         comp.appendChild(stateIndicator);
 
-        comp.onclick = function() {
+        comp.onclick = function () {
             states[componentName] = states[componentName] === 0 ? 1 : 0;
 
             if (states[componentName] === 1) {
@@ -384,9 +393,11 @@ The correct answer is: Receptor, Signal, Enzyme
 
 Was it correct? ${isCorrect ? 'YES' : 'NO'}
 
-${isCorrect ?
-        'Give them SUPER EXCITED praise! Use 2 SHORT sentences. Add a cool real-world example like "This is how your body knows when to feel hungry!" or "This is how your brain sends messages!" Keep it simple and FUN!' :
-        'Give them a hint in a FUN way! Use 2 SHORT sentences. Be encouraging! Maybe use an analogy like "Think of it like a phone call - you need someone to call, a phone, and someone to answer!"'}
+${
+    isCorrect
+        ? 'Give them SUPER EXCITED praise! Use 2 SHORT sentences. Add a cool real-world example like "This is how your body knows when to feel hungry!" or "This is how your brain sends messages!" Keep it simple and FUN!'
+        : 'Give them a hint in a FUN way! Use 2 SHORT sentences. Be encouraging! Maybe use an analogy like "Think of it like a phone call - you need someone to call, a phone, and someone to answer!"'
+}
 
 Talk like you're talking to a kid. Short sentences. Lots of energy!`;
 
@@ -394,16 +405,18 @@ Talk like you're talking to a kid. Short sentences. Lots of energy!`;
         const response = await callOpenRouter(prompt);
         return response;
     } catch (error) {
-        return isCorrect ?
-            '🎉 Excellent work! You identified the key components correctly!' :
-            '🤔 Not quite right. Think about what receives signals, what the signal is, and what processes it.';
+        return isCorrect
+            ? '🎉 Excellent work! You identified the key components correctly!'
+            : '🤔 Not quite right. Think about what receives signals, what the signal is, and what processes it.';
     }
 }
 
 async function getConnectionFeedback(connections, isCorrect) {
     const connectionStr = connections.map((c) => `${c.from} → ${c.to}`).join(', ');
-    const correctMsg = 'Give MEGA EXCITED praise in 2 SHORT sentences! Add a fun example like "Just like dominoes knocking each other down!" or "Like passing a note in class!"';
-    const hintMsg = 'Give a fun hint in 2 SHORT sentences! Use an analogy like "Think of a relay race - who starts, who\'s in the middle, who finishes?"';
+    const correctMsg =
+        'Give MEGA EXCITED praise in 2 SHORT sentences! Add a fun example like "Just like dominoes knocking each other down!" or "Like passing a note in class!"';
+    const hintMsg =
+        'Give a fun hint in 2 SHORT sentences! Use an analogy like "Think of a relay race - who starts, who\'s in the middle, who finishes?"';
 
     const prompt = `You're Dr. Elena talking to a kid. They connected: ${connectionStr}
 
@@ -418,9 +431,9 @@ Talk to a kid. Be SUPER enthusiastic!`;
     try {
         return await callOpenRouter(prompt);
     } catch (error) {
-        return isCorrect ?
-            '🎉 Perfect! You understand how signals flow through the system!' :
-            '🤔 Think about the signal\'s journey: it reaches the receptor first, then the receptor activates the enzyme.';
+        return isCorrect
+            ? '🎉 Perfect! You understand how signals flow through the system!'
+            : "🤔 Think about the signal's journey: it reaches the receptor first, then the receptor activates the enzyme.";
     }
 }
 
@@ -435,18 +448,20 @@ Correct answer: Signal ON, Receptor OFF, Enzyme OFF (signal starts it!)
 
 Correct? ${isCorrect ? 'YES' : 'NO'}
 
-${isCorrect ?
-        'CELEBRATE BIG TIME in 2 SHORT sentences! Say they completed Act 1! Add something like "You just solved the mystery!"' :
-        'Give a fun hint in 2 SHORT sentences! Like "What arrives first to wake everything up?" or "Think of turning on a TV - what button do you press first?"'}
+${
+    isCorrect
+        ? 'CELEBRATE BIG TIME in 2 SHORT sentences! Say they completed Act 1! Add something like "You just solved the mystery!"'
+        : 'Give a fun hint in 2 SHORT sentences! Like "What arrives first to wake everything up?" or "Think of turning on a TV - what button do you press first?"'
+}
 
 Be SUPER excited and fun!`;
 
     try {
         return await callOpenRouter(prompt);
     } catch (error) {
-        return isCorrect ?
-            '🎉 Perfect! You understand initial conditions! Act 1 complete!' :
-            '🤔 Remember, the signal arrives from outside to start the cascade.';
+        return isCorrect
+            ? '🎉 Perfect! You understand initial conditions! Act 1 complete!'
+            : '🤔 Remember, the signal arrives from outside to start the cascade.';
     }
 }
 
@@ -454,7 +469,7 @@ async function callOpenRouter(prompt) {
     const response = await fetch(CONFIG.OPENROUTER_API_URL, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${CONFIG.OPENROUTER_API_KEY}`,
+            Authorization: `Bearer ${CONFIG.OPENROUTER_API_KEY}`,
             'Content-Type': 'application/json',
             'HTTP-Referer': 'https://cellcollective.org',
             'X-Title': 'Cell Collective Modeling Game',
@@ -467,7 +482,9 @@ async function callOpenRouter(prompt) {
         }),
     });
 
-    if (!response.ok) {throw new Error(`API error: ${response.status}`);}
+    if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+    }
 
     const data = await response.json();
     return data.choices[0].message.content.trim();
@@ -501,7 +518,9 @@ function showFeedback(message, type = 'info') {
     `;
 
     if (type !== 'success' && type !== 'loading') {
-        setTimeout(() => { aiFeedback.className = ''; }, 10000);
+        setTimeout(() => {
+            aiFeedback.className = '';
+        }, 10000);
     }
 }
 

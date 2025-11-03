@@ -3,6 +3,7 @@
 ## ✅ WHAT'S BEEN COMPLETED
 
 ### Core Features
+
 - ✅ **Stunning Opening Screen** - Animated Dr. Maya portrait, floating particles
 - ✅ **Instructions Screen** - Clear, engaging tutorial
 - ✅ **Screen-by-Screen Flow** - Dialogue, Learning, Choices separated
@@ -13,6 +14,7 @@
 - ✅ **49 Scene Images** - All mapped and ready
 
 ### In Progress
+
 - 🔄 **Gemini TTS Integration** - Natural voice for Dr. Maya
 - 🔄 **Background Music** - Sci-fi atmospheric tracks
 - 🔄 **Sound Effects** - Button clicks, transitions, success/fail sounds
@@ -20,11 +22,13 @@
 ## 📦 FILES
 
 **Main Game:**
+
 - `modelit-enhanced.html` - Current production file
 - `story-data.js` - Complete story (10 chapters)
 - `story-data-enhanced.js` - Screen-by-screen version (in progress)
 
 **Assets:**
+
 - `/images/scenes/` - 49 AI-generated PNG images
 - `/assets/music/` - (Music files to be added)
 - `/assets/sounds/` - (Sound effects to be added)

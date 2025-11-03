@@ -49,7 +49,7 @@ async function generateImage(promptKey) {
         const response = await fetch(IMAGE_CONFIG.API_URL, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${IMAGE_CONFIG.API_KEY}`,
+                Authorization: `Bearer ${IMAGE_CONFIG.API_KEY}`,
                 'Content-Type': 'application/json',
                 'HTTP-Referer': 'https://cellcollective.org',
                 'X-Title': 'Cell Collective Modeling Game',
@@ -75,7 +75,6 @@ async function generateImage(promptKey) {
         // Extract and return the image URL
         console.log('✅ Image generated successfully!', data);
         return data;
-
     } catch (error) {
         console.error(`❌ Failed to generate image for ${promptKey}:`, error);
         return null;
@@ -94,7 +93,7 @@ async function generateAllImages() {
             images[key] = imageData;
         }
         // Add delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
     }
 
     console.log('✅ All images generated!', images);

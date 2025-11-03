@@ -13,6 +13,7 @@ ModelIt Mystery can work completely offline without any API keys. However, you c
 Just open `index.html` or `modelit-story.html` in your browser. That's it!
 
 The game includes:
+
 - ✅ 49 pre-generated scene images
 - ✅ 79 voice narration files
 - ✅ Background music
@@ -31,16 +32,16 @@ Add fresh, high-quality images from free stock photo APIs.
 
 1. **Sign up**: Go to [https://unsplash.com/developers](https://unsplash.com/developers)
 2. **Create an app**:
-   - Click "Register as a Developer"
-   - Click "New Application"
-   - Name: "ModelIt Mystery"
-   - Description: "Educational game about biological modeling"
-   - Accept terms
+    - Click "Register as a Developer"
+    - Click "New Application"
+    - Name: "ModelIt Mystery"
+    - Description: "Educational game about biological modeling"
+    - Accept terms
 3. **Get your Access Key**: Copy the "Access Key" (starts with "...")
 4. **Configure**:
-   - Copy `src/config.example.js` to `src/config.js`
-   - Set `UNSPLASH_ACCESS_KEY: 'your-key-here'`
-   - Set `ENABLE_DYNAMIC_IMAGES: true`
+    - Copy `src/config.example.js` to `src/config.js`
+    - Set `UNSPLASH_ACCESS_KEY: 'your-key-here'`
+    - Set `ENABLE_DYNAMIC_IMAGES: true`
 
 **Attribution**: Unsplash requires photo credits. The game automatically tracks downloads (required by API terms).
 
@@ -50,13 +51,13 @@ Add fresh, high-quality images from free stock photo APIs.
 
 1. **Sign up**: Go to [https://www.pexels.com/api/](https://www.pexels.com/api/)
 2. **Get API Key**:
-   - Click "Get Started"
-   - Fill out the form
-   - Copy your API key
+    - Click "Get Started"
+    - Fill out the form
+    - Copy your API key
 3. **Configure**:
-   - Copy `src/config.example.js` to `src/config.js`
-   - Set `PEXELS_API_KEY: 'your-key-here'`
-   - Set `ENABLE_DYNAMIC_IMAGES: true`
+    - Copy `src/config.example.js` to `src/config.js`
+    - Set `PEXELS_API_KEY: 'your-key-here'`
+    - Set `ENABLE_DYNAMIC_IMAGES: true`
 
 **Attribution**: Pexels images are free to use with minimal attribution.
 
@@ -72,14 +73,14 @@ Enable AI-powered hints and personalized feedback (experimental).
 
 1. **Sign up**: Go to [https://openrouter.ai/](https://openrouter.ai/)
 2. **Get API Key**:
-   - Create an account
-   - Go to "Keys" in your dashboard
-   - Generate a new key
-   - Add some credits (optional, free models available)
+    - Create an account
+    - Go to "Keys" in your dashboard
+    - Generate a new key
+    - Add some credits (optional, free models available)
 3. **Configure**:
-   - Copy `src/config.example.js` to `src/config.js`
-   - Set `OPENROUTER_API_KEY: 'sk-or-v1-...'`
-   - Set `ENABLE_AI_FEEDBACK: true`
+    - Copy `src/config.example.js` to `src/config.js`
+    - Set `OPENROUTER_API_KEY: 'sk-or-v1-...'`
+    - Set `ENABLE_AI_FEEDBACK: true`
 
 **Note**: The game has built-in feedback that works without AI. AI just makes it more personalized.
 
@@ -125,6 +126,7 @@ Add to `index.html` or `modelit-story.html` (before other scripts):
 ## Security Best Practices
 
 ### ✅ DO:
+
 - Use `config.js` for all API keys
 - Add `config.js` to `.gitignore`
 - Use read-only API keys when possible
@@ -132,6 +134,7 @@ Add to `index.html` or `modelit-story.html` (before other scripts):
 - Use environment variables in production
 
 ### ❌ DON'T:
+
 - Commit API keys to Git
 - Share keys publicly
 - Use production keys in development
@@ -144,13 +147,14 @@ Add to `index.html` or `modelit-story.html` (before other scripts):
 
 The game includes smart rate limiting:
 
-| API | Free Limit | Game Buffer | Fallback |
-|-----|------------|-------------|----------|
-| Unsplash | 50/hour | 45/hour | Local images |
-| Pexels | 200/hour | 190/hour | Local images |
-| OpenRouter | Varies | N/A | Static feedback |
+| API        | Free Limit | Game Buffer | Fallback        |
+| ---------- | ---------- | ----------- | --------------- |
+| Unsplash   | 50/hour    | 45/hour     | Local images    |
+| Pexels     | 200/hour   | 190/hour    | Local images    |
+| OpenRouter | Varies     | N/A         | Static feedback |
 
 **What happens when limit is reached?**
+
 - Game automatically falls back to local images
 - No error messages to players
 - Continues working perfectly
@@ -166,11 +170,13 @@ The game includes smart rate limiting:
 
 ```javascript
 const imageAPI = new ImageAPIManager(window.GAME_CONFIG);
-imageAPI.getSceneImage('test', 'scientist laboratory', 'fallback.png')
-    .then(url => console.log('Image URL:', url));
+imageAPI
+    .getSceneImage('test', 'scientist laboratory', 'fallback.png')
+    .then((url) => console.log('Image URL:', url));
 ```
 
 **Expected output**:
+
 - With API: URL from Unsplash/Pexels
 - Without API: Local fallback path
 
@@ -182,13 +188,14 @@ console.log(imageAPI.getStats());
 ```
 
 **Expected output**:
+
 ```json
 {
-  "cacheSize": 0,
-  "unsplashCalls": 0,
-  "pexelsCalls": 0,
-  "unsplashRemaining": 45,
-  "pexelsRemaining": 190
+    "cacheSize": 0,
+    "unsplashCalls": 0,
+    "pexelsCalls": 0,
+    "unsplashRemaining": 45,
+    "pexelsRemaining": 190
 }
 ```
 
@@ -201,6 +208,7 @@ console.log(imageAPI.getStats());
 **Cause**: Invalid API key or rate limit exceeded
 
 **Solution**:
+
 1. Verify API key is correct
 2. Check rate limits (refresh after an hour)
 3. Try the other image API
@@ -211,6 +219,7 @@ console.log(imageAPI.getStats());
 **Cause**: CORS issues or API downtime
 
 **Solution**:
+
 - Game automatically falls back to local images
 - No action needed from you!
 - Check browser console for details
@@ -218,6 +227,7 @@ console.log(imageAPI.getStats());
 ### API key not working
 
 **Common mistakes**:
+
 1. **Extra spaces**: `'  key  '` → `'key'`
 2. **Wrong quotes**: `"key"` or `'key'` both work, but be consistent
 3. **Not enabled**: Set `ENABLE_DYNAMIC_IMAGES: true`
@@ -257,13 +267,13 @@ If hosting online with APIs:
 
 ## Cost Breakdown
 
-| Feature | API | Cost | Limit |
-|---------|-----|------|-------|
-| Images | None | $0 | ∞ (49 included) |
-| Images | Unsplash | $0 | 50/hour |
-| Images | Pexels | $0 | 200/hour |
-| Voice | None | $0 | ∞ (79 included) |
-| Music | None | $0 | ∞ (1 included) |
+| Feature     | API        | Cost     | Limit           |
+| ----------- | ---------- | -------- | --------------- |
+| Images      | None       | $0       | ∞ (49 included) |
+| Images      | Unsplash   | $0       | 50/hour         |
+| Images      | Pexels     | $0       | 200/hour        |
+| Voice       | None       | $0       | ∞ (79 included) |
+| Music       | None       | $0       | ∞ (1 included)  |
 | AI Feedback | OpenRouter | ~$0-5/mo | Varies by model |
 
 **Total minimum cost**: **$0.00** ✅
@@ -312,4 +322,4 @@ Then update `getSceneImage()` to call your method.
 
 ---
 
-*Last Updated: October 28, 2025*
+_Last Updated: October 28, 2025_

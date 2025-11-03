@@ -1,53 +1,53 @@
 {
-  "name": "modelit-mystery",
-  "version": "2.1.0",
-  "type": "module",
-  "description": "An interactive educational game teaching Boolean modeling fundamentals through Dr. Maya's cell mutation mystery",
-  "main": "index.html",
-  "scripts": {
-    "start": "npx http-server -p 8080 -c-1",
-    "lint": "eslint src/**/*.js *.js",
-    "lint:fix": "eslint src/**/*.js *.js --fix",
-    "format": "prettier --write \"**/*.{js,html,css,md,json}\"",
-    "format:check": "prettier --check \"**/*.{js,html,css,md,json}\"",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "validate": "npm run lint && npm run format:check && npm run test",
-    "validate:assets": "python3 validate_assets.py"
-  },
-  "keywords": [
-    "education",
-    "game",
-    "biology",
-    "modeling",
-    "interactive",
-    "STEM",
-    "Boolean",
-    "cell-biology"
-  ],
-  "author": "Dr. Charles Martin",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/charlesmartinedd/modelit-mystery.git"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.0.0",
-    "eslint": "^9.0.0",
-    "eslint-config-prettier": "^9.0.0",
-    "globals": "^15.0.0",
-    "jest": "^29.0.0",
-    "jest-environment-jsdom": "^29.0.0",
-    "prettier": "^3.0.0"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=9.0.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+    "name": "modelit-mystery",
+    "version": "2.1.0",
+    "type": "module",
+    "description": "An interactive educational game teaching Boolean modeling fundamentals through Dr. Maya's cell mutation mystery",
+    "main": "index.html",
+    "scripts": {
+        "start": "npx http-server -p 8080 -c-1",
+        "lint": "eslint src/**/*.js *.js",
+        "lint:fix": "eslint src/**/*.js *.js --fix",
+        "format": "prettier --write \"**/*.{js,html,css,md,json}\"",
+        "format:check": "prettier --check \"**/*.{js,html,css,md,json}\"",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage",
+        "validate": "npm run lint && npm run format:check && npm run test",
+        "validate:assets": "python3 validate_assets.py"
+    },
+    "keywords": [
+        "education",
+        "game",
+        "biology",
+        "modeling",
+        "interactive",
+        "STEM",
+        "Boolean",
+        "cell-biology"
+    ],
+    "author": "Dr. Charles Martin",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/charlesmartinedd/modelit-mystery.git"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.0.0",
+        "eslint": "^9.0.0",
+        "eslint-config-prettier": "^9.0.0",
+        "globals": "^15.0.0",
+        "jest": "^29.0.0",
+        "jest-environment-jsdom": "^29.0.0",
+        "prettier": "^3.0.0"
+    },
+    "engines": {
+        "node": ">=18.0.0",
+        "npm": ">=9.0.0"
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ]
 }

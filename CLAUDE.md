@@ -20,6 +20,7 @@
 **Integration**: `scripts/lunchmoney_helper.py` (LUNCH_MONEY_API_KEY in `.env`)
 
 **Revenue Stream Accounts**:
+
 - **Alexandria's Design**: cmartin@alexandriasdesign.com ✅
 - **Bills & Important**: lmcmtutors@gmail.com ✅
 - **Personal/Admin**: charlesmartinedd@gmail.com ✅
@@ -58,18 +59,21 @@ PAI Classifies & Routes:
 ### When to Use Each Framework
 
 **SuperClaude** (`.claude/agents/superclaude-framework.md`):
+
 - Large codebases (94% token reduction)
 - Research tasks (Context7 official docs, Tavily web search)
 - Confidence checks (PM Agent pre-execution validation)
 - Domain expertise (16 specialized agents)
 
 **Claude Flow**:
+
 - Parallel execution (2.8-4.4x speed)
 - Swarm coordination (mesh, hierarchical, adaptive)
 - Neural training (27+ models)
 - GitHub integration (PR management, issue triage)
 
 **Direct Agents** (see Quick Reference below):
+
 - Fast, focused tasks
 - Clear single-agent responsibility
 - No framework overhead needed
@@ -79,44 +83,50 @@ PAI Classifies & Routes:
 ## 📋 QUICK AGENT REFERENCE
 
 ### Revenue Generation Agents
-| Agent | File | Use For |
-|-------|------|---------|
-| **Product Launcher** | `product-launcher.md` | Stripe products, digital sales, one-time/subscriptions |
-| **Website Launcher** | `website-launcher.md` | GitHub Pages sites, Stripe checkout, Playwright testing |
-| **Social Media Manager** | `social-media-manager.md` | 12-platform cross-posting via Ayrshare |
-| **Big Baller** | `big-baller.md` | Revenue tracking, Lunch Money integration, Saturday reports |
+
+| Agent                    | File                      | Use For                                                     |
+| ------------------------ | ------------------------- | ----------------------------------------------------------- |
+| **Product Launcher**     | `product-launcher.md`     | Stripe products, digital sales, one-time/subscriptions      |
+| **Website Launcher**     | `website-launcher.md`     | GitHub Pages sites, Stripe checkout, Playwright testing     |
+| **Social Media Manager** | `social-media-manager.md` | 12-platform cross-posting via Ayrshare                      |
+| **Big Baller**           | `big-baller.md`           | Revenue tracking, Lunch Money integration, Saturday reports |
 
 ### Content & Design Agents
-| Agent | File | Use For |
-|-------|------|---------|
-| **Bob Ross** | `bob-ross-image-3d-makers.md` | Images (OpenAI/Gemini), 3D models (Blender), visual content |
-| **The Validator** | `the-validator.md` | Playwright testing, Chrome DevTools, nonstop validation |
+
+| Agent             | File                          | Use For                                                     |
+| ----------------- | ----------------------------- | ----------------------------------------------------------- |
+| **Bob Ross**      | `bob-ross-image-3d-makers.md` | Images (OpenAI/Gemini), 3D models (Blender), visual content |
+| **The Validator** | `the-validator.md`            | Playwright testing, Chrome DevTools, nonstop validation     |
 
 ### Integration & Automation Agents
-| Agent | File | Use For |
-|-------|------|---------|
+
+| Agent                      | File                        | Use For                                                    |
+| -------------------------- | --------------------------- | ---------------------------------------------------------- |
 | **Money Making Microsoft** | `money-making-microsoft.md` | Office 365 (Outlook, Teams, Planner, OneDrive, SharePoint) |
-| **Getting to the Google** | `getting-to-the-google.md` | Google Workspace (Gmail, Drive, Docs, Sheets, Calendar) |
-| **Workflow Wizard** | `workflow-wizard.md` | n8n automation, workflow creation |
-| **Git Guardian** | `git-guardian.md` | GitHub operations, version control |
+| **Getting to the Google**  | `getting-to-the-google.md`  | Google Workspace (Gmail, Drive, Docs, Sheets, Calendar)    |
+| **Workflow Wizard**        | `workflow-wizard.md`        | n8n automation, workflow creation                          |
+| **Git Guardian**           | `git-guardian.md`           | GitHub operations, version control                         |
 
 ### AI & Research Agents
-| Agent | File | Use For |
-|-------|------|---------|
-| **Grok Keeps It Real** | `grok-keeps-it-real.md` | Recent data (Nov 2024 knowledge), grant research, market intel |
-| **GLM Is Not Claude Code** | `glm-is-not-claude-code.md` | Cheap code generation, content creation |
+
+| Agent                      | File                        | Use For                                                        |
+| -------------------------- | --------------------------- | -------------------------------------------------------------- |
+| **Grok Keeps It Real**     | `grok-keeps-it-real.md`     | Recent data (Nov 2024 knowledge), grant research, market intel |
+| **GLM Is Not Claude Code** | `glm-is-not-claude-code.md` | Cheap code generation, content creation                        |
 
 ### Meta-Orchestration
-| Agent | File | Use For |
-|-------|------|---------|
-| **PAI Orchestrator** | `pai-orchestrator.md` | Framework selection, intent routing, workflow coordination |
-| **SuperClaude Framework** | `superclaude-framework.md` | Token optimization, research, PM Agent confidence checks |
+
+| Agent                     | File                       | Use For                                                    |
+| ------------------------- | -------------------------- | ---------------------------------------------------------- |
+| **PAI Orchestrator**      | `pai-orchestrator.md`      | Framework selection, intent routing, workflow coordination |
+| **SuperClaude Framework** | `superclaude-framework.md` | Token optimization, research, PM Agent confidence checks   |
 
 ---
 
 ## 🎯 AGENT DECISION TREE
 
 ### Revenue Tasks
+
 ```
 Need to: Launch a product
     → Product Launcher (Stripe setup)
@@ -126,6 +136,7 @@ Need to: Launch a product
 ```
 
 ### Content Creation
+
 ```
 Need to: Create images or 3D models
     → Bob Ross (DALL-E, Gemini, Blender)
@@ -133,6 +144,7 @@ Need to: Create images or 3D models
 ```
 
 ### Research & Documentation
+
 ```
 Need to: Look up official docs or research
     → PAI → SuperClaude Framework
@@ -141,6 +153,7 @@ Need to: Look up official docs or research
 ```
 
 ### Parallel Development
+
 ```
 Need to: Multi-file editing or coordinated tasks
     → PAI → Claude Flow
@@ -149,6 +162,7 @@ Need to: Multi-file editing or coordinated tasks
 ```
 
 ### Testing & Validation
+
 ```
 Need to: Test a website or app
     → The Validator
@@ -158,6 +172,7 @@ Need to: Test a website or app
 ```
 
 ### Productivity Integration
+
 ```
 Need to: Email, calendar, docs, tasks
     → Money Making Microsoft (Office 365)
@@ -170,6 +185,7 @@ Need to: Email, calendar, docs, tasks
 ## 🔧 MCP AUTO-LOAD CONFIGURATION
 
 **Auto-loads on Claude startup** (`.claude/mcp_settings.json`):
+
 - ✅ **Google Workspace**: Gmail, Drive, Calendar, Docs, Sheets, Slides, Classroom
 - ✅ **Office 365**: Outlook, Teams, Planner, OneDrive, SharePoint, Contacts
 - ✅ **n8n**: Workflow automation (23+ tools)
@@ -178,11 +194,13 @@ Need to: Email, calendar, docs, tasks
 - ✅ **Supabase**: Database/backend services
 
 **Load only when requested** (disabled: true):
+
 - ⏸️ **Claude Flow**: Swarm coordination (load via PAI when needed)
 - ⏸️ **RUV Swarm**: Enhanced orchestration (load via PAI when needed)
 - ⏸️ **Flow Nexus**: Cloud orchestration (load via PAI when needed)
 
 **OAuth-based (no API keys needed)**:
+
 - Google Workspace: `C:\Users\MarieLexisDad\Old Files\google-workspace-mcp\token-*.json`
 - Office 365: `C:\Users\MarieLexisDad\.office-mcp-tokens.json`
 
@@ -191,6 +209,7 @@ Need to: Email, calendar, docs, tasks
 ## 🔑 API KEYS & AUTHENTICATION
 
 **Configured in `.env`**:
+
 - **OPENAI_API_KEY**: GPT, DALL-E, Whisper (ask before using)
 - **OPENROUTER_API_KEY**: 300+ LLMs, free models (Mistral, DeepSeek, Llama)
 - **GROK_API_KEY**: Recent data (Nov 2024), grant research, market intel
@@ -234,6 +253,7 @@ When user references a screenshot or recording, automatically check these folder
 **CRITICAL**: Charles does NOT use n8n GUI. Build workflows programmatically via MCP tools or n8n REST API. NEVER suggest opening browser.
 
 **Priority Order for Integrations**:
+
 1. Use n8n's built-in nodes (no external APIs)
 2. Use already-authenticated services (Google Workspace, Office 365)
 3. Use local services (PostgreSQL, Redis, MySQL, MongoDB)
@@ -248,6 +268,7 @@ When user references a screenshot or recording, automatically check these folder
 **Agent**: The Validator (`.claude/agents/the-validator.md`)
 
 **MANDATORY Every Time**:
+
 1. Check port availability: `netstat -ano | findstr "LISTENING"`
 2. Launch local server: `npx http-server -p [port]`
 3. Run Playwright tests: `npx playwright test`
@@ -265,6 +286,7 @@ When user references a screenshot or recording, automatically check these folder
 **Strategy**: Ask before committing
 
 **When to ask**:
+
 - After major feature implementations
 - After significant refactoring
 - After fixing critical bugs
@@ -279,16 +301,19 @@ When user references a screenshot or recording, automatically check these folder
 **GOLDEN RULE**: "1 MESSAGE = ALL RELATED OPERATIONS"
 
 **Mandatory Patterns**:
+
 - **TodoWrite**: Batch ALL todos in ONE call (5-10+ minimum)
 - **Task tool**: Spawn ALL agents in ONE message
 - **File operations**: Batch ALL reads/writes/edits in ONE message
 - **Bash commands**: Batch ALL terminal operations in ONE message
 
 **File Organization**:
+
 - NEVER save working files to root
 - Use: `/src`, `/tests`, `/docs`, `/config`, `/scripts`, `/examples`
 
 **Claude Code Task Tool** (Primary agent execution):
+
 ```
 # ✅ CORRECT: Use Task tool for parallel agents
 [Single Message]:
@@ -298,6 +323,7 @@ When user references a screenshot or recording, automatically check these folder
 ```
 
 **MCP Tools** (Only for coordination):
+
 - `swarm_init` - Topology setup
 - `agent_spawn` - Agent type definitions
 - `task_orchestrate` - High-level planning
@@ -323,30 +349,39 @@ When user references a screenshot or recording, automatically check these folder
 ## 🚀 AVAILABLE AGENTS (54 Total)
 
 ### Core Development
+
 `coder`, `reviewer`, `tester`, `planner`, `researcher`
 
 ### Swarm Coordination
+
 `hierarchical-coordinator`, `mesh-coordinator`, `adaptive-coordinator`, `collective-intelligence-coordinator`, `swarm-memory-manager`
 
 ### Consensus & Distributed
+
 `byzantine-coordinator`, `raft-manager`, `gossip-coordinator`, `consensus-builder`, `crdt-synchronizer`, `quorum-manager`, `security-manager`
 
 ### Performance & Optimization
+
 `perf-analyzer`, `performance-benchmarker`, `task-orchestrator`, `memory-coordinator`, `smart-agent`
 
 ### GitHub & Repository
+
 `github-modes`, `pr-manager`, `code-review-swarm`, `issue-tracker`, `release-manager`, `workflow-automation`, `project-board-sync`, `repo-architect`, `multi-repo-swarm`
 
 ### SPARC Methodology
+
 `sparc-coord`, `sparc-coder`, `specification`, `pseudocode`, `architecture`, `refinement`
 
 ### Specialized Development
+
 `backend-dev`, `mobile-dev`, `ml-developer`, `cicd-engineer`, `api-docs`, `system-architect`, `code-analyzer`, `base-template-generator`
 
 ### Testing & Validation
+
 `tdd-london-swarm`, `production-validator`
 
 ### Migration & Planning
+
 `migration-planner`, `swarm-init`
 
 ---
@@ -354,6 +389,7 @@ When user references a screenshot or recording, automatically check these folder
 ## 🎯 CLAUDE CODE VS MCP TOOLS
 
 ### Claude Code Handles ALL EXECUTION:
+
 - **Task tool**: Spawn and run agents concurrently
 - File operations (Read, Write, Edit, Glob, Grep)
 - Code generation and programming
@@ -363,6 +399,7 @@ When user references a screenshot or recording, automatically check these folder
 - Testing and debugging
 
 ### MCP Tools ONLY COORDINATE:
+
 - Swarm initialization (topology)
 - Agent type definitions
 - Task orchestration (planning)
@@ -379,6 +416,7 @@ When user references a screenshot or recording, automatically check these folder
 **Agent**: PAI Orchestrator (`.claude/agents/pai-orchestrator.md`)
 
 **SPARC Phases**:
+
 1. **Specification**: Requirements analysis
 2. **Pseudocode**: Algorithm design
 3. **Architecture**: System design
@@ -386,6 +424,7 @@ When user references a screenshot or recording, automatically check these folder
 5. **Completion**: Integration
 
 **Commands** (when Claude Flow is loaded):
+
 ```bash
 npx claude-flow sparc tdd "<feature>"  # Full TDD workflow
 npx claude-flow sparc run <mode> "<task>"  # Specific mode
@@ -399,5 +438,5 @@ npx claude-flow sparc pipeline "<task>"  # Full pipeline
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless absolutely necessary.
 ALWAYS prefer editing existing files over creating new ones.
-NEVER proactively create documentation files (*.md) or README files unless explicitly requested.
+NEVER proactively create documentation files (\*.md) or README files unless explicitly requested.
 Never save working files, text/mds, and tests to the root folder.

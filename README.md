@@ -17,6 +17,7 @@ An interactive educational game that teaches the 10 fundamentals of Boolean mode
 ## 📚 Educational Content
 
 Students learn about:
+
 1. Components & Variables
 2. Relationships & Interactions
 3. Initial Conditions
@@ -68,6 +69,7 @@ modelit-mystery/
 ## 🎨 Character
 
 **Dr. Maya** - A warm and friendly African American female scientist with:
+
 - Natural curly hair in a bun
 - Warm brown skin tone
 - Big, expressive brown eyes

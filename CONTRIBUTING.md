@@ -14,26 +14,29 @@ Thank you for your interest in contributing to ModelIt Mystery! This educational
 ### Setup Development Environment
 
 1. **Clone the repository**
-   ```bash
-   git clone https://github.com/charlesmartinedd/modelit-mystery.git
-   cd modelit-mystery
-   ```
+
+    ```bash
+    git clone https://github.com/charlesmartinedd/modelit-mystery.git
+    cd modelit-mystery
+    ```
 
 2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 3. **Validate assets**
-   ```bash
-   npm run validate:assets
-   ```
+
+    ```bash
+    npm run validate:assets
+    ```
 
 4. **Start local server**
-   ```bash
-   npm start
-   ```
-   Then open http://localhost:8080 in your browser
+    ```bash
+    npm start
+    ```
+    Then open http://localhost:8080 in your browser
 
 ## 🛠️ Development Workflow
 
@@ -61,32 +64,34 @@ npm run validate
 ### Making Changes
 
 1. **Create a new branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
+
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
 
 2. **Make your changes**
-   - Follow the existing code style
-   - Add comments for complex logic
-   - Test your changes thoroughly
+    - Follow the existing code style
+    - Add comments for complex logic
+    - Test your changes thoroughly
 
 3. **Test your changes**
-   ```bash
-   # Run tests
-   npm test
-   
-   # Validate assets still work
-   npm run validate:assets
-   
-   # Test in browser
-   npm start
-   ```
+
+    ```bash
+    # Run tests
+    npm test
+
+    # Validate assets still work
+    npm run validate:assets
+
+    # Test in browser
+    npm start
+    ```
 
 4. **Commit your changes**
-   ```bash
-   git add .
-   git commit -m "feat: description of your changes"
-   ```
+    ```bash
+    git add .
+    git commit -m "feat: description of your changes"
+    ```
 
 ### Commit Message Format
 
@@ -101,6 +106,7 @@ We use conventional commits:
 - `chore:` - Maintenance tasks
 
 Examples:
+
 ```
 feat: add keyboard shortcuts for navigation
 fix: resolve audio loading issue on mobile
@@ -146,6 +152,7 @@ npm test:coverage
 - Test edge cases and error conditions
 
 Example:
+
 ```javascript
 describe('playClickSound', () => {
     it('should create oscillator and gain nodes', () => {
@@ -166,6 +173,7 @@ describe('playClickSound', () => {
 - Keep functions small and focused
 
 Example:
+
 ```javascript
 /**
  * Plays a click sound effect using Web Audio API
@@ -206,6 +214,7 @@ When adding features, update:
 ### Reporting Security Issues
 
 If you discover a security vulnerability, please email:
+
 - charlesmartinedd@gmail.com
 
 Do not create public GitHub issues for security vulnerabilities.

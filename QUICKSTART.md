@@ -11,26 +11,32 @@
 ## 🎯 Winning Strategy
 
 ### Stage 1: Identify Components
+
 **Goal**: Place Receptor, Signal, and Enzyme on the canvas
 
 **Tips**:
+
 - You need exactly 3 components
 - Think about cellular signaling: what receives, what transmits, what processes?
 - Placement doesn't matter yet, just get the right ones!
 
 ### Stage 2: Define Relationships
+
 **Goal**: Connect components to show information flow
 
 **Tips**:
+
 - Click a component to select it (turns yellow)
 - Click another component to draw a connection
 - Think: Signal → Receptor → Enzyme
 - You need at least 2 connections
 
 ### Stage 3: Set Initial Conditions
+
 **Goal**: Set starting states (ON/OFF) for each component
 
 **Tips**:
+
 - Click components to toggle between ON (green) and OFF (red)
 - What starts the cascade? The Signal!
 - Signal should be ON, others OFF
@@ -38,11 +44,13 @@
 ## 🤖 AI Features
 
 ### Get Hint Button
+
 - Provides contextual help based on your progress
 - First hint is gentle, later hints are more direct
 - Has a 5-second cooldown
 
 ### Check My Model Button
+
 - Validates your current model
 - Gives personalized feedback from Dr. Elena
 - Uses AI to explain what's right or wrong
@@ -50,6 +58,7 @@
 ## 🏆 Completion
 
 You'll know you're done when:
+
 - All 3 fundamental badges at the top are glowing
 - You see the "Act 1 Complete" celebration screen
 - Your stats are displayed
@@ -59,15 +68,18 @@ You'll know you're done when:
 ## 🐛 Troubleshooting
 
 **Components won't drag?**
+
 - Make sure you're dragging onto the blue grid area
 - Try refreshing the page
 
 **AI not responding?**
+
 - Check your internet connection
 - The API key may need to be refreshed
 - Look for error messages in browser console (F12)
 
 **Buttons disabled?**
+
 - You need to place enough components first
 - Check Dr. Elena's instructions on the left
 
@@ -81,6 +93,7 @@ You'll know you're done when:
 ## ⌨️ Keyboard Shortcuts (Future)
 
 Coming in Act 2:
+
 - `H` - Get Hint
 - `C` - Check Model
 - `R` - Reset Stage
@@ -95,6 +108,7 @@ Coming in Act 2:
 ## 🔄 Replayability
 
 Want to try again?
+
 - Refresh the page to restart Act 1
 - Try completing it without hints!
 - Challenge: Complete in under 3 attempts
@@ -110,6 +124,7 @@ Lower attempts and fewer hints = better mastery!
 ## 🚀 What's Next?
 
 After completing Act 1, you'll have learned:
+
 - ✅ Component identification
 - ✅ Relationship mapping
 - ✅ Initial state configuration
