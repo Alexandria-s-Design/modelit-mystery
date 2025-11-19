@@ -133,29 +133,9 @@
             flex-direction: column;
         }
 
-        .scene-container {
-            animation: fadeIn 0.6s ease;
-            display: flex;
-            flex-direction: row;
-            gap: 25px;
-            height: 100%;
-            max-height: calc(100vh - 120px);
-        }
+        /* Replaced by responsive container CSS below */
 
-        .scene-image {
-            width: 48%;
-            height: calc(100vh - 120px);
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
-            border: 3px solid #00d4ff;
-            position: relative;
-            flex-shrink: 0;
-            animation: imageZoomIn 0.8s ease-out;
-            transition: all 0.3s ease;
-        }
+        /* Replaced by responsive container CSS below */
 
         .scene-image.speaking {
             animation: subtlePulse 2s ease-in-out infinite;
@@ -182,14 +162,7 @@
             }
         }
 
-        .scene-content-wrapper {
-            width: 48%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
+        /* Replaced by responsive container CSS below */
 
         .scene-content-wrapper::-webkit-scrollbar {
             width: 8px;
@@ -249,7 +222,7 @@
             font-family: 'Exo 2', sans-serif;
             line-height: 1.6;
             color: #e0e0e0;
-            font-size: 16px;
+            font-size: 22px; /* Increased 40% from 16px for student readability */
             font-weight: 400;
         }
 
@@ -273,8 +246,8 @@
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 153, 204, 0.2) 100%);
             border: 2px solid #00d4ff;
             color: white;
-            padding: 12px 20px;
-            font-size: 15px;
+            padding: 12px 20px 12px 50px; /* Added left padding to prevent arrow overlap */
+            font-size: 21px; /* Increased 40% from 15px for student readability */
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -286,7 +259,7 @@
         .choice-button:before {
             content: '▶';
             position: absolute;
-            left: 15px;
+            left: 18px; /* Adjusted to accommodate larger text */
             color: #00d4ff;
             font-size: 20px;
             transition: all 0.3s ease;
@@ -426,18 +399,395 @@
         .learning-content {
             color: #e0e0e0;
             line-height: 1.5;
-            font-size: 14px;
+            font-size: 20px; /* Increased 40% from 14px for student readability */
+        }
+
+        /* Cover Page Styles */
+        #cover-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a4f6e 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.8s ease;
+        }
+
+        #cover-page.hidden {
+            display: none;
+        }
+
+        .cover-hero-image {
+            width: 400px;
+            height: 400px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 50px rgba(0, 212, 255, 0.4);
+            border: 3px solid #00d4ff;
+            background-image: url('images/scenes/ch0_scene1_maya_intro.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .cover-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.4);
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cover-description {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 22px;
+            color: #e0e0e0;
+            max-width: 700px;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .start-button {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            padding: 20px 60px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .start-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.8);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* End Card Styles */
+        #end-card {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a4f6e 0%, #1a1a2e 100%);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 1s ease;
+        }
+
+        #end-card.show {
+            display: flex;
+        }
+
+        .end-hero-image {
+            width: 350px;
+            height: 350px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 50px rgba(0, 212, 255, 0.4);
+            border: 3px solid #00d4ff;
+            background-image: url('images/scenes/ch10_scene5_celebration.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .end-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 64px;
+            font-weight: 900;
+            color: #00d4ff;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 50px rgba(0, 212, 255, 0.4);
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .end-subtitle {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 28px;
+            color: #00ff00;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .end-message {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 20px;
+            color: #e0e0e0;
+            max-width: 700px;
+            text-align: center;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            padding: 0 20px;
+        }
+
+        .replay-button {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+
+        .replay-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.8);
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.4);
+            }
+            to {
+                text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.6);
+            }
+        }
+    
+        
+            .scene-image, .scene-content-wrapper {
+                max-height: 85vh;
+            }
+        }
+
+        @media (max-height: 800px) {
+            .scene-container {
+                max-height: 95vh;
+            }
+            .scene-image, .scene-content-wrapper {
+                max-height: 95vh;
+                min-height: 400px;
+            }
+        }
+    
+        .continue-button,
+        .choice-button {
+            margin-bottom: 10px !important;
+        }
+
+        .scene-content-wrapper > *:last-child {
+            margin-bottom: 30px !important;
+        }
+    
+        .scene-image, .scene-content-wrapper {
+                max-height: calc(100vh - 120px);
+            }
+        }
+
+        @media (max-width: 1600px) {
+            .scene-container {
+                gap: 15px;
+            }
+        }
+
+        @media (max-height: 900px) {
+            .scene-container {
+                max-height: calc(100vh - 100px);
+            }
+            .scene-image, .scene-content-wrapper {
+                max-height: calc(100vh - 100px);
+            }
+        }
+
+        @media (max-height: 768px) {
+            .scene-container {
+                min-height: 400px;
+                max-height: calc(100vh - 80px);
+            }
+            .scene-image, .scene-content-wrapper {
+                min-height: 350px;
+                max-height: calc(100vh - 80px);
+            }
+        }
+    
+        /* Main responsive container */
+        #story-panel {
+            width: 100%;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .scene-container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            padding: 0 15px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        .scene-image {
+            width: 48%;
+            height: 100%;
+            min-height: 400px;
+            flex-shrink: 0;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+            border: 3px solid #00d4ff;
+            position: relative;
+            animation: imageZoomIn 0.8s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .scene-content-wrapper {
+            width: 48%;
+            height: 100%;
+            min-height: 400px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 10px;
+            padding-bottom: 80px;
+            box-sizing: border-box;
+        }
+
+        /* Ensure content flows naturally */
+        .scene-content-wrapper > * {
+            flex-shrink: 0;
+        }
+
+        /* Ensure buttons are always accessible */
+        .continue-button,
+        .choice-button {
+            margin-top: 15px;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+
+        /* Better scrollbar */
+        .scene-content-wrapper::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scene-content-wrapper::-webkit-scrollbar-track {
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .scene-content-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        .scene-content-wrapper::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.8);
+        }
+
+        /* Responsive breakpoints */
+        @media (max-height: 800px) {
+            #story-panel {
+                height: calc(100vh - 100px);
+            }
+        }
+
+        @media (max-height: 700px) {
+            #story-panel {
+                height: calc(100vh - 80px);
+            }
+            .scene-container {
+                gap: 15px;
+                padding: 0 10px;
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .scene-container {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .scene-container {
+                gap: 10px;
+                padding: 0 10px;
+            }
+            .scene-content-wrapper {
+                padding-bottom: 100px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .scene-content-wrapper {
+                min-height: 300px;
+                padding-bottom: 120px;
+            }
         }
     </style>
     <script src="story-data.js"></script>
 </head>
 <body>
+    <!-- Cover Page -->
+    <div id="cover-page">
+        <div class="cover-hero-image"></div>
+        <div class="cover-title">ModelIt! The Mystery</div>
+        <div class="cover-description">
+            Join Dr. Maya in an interactive <strong>graphic novel experience</strong> as you unravel the mystery of mutating cells. Learn the 10 fundamentals of biological modeling through a thrilling science adventure!
+        </div>
+        <button class="start-button" onclick="startAdventure()">Start Adventure</button>
+    </div>
+
+    <!-- End Card -->
+    <div id="end-card">
+        <div class="end-hero-image"></div>
+        <div class="end-title">🎉 CONGRATULATIONS! 🎉</div>
+        <div class="end-subtitle">You've Completed the Graphic Novel!</div>
+        <div class="end-message">
+            You've mastered all <strong>10 fundamentals of biological modeling</strong> alongside Dr. Maya!
+            From understanding components to validating complex systems, you're now equipped with the same tools
+            scientists use to understand diseases, develop drugs, and save lives.
+            <br><br>
+            <strong>You're not just a helper — you're a real Computational Biologist now!</strong>
+        </div>
+        <button class="replay-button" onclick="replayAdventure()">Play Again</button>
+    </div>
+
     <div id="game-container">
         <!-- Header -->
         <div id="game-header">
             <div id="game-title">ModelIt! The Mystery</div>
             <div style="display: flex; align-items: center; gap: 20px;">
                 <div class="audio-controls">
+                    <button id="return-to-cover" class="audio-toggle" onclick="returnToCover()">
+                        <span>🏠</span> Home
+                    </button>
                     <button id="music-toggle" class="audio-toggle active" onclick="toggleMusic()">
                         <span id="music-icon">🎵</span> Music
                     </button>
@@ -496,6 +846,23 @@
                     }, { once: true });
                 });
             }
+        }
+
+        // Start Adventure - Hide cover page and begin game
+        function startAdventure() {
+            // Hide cover page, show game container
+            const coverPage = document.getElementById('cover-page');
+            const gameContainer = document.getElementById('game-container');
+
+            coverPage.classList.add('hidden');
+            gameContainer.style.display = 'block';
+
+            // Play Dr. Maya's welcome voice
+            const welcomeMessage = "Hey there! I'm Dr. Maya and I need your help.";
+            speak(welcomeMessage);
+
+            // Initialize background music
+            initBackgroundMusic();
         }
 
         function toggleMusic() {
@@ -734,20 +1101,22 @@
             showScene(chapter, currentScene);
         }
 
-        function showScene(chapter, sceneIndex) {
+        function showScene(chapter, sceneIndex, showLearning = false) {
             const scene = chapter.scenes[sceneIndex];
             const panel = document.getElementById('story-panel');
 
             // Update voice tracking
             currentSceneInChapter = sceneIndex;
-            isLearningMoment = !!scene.learning;
+            isLearningMoment = showLearning && !!scene.learning;
             isChoiceMoment = false;
 
             // Clean text for speech (remove HTML tags)
             const cleanText = scene.text.replace(/<[^>]*>/g, '');
 
-            // Speak Dr. Maya's dialogue
-            speak(cleanText);
+            // Speak Dr. Maya's dialogue (only on initial show, not when revealing learning)
+            if (!showLearning) {
+                speak(cleanText);
+            }
 
             let html = `
                 <div class="scene-container">
@@ -758,23 +1127,39 @@
                     </div>
 
                     <div class="scene-content-wrapper">
-                        <div class="dialogue-container">
-                            <div class="speaker-name">${scene.speaker}</div>
-                            <div class="dialogue-text">${scene.text}</div>
-                        </div>
             `;
 
-            if (scene.learning) {
+            // Show EITHER dialogue OR learning moment, never both simultaneously
+            if (showLearning && scene.learning) {
+                // Show only the learning moment
                 html += `
                         <div class="learning-moment">
                             <div class="learning-title">${scene.learning.title}</div>
                             <div class="learning-content">${scene.learning.content}</div>
                         </div>
                 `;
+            } else {
+                // Show only the dialogue
+                html += `
+                        <div class="dialogue-container">
+                            <div class="speaker-name">${scene.speaker}</div>
+                            <div class="dialogue-text">${scene.text}</div>
+                        </div>
+                `;
             }
 
-            // Check if there are more scenes or if we should show choices
-            if (sceneIndex < chapter.scenes.length - 1) {
+            // Determine what continue button to show
+            if (!showLearning && scene.learning) {
+                // If we have learning content and haven't shown it yet, show button to reveal it
+                html += `
+                        <div style="text-align: center;">
+                            <div class="continue-button" onclick="showScene(window.currentChapterDataForScene.chapter, window.currentChapterDataForScene.sceneIndex, true)">
+                                Continue →
+                            </div>
+                        </div>
+                `;
+            } else if (sceneIndex < chapter.scenes.length - 1) {
+                // Move to next scene
                 html += `
                         <div style="text-align: center;">
                             <div class="continue-button" onclick="showNextScene(${sceneIndex})">
@@ -783,7 +1168,7 @@
                         </div>
                 `;
             } else if (chapter.choice) {
-                // Show button to reveal choices with animation
+                // Show button to reveal choices
                 html += `
                         <div id="choice-reveal-area" style="text-align: center;">
                             <div class="continue-button" onclick="revealChoices()">
@@ -798,8 +1183,9 @@
                 </div>`;
             panel.innerHTML = html;
 
-            // Store the current chapter for revealChoices function
+            // Store the current chapter and scene for navigation
             window.currentChapterData = chapter;
+            window.currentChapterDataForScene = { chapter, sceneIndex };
         }
 
         function revealChoices() {
@@ -842,7 +1228,62 @@
         function showNextScene(currentSceneIndex) {
             playClickSound();
             const chapter = story.chapters[currentChapter];
-            showScene(chapter, currentSceneIndex + 1);
+            const nextSceneIndex = currentSceneIndex + 1;
+
+            // Check if we've reached the end of the story
+            if (nextSceneIndex >= chapter.scenes.length && !chapter.choice) {
+                // This is the last scene of the final chapter
+                showEndCard();
+                return;
+            }
+
+            showScene(chapter, nextSceneIndex);
+        }
+
+        function showEndCard() {
+            // Hide game container, show end card
+            const endCard = document.getElementById('end-card');
+            endCard.classList.add('show');
+
+            // Play celebration message
+            const endMessage = "Congratulations! You've mastered all 10 fundamentals of biological modeling! You're a real computational biologist now!";
+            speak(endMessage);
+        }
+
+        function replayAdventure() {
+            // Hide end card
+            const endCard = document.getElementById('end-card');
+            endCard.classList.remove('show');
+
+            // Reset game state
+            currentChapter = 0;
+            playerChoices = [];
+
+            // Restart from first chapter
+            loadChapter(0);
+        }
+
+        function returnToCover() {
+            // Show confirmation dialog
+            if (confirm('Return to the cover page? Your current progress will not be saved.')) {
+                // Hide game container and end card
+                const gameContainer = document.getElementById('game-container');
+                const endCard = document.getElementById('end-card');
+                const coverPage = document.getElementById('cover-page');
+
+                gameContainer.style.display = 'none';
+                endCard.classList.remove('show');
+                coverPage.classList.remove('hidden');
+
+                // Reset game state
+                currentChapter = 0;
+                playerChoices = [];
+
+                // Stop any playing voice
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+            }
         }
 
         function makeChoice(choiceIndex) {
@@ -892,14 +1333,16 @@
             speak(feedback);
 
             panel.innerHTML = `
-                <div class="scene-container">
-                    <div class="dialogue-container">
-                        <div class="speaker-name">Dr. Maya</div>
-                        <div class="dialogue-text">${feedback}</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div class="continue-button" onclick="showChapter(${nextChapter})">
-                            Continue Investigation →
+                <div class="scene-container" style="align-items: center; justify-content: center;">
+                    <div class="scene-content-wrapper" style="width: 80%; max-width: 800px;">
+                        <div class="dialogue-container">
+                            <div class="speaker-name">Dr. Maya</div>
+                            <div class="dialogue-text">${feedback}</div>
+                        </div>
+                        <div style="text-align: center; margin-top: 30px; margin-bottom: 40px;">
+                            <div class="continue-button" onclick="showChapter(${nextChapter})">
+                                Continue Investigation →
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -917,31 +1360,39 @@
                 <div class="scene-container">
                     <div class="scene-image" style="background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%); display: flex; align-items: center; justify-content: center;">
                         <div style="font-family: 'Orbitron', sans-serif; font-size: 48px; color: white; text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);">
-                            ⚠️ EXPERIMENT FAILED ⚠️
+                            ⚠️ INCORRECT ANSWER ⚠️
                         </div>
                     </div>
 
-                    <div class="dialogue-container" style="border-left-color: #ff0000;">
-                        <div class="speaker-name" style="color: #ff0000;">Dr. Maya</div>
-                        <div class="dialogue-text">${feedback}</div>
-                    </div>
-
-                    <div class="learning-moment" style="border-color: #ff0000; background: linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);">
-                        <div class="learning-title" style="color: #ff0000;">💀 Critical Failure</div>
-                        <div class="learning-content">
-                            The cells have mutated out of control! Without the right knowledge of modeling fundamentals, we couldn't predict what would happen.
-                            <br><br>
-                            <strong>In science, mistakes can be catastrophic. Let's start over and learn from this failure!</strong>
+                    <div class="scene-content-wrapper">
+                        <div class="dialogue-container" style="border-left-color: #ff0000;">
+                            <div class="speaker-name" style="color: #ff0000;">Dr. Maya</div>
+                            <div class="dialogue-text">${feedback}</div>
                         </div>
-                    </div>
 
-                    <div style="text-align: center; margin-top: 20px;">
-                        <div class="continue-button" style="background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%); border-color: #ff0000;" onclick="restartGame()">
-                            Start Over from Beginning
+                        <div class="learning-moment" style="border-color: #ff0000; background: linear-gradient(135deg, rgba(255, 0, 0, 0.2) 0%, rgba(139, 0, 0, 0.2) 100%);">
+                            <div class="learning-title" style="color: #ff0000;">💀 Incorrect Answer</div>
+                            <div class="learning-content">
+                                That's not quite right! But that's okay - science is all about learning from our mistakes.
+                                <br><br>
+                                <strong>Let's review the lesson and try again!</strong>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 30px; margin-bottom: 40px;">
+                            <div class="continue-button" style="background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%); border-color: #ffa500; font-size: 20px; padding: 18px 40px;" onclick="retryQuestion()">
+                                ✨ Try Again 🔄
+                            </div>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        function retryQuestion() {
+            playClickSound();
+            // Re-show the current chapter to allow the student to try again
+            showChapter(currentChapter);
         }
 
         function restartGame() {
