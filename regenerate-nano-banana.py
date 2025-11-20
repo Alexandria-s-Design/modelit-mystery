@@ -24,8 +24,8 @@ if env_file.exists():
 
 OUTPUT_DIR = Path(__file__).parent / 'images' / 'scenes'
 
-# High-level character reference for Nano Banana
-CHARACTER_REF = """Dr. Maya: Beautiful African American woman scientist, rich warm brown skin, natural curly afro hair (dark brown), large expressive brown eyes, white lab coat over teal shirt, friendly intelligent expression, futuristic cyan-lit laboratory, semi-realistic cartoon style (Pixar/Disney quality), professional digital illustration"""
+# High-level character reference for Nano Banana - FIXED FOR CHARACTER CONSISTENCY
+CHARACTER_REF = """Dr. Maya - STRICT CHARACTER DESIGN: Beautiful African American woman scientist, rich warm brown skin (#8B5A3C-#A67C52). CRITICAL: Hair is HIGH BUN hairstyle (curly texture secured on TOP of head, neat bun with face-framing curls), dark brown/black color (#1A1A1A-#3D2817). Mid-30s, oval face, large expressive brown eyes (same eye shape). White lab coat with circular ModelIt badge on chest, teal/cyan shirt (#00C4B4-#20D4E4) visible underneath (NOT blue). Friendly intelligent expression. Futuristic cyan-lit laboratory, semi-realistic cartoon style (Pixar/Disney quality), professional digital illustration. POSE CAN VARY but face and hair style MUST MATCH reference exactly"""
 
 # 20 images for regeneration with Nano Banana
 IMAGES = [
@@ -65,7 +65,7 @@ def generate_nano_banana(filename, description):
     }
 
     payload = {
-        'model': 'google/gemini-2.0-flash-exp:free',  # Nano Banana
+        'model': 'google/gemini-2.5-flash-image:free',  # Nano Banana - Gemini 2.5 Flash Image
         'prompt': full_prompt,
         'n': 1,
         'size': '1024x1024'
@@ -103,7 +103,7 @@ def main():
     print("=" * 70)
     print("REGENERATING 20 DR. MAYA IMAGES WITH NANO BANANA (GEMINI 2.5 FLASH)")
     print("=" * 70)
-    print(f"\nModel: google/gemini-2.0-flash-exp (Nano Banana)")
+    print(f"\nModel: google/gemini-2.5-flash-image:free (Nano Banana - Gemini 2.5 Flash)")
     print(f"Images: {len(IMAGES)}")
     print(f"Output: {OUTPUT_DIR}\n")
     print("=" * 70)
