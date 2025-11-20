@@ -1,0 +1,26 @@
+{
+  "name": "modelit-mystery",
+  "version": "1.0.0",
+  "description": "An interactive educational game that teaches the 10 fundamentals of Boolean modeling through an engaging choose-your-own-adventure story with Dr. Maya, a brilliant scientist investigating mysterious cell mutations.",
+  "main": "comprehensive-fix.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alexandria-s-Design/modelit-mystery.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alexandria-s-Design/modelit-mystery/issues"
+  },
+  "homepage": "https://github.com/Alexandria-s-Design/modelit-mystery#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1"
+  }
+}
