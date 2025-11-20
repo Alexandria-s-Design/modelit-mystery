@@ -532,6 +532,10 @@ const STORY_DATA = {
                         title: "🏆 You Did It!",
                         content: "You just learned the 10 Fundamentals of Biological Modeling! 1. What Models Are 2. Components 3. Relationships 4. Initial Conditions 5. Logic Functions 6. State Space 7. Feedback Loops 8. Predicting Behavior 9. Perturbations 10. Validation & Iteration. These skills are used by scientists worldwide to understand diseases, develop drugs, and save lives!"
                     },
+                    completionMessage: {
+                        title: "📚 STORY COMPLETE | MISSION ACCOMPLISHED",
+                        content: "You've cracked the code, solved the mystery, and mastered biological modeling. From unknown helper to certified computational biologist - you did it! Dr. Maya is proud of you, and your journey in the world of biological modeling is just beginning!"
+                    },
                     image: "images/scenes/ch10_scene5_celebration.png"
                 }
             ],
